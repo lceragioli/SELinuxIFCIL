@@ -1,0 +1,11 @@
+*.cmi
+*.cmo
+temp
+CILgrammar.ml   
+CILgrammar.mli
+NuSMVconfiguration
+CILlexer.ml
+CILlexer.mli
+NuSMVoutput
+main
+
