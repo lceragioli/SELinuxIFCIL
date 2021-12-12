@@ -8,6 +8,7 @@ ocamlc -c CILgrammar.mli
 ocamlc -c CILlexer.ml
 ocamlc -c CILgrammar.ml
 
+ocamlc -c Utils.mli
 ocamlc -c Utils.ml
 ocamlc -c IFCILconfiguration.mli
 ocamlc -c IFCILconfiguration.ml
