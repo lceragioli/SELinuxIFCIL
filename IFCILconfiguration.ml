@@ -1,3 +1,4 @@
+open CILsyntax
 open CILgrammar
 module SS = Set.Make (String)
 open Utils
@@ -649,23 +650,23 @@ let rec operations clsper fstmntls =
 let print_IFL (node, marrow, node') =
   let marrowstring =
     match marrow with
-    | m, CILgrammar.LONGARROW -> " -[" ^ String.concat "," m ^ "]> "
-    | m, CILgrammar.SHORTARROW -> " [" ^ String.concat "," m ^ "]> "
+    | m, CILsyntax.LONGARROW -> " -[" ^ String.concat "," m ^ "]> "
+    | m, CILsyntax.SHORTARROW -> " [" ^ String.concat "," m ^ "]> "
   in
   " ( " ^ String.concat "." node ^ ", " ^ marrowstring ^ ", "
   ^ String.concat "." node' ^ " ) "
 
 let print_IFL_requirement r =
   match r with
-  | CILgrammar.MUST iflpath ->
+  | CILsyntax.MUST iflpath ->
       ".IFL-must "
       ^ List.fold_right (fun p s -> print_IFL p ^ s) iflpath ""
       ^ "\n"
-  | CILgrammar.MUSTNOT iflpath ->
+  | CILsyntax.MUSTNOT iflpath ->
       ".IFL-mustnot "
       ^ List.fold_right (fun p s -> print_IFL p ^ s) iflpath ""
       ^ "\n"
-  | CILgrammar.EVERYMUST (iflpath, iflpath') ->
+  | CILsyntax.EVERYMUST (iflpath, iflpath') ->
       ".IFL-every "
       ^ List.fold_right (fun p s -> print_IFL p ^ s) iflpath ""
       ^ " must be "

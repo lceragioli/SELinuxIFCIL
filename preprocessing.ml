@@ -1,6 +1,6 @@
 open Utils
 open IFCILconfiguration
-open CILgrammar
+open CILsyntax
 
 exception OurError of string
 
