@@ -8,4 +8,5 @@ CILlexer.ml
 CILlexer.mli
 NuSMVoutput
 main
+_build/
 

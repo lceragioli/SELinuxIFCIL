@@ -1,5 +1,5 @@
 open IFCILconfiguration
-open CILgrammar
+open CILsyntax
 open Utils
 module SS = Set.Make (String)
 
