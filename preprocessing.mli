@@ -1,5 +1,5 @@
 open IFCILconfiguration
-open CILgrammar
+open CILsyntax
 
 exception OurError of string
 
@@ -17,5 +17,5 @@ type semi_flat_statement =
   | FLAT of flat_statement
   | SEMIFLATIN of path * statement list
 
-val flatten_conf : CILgrammar.statement list ->
+val flatten_conf : CILsyntax.statement list ->
   string list -> (string list * IFCILconfiguration.flat_statement) list

@@ -1,4 +1,4 @@
-open CILgrammar
+open CILsyntax
 open IFCILconfiguration
 open IFL
 open Sys

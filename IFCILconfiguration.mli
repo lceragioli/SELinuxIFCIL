@@ -1,4 +1,4 @@
-open CILgrammar
+open CILsyntax
 
 exception OurError of string
 
@@ -129,14 +129,14 @@ val all_defined_operations :
 
 val filter_operations :
   Stdlib__set.Make(Stdlib__string).t ->
-  CILgrammar.attributeexp ->
+  CILsyntax.attributeexp ->
   Stdlib__set.Make(Stdlib__string).t
 (* given a set of operations and an expression
    returns the subset of operations defined bu the expression
 *)
 
 val operations_of_clspermsetcon :
-  CILgrammar.classpermissionsetcon ->
+  CILsyntax.classpermissionsetcon ->
   string list ->
   (string list * flat_statement) list ->
   string list
@@ -154,7 +154,7 @@ val ops_in_class :
 *)
 
 val operations :
-  CILgrammar.classpermission ->
+  CILsyntax.classpermission ->
   (string list * flat_statement) list ->
   (string list * string) list
 (*
@@ -165,21 +165,21 @@ val operations :
 (* -------------- Printing functions -------------- *)
 
 val print_IFL :
-  string list * (string list * CILgrammar.arrow) * string list -> string
+  string list * (string list * CILsyntax.arrow) * string list -> string
 
-val print_IFL_requirement : CILgrammar.iflreq -> string
+val print_IFL_requirement : CILsyntax.iflreq -> string
 
 val print_IFL_refinements :
-  (string * string list * CILgrammar.iflreq) list -> string
+  (string * string list * CILsyntax.iflreq) list -> string
 
-val print_attrset : CILgrammar.attributeexp -> string
+val print_attrset : CILsyntax.attributeexp -> string
 
 val print_path : string list -> string
 
-val print_classpermissionsetcon : CILgrammar.classpermissionsetcon -> string
+val print_classpermissionsetcon : CILsyntax.classpermissionsetcon -> string
 
-val print_classpermission : CILgrammar.classpermission -> string
+val print_classpermission : CILsyntax.classpermission -> string
 
-val print_fparams : (CILgrammar.parametertype * string) list -> string
+val print_fparams : (CILsyntax.parametertype * string) list -> string
 
 val print_flat_CIL : string list * flat_statement -> string
