@@ -1,14 +1,6 @@
 ;; SPDX-FileCopyrightText: © 2021 Dominick Grift <dominick.grift@defensec.nl>
 ;; SPDX-License-Identifier: Unlicense
 
-; typeattributes for information flows;
-(typeattribute TCB)
-(typeattribute Harm)
-(typeattribute Harmless)
-(typeattributeset Harmless (or TCB (not Harm)))
-
-;IFL; (TCBintegrity) +> TCB : Harmless +> TCB ;IFL;
-
 ;IFL; (wrapping1) selinux > : > sys.subj ;IFL;
 ;IFL; (wrapping2) > sys.subj : selinux > ;IFL;
 ;IFL; (wrapping3) sys.subj > : > mqueue.fs ;IFL;
@@ -17,12 +9,6 @@
 ;IFL; (wrapping6) > lostfound.file : mqueue.fs > ;IFL;
 ;IFL; (wrapping7) lostfound.file > : > xattr.fs ;IFL;
 ;IFL; (wrapping8) > xattr.fs : lostfound.file > ;IFL;
-
-;IFL; (pipeline1) selinux +> lostfound.file : selinux +> sys.subj +> mqueue.fs +> lostfound.file ;IFL;
-;IFL; (pipeline2) selinux +> hugetlb.fs : selinux +> sys.subj +> hugetlb.fs ;IFL;
-;IFL; (pipeline3) boot.file +> sys.subj : boot.file +> hugetlb.fs +> sys.subj ;IFL;
-;IFL; (pipeline4) xattr.fs +> sys.subj : xattr.fs +> boot.file +> sys.subj ;IFL;
-
 
 (classmap constrainobject (append create getattr read relabelto setattr write))
 
@@ -6865,8 +6851,6 @@
 	      (typeattributeset not_typeattr (not typeattr))
 
 	      (neverallow not_typeattr .selinux (security (load_policy)))
-		  (typeattributeset Harmless (not (not_typeattr)))
-		  (typeattributeset TCB .selinux)
 		)
 
        (block setenforce
@@ -8437,7 +8421,6 @@
 
 	      (neverallow not_typeattr procfile
 			  (file (append write)))
-		  (typeattributeset TCB procfile)
 		))
 
 (in procfile.unconfined

@@ -8,28 +8,10 @@
 (typeattribute Harmless)
 (typeattributeset Harmless (or TCB (not Harm)))
 
-(typeattributeset TCB
-       (or .kernel.sysctlfile (or .kernel.sysfile (or .root.fs .unconfined.subj_typeattr))))
-
 ;IFL; (TCBintegrity) +> TCB : Harmless +> TCB ;IFL;
 
-;IFL; (augment1) fwenv.subj +> tmpfile.locktmpfile : fwenv.subj +[append]> tmpfile.locktmpfile ;IFL;
-;IFL; (augment2) fwenv.subj +> fwenv.subj : fwenv.subj +[append]> fwenv.subj ;IFL; 
-
-;IFL; (wrapping1) nameservice.miscfile > : > dnsmasq.subj ;IFL;
-;IFL; (wrapping2) > dnsmasq.subj : nameservice.miscfile > ;IFL;
-;IFL; (wrapping3) luci.subj > : > nameservice.miscfile ;IFL;
-;IFL; (wrapping4) > nameservice.miscfile : luci.subj > ;IFL;
-;IFL; (wrapping5) fwenv.subj > : > tmpfile.locktmpfile ;IFL;
-;IFL; (wrapping6) > tmpfile.locktmpfile : fwenv.subj > ;IFL;
-;IFL; (wrapping7) > fwenv.subj : tmpfile.locktmpfile > ;IFL;
-;IFL; (wrapping8) tmpfile.locktmpfile > : > fwenv.subj ;IFL;
-;IFL; (wrapping9) libubox.datafile > : > ntpdhotplug.subj ;IFL;
-;IFL; (wrapping10) > ntpdhotplug.subj : libubox.datafile > ;IFL;
-
-;IFL; (pipeline1) nameservice.miscfile +> luci.subj : nameservice.miscfile +> dnsmasq.subj +> luci.subj ;IFL;
-;IFL; (pipeline2) dnsmasq.subj +> nameservice.miscfile : dnsmasq.subj +> luci.subj +> nameservice.miscfile ;IFL;
-;IFL; (pipeline3) luci.subj +> dnsmasq.subj : luci.subj +> nameservice.miscfile +> dnsmasq.subj ;IFL;
+(typeattributeset TCB
+       (or .kernel.sysctlfile (or .kernel.sysfile (or .root.fs .unconfined.subj_typeattr))))
 
 
 (tunable
@@ -2314,7 +2296,7 @@
                     subj_typeattr))
 
                   (neverallow not_subj_typeattr obj_typeattr
-                              (file (relabelto)))
+                              (file (relabelto)))            
 
                   (call subj_type (unconfined.subj_typeattr)))
 
@@ -5459,6 +5441,8 @@
              subj_typeattr))
 
            (neverallow not_subj_typeattr secfile (file (read)))
+           (typeattributeset Harm not_subj_typeattr)
+           (typeattributeset TCB secfile)
            ))
 
 ;; -*- mode: CIL; fill-column: 79; indent-tabs-mode: nil; -*-
@@ -5521,6 +5505,7 @@
                 subj_typeattr))
 
               (neverallow not_subj_typeattr authfile (file (read)))
+              (typeattributeset TCB authfile)
               ))
 
 ;; -*- mode: CIL; fill-column: 79; indent-tabs-mode: nil; -*-
@@ -12718,6 +12703,7 @@
                 subj_typeattr))
 
               (neverallow not_subj_typeattr .selinux (security (load_policy)))
+              (typeattributeset TCB .selinux)
               )
 
        (block setenforce

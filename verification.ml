@@ -1,6 +1,7 @@
 open CILgrammar
 open IFCILconfiguration
 open IFL
+open Sys
 module SS = Set.Make (String)
 module Dict = Map.Make (String)
 
@@ -185,7 +186,7 @@ let rec kind_to_LTL k type_nodes =
     if List.length os > 1 then "(" ^ String.concat " | " os ^ ")"
     else String.concat " | " os
   and print_type node =
-    if node = [ "any-node" ] then "TRUE"
+    if node = [ "any-node" ] then "(! (state = pozzo))"
     else if SS.mem (name node) type_nodes then "state = " ^ name node
     else name node
   in
@@ -477,6 +478,7 @@ let rec parse_response oc' requirements =
         raise e)
 
 let verify config infMC outfMC =
+  let start = Sys.time () in
   let oc = open_out infMC and oc' = open_in outfMC in
   let requirements, type_nodes = print_NuSMV config oc in
   print_newline ();
@@ -486,4 +488,6 @@ let verify config infMC outfMC =
   flush stdout;
   Sys.command ("./NuSMV " ^ infMC ^ " > " ^ outfMC);
   parse_response oc' requirements;
+  let stop = Sys.time () in
+  Printf.printf "Execution time: %fs\n%!" (stop -. start);
   close_in_noerr oc'

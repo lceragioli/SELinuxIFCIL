@@ -1,5 +1,8 @@
 #!/bin/bash
 
+opam switch 4.12.0
+eval $(opam env)
+
 ocamllex CILlexer.mll
 ocamlyacc CILgrammar.mly
 awk '/%{/{flag=1; next} /let/{flag=0} flag' CILgrammar.mly > temp

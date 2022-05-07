@@ -1,27 +1,6 @@
 ; typeattributes for information flows;
-(typeattribute TCB)
-(typeattribute Harm)
-(typeattribute Harmless)
-(typeattributeset Harmless (or TCB (not Harm)))
-
-; information flows requirements ;
-
-;IFL; (wrapping1) sysfs.fs > : > sys.subj ;IFL;
-;IFL; (wrapping2) > sys.subj : sysfs.fs > ;IFL;
-;IFL; (wrapping3) sys.subj > : > devtmpfs.fs ;IFL;
-;IFL; (wrapping4) > devtmpfs.fs : sys.subj > ;IFL;
-;IFL; (wrapping5) devtmpfs.fs > : > loop_control.dev ;IFL;
-;IFL; (wrapping6) > loop_control.dev : devtmpfs.fs > ;IFL;
-
-;IFL; (pipeline1) sysfs.fs +> devtmpfs.fs : sysfs.fs +> sys.subj +> devtmpfs.fs ;IFL;
-;IFL; (pipeline2) sysfs.fs +> sys.subj : sysfs.fs +> sys.subj +> devtmpfs.fs +> sys.subj ;IFL;
-;IFL; (pipeline3) sysfs.fs +> devtmpfs.fs : sysfs.fs +> sys.subj +> devtmpfs.fs +> sys.subj +> devtmpfs.fs ;IFL;
-;IFL; (pipeline4) sysfs.fs +> sys.subj : sysfs.fs +> sys.subj +> devtmpfs.fs +> sys.subj +> devtmpfs.fs +> sys.subj ;IFL;
-
-;IFL; (augment1) sys.subj +> sys.subj : sys.subj +[append]> sys.subj ;IFL;
-;IFL; (augment2) sys.subj +> securityfs.fs : sys.subj +[append]> securityfs.fs ;IFL; 
-
-;IFL; (TCBintegrity) +> TCB : Harmless +> TCB ;IFL;
+;IFL; (augment1) sys.subj +> sys.subj : sys.subj -[append]> sys.subj ;IFL;
+;IFL; (augment2) sys.subj +> securityfs.fs : sys.subj -[append]> securityfs.fs ;IFL; 
 
 (policycap "network_peer_controls")
 (policycap "open_perms")
@@ -3644,9 +3623,6 @@
 
 (neverallow sys_not_write_security_and_usermodehelper_sysctl_subj_type
 	sys_security_or_usermodehelper_sysctl_obj_type (file (append write)))
-; for flow requirement ;
-(typeattributeset Harm (sys_not_write_security_and_usermodehelper_sysctl_subj_type))
-(typeattributeset TCB sys_security_or_usermodehelper_sysctl_obj_type)
 	
 (typeattributeset sys_not_security_or_usermodehelper_sysctl_obj_type
 	(and (sys_sysctl_obj_type) (not (sys_security_or_usermodehelper_sysctl_obj_type))))
@@ -5348,9 +5324,7 @@
 	(not (sec_load_policy_subj_type sec_unconfined_subj_type)))
 
 (neverallow sec_not_load_policy_subj_type_or_sec_unconfined_subj_type securityfs.fs (security (load_policy)))
-; for flow requirement ;
-(typeattributeset Harm (sec_not_load_policy_subj_type_or_sec_unconfined_subj_type))
-(typeattributeset TCB securityfs.fs)
+
 
 (typeattribute sec_setenforce_subj_type)
 (typeattribute sec_not_setenforce_subj_type_or_sec_unconfined_subj_type)
@@ -5359,8 +5333,7 @@
 	(not (sec_setenforce_subj_type sec_unconfined_subj_type)))
 
 (neverallow sec_not_setenforce_subj_type_or_sec_unconfined_subj_type securityfs.fs (security (setenforce)))
-; for flow requirement ;
-(typeattributeset Harm (sec_not_setenforce_subj_type_or_sec_unconfined_subj_type))
+
 
 (typeattribute sec_setsecparam_subj_type)
 (typeattribute sec_not_setsecparam_subj_type_or_sec_unconfined_subj_type)
@@ -5369,8 +5342,7 @@
 	(not (sec_setsecparam_subj_type sec_unconfined_subj_type)))
 
 (neverallow sec_not_setsecparam_subj_type_or_sec_unconfined_subj_type securityfs.fs (security (setsecparam)))
-; for flow requirement ;
-(typeattributeset Harm (sec_not_setsecparam_subj_type_or_sec_unconfined_subj_type))
+
 
 (allow sec_unconfined_subj_type securityfs.fs list_dir_perms)
 (allow sec_unconfined_subj_type securityfs.fs read_lnk_file_perms)

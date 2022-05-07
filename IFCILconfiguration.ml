@@ -1,12 +1,40 @@
 open CILgrammar
-module SS = Set.Make (String)
 open Utils
+
+module SS = Set.Make (String)
+
+module StringList = OrderList (String)
+module SLS = Set.Make (StringList)
+
+module StSL = OrderPair (String) (StringList)
+module StSLS = Set.Make (StSL)
+
+module SM = Map.Make (String)
+module SLM = Map.Make (StringList)
 
 exception OurError of string
 
 exception UnsupportedConstruct of string
 
 exception UndefinedReference of string
+
+type macrocontent =
+  {
+    types : SS.t;
+    typeAlias : SS.t;
+    typealiasActuals : string list SM.t;
+    typeAttribute : SS.t;
+    typeAttributeSet : attributeexp SLM.t;
+  }
+
+type blockcontent =
+  {
+    types : SS.t;
+    typeAlias : SS.t;
+    typealiasActuals : string list SM.t;
+    typeAttribute : SS.t;
+    typeAttributeSet : attributeexp SLM.t;
+  }
 
 type flat_statement =
   | FLATTYPE of string

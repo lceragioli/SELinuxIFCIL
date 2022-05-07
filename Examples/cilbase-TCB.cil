@@ -3,24 +3,6 @@
 (typeattribute Harm)
 (typeattribute Harmless)
 (typeattributeset Harmless (or TCB (not Harm)))
-
-; information flows requirements ;
-
-;IFL; (wrapping1) sysfs.fs > : > sys.subj ;IFL;
-;IFL; (wrapping2) > sys.subj : sysfs.fs > ;IFL;
-;IFL; (wrapping3) sys.subj > : > devtmpfs.fs ;IFL;
-;IFL; (wrapping4) > devtmpfs.fs : sys.subj > ;IFL;
-;IFL; (wrapping5) devtmpfs.fs > : > loop_control.dev ;IFL;
-;IFL; (wrapping6) > loop_control.dev : devtmpfs.fs > ;IFL;
-
-;IFL; (pipeline1) sysfs.fs +> devtmpfs.fs : sysfs.fs +> sys.subj +> devtmpfs.fs ;IFL;
-;IFL; (pipeline2) sysfs.fs +> sys.subj : sysfs.fs +> sys.subj +> devtmpfs.fs +> sys.subj ;IFL;
-;IFL; (pipeline3) sysfs.fs +> devtmpfs.fs : sysfs.fs +> sys.subj +> devtmpfs.fs +> sys.subj +> devtmpfs.fs ;IFL;
-;IFL; (pipeline4) sysfs.fs +> sys.subj : sysfs.fs +> sys.subj +> devtmpfs.fs +> sys.subj +> devtmpfs.fs +> sys.subj ;IFL;
-
-;IFL; (augment1) sys.subj +> sys.subj : sys.subj +[append]> sys.subj ;IFL;
-;IFL; (augment2) sys.subj +> securityfs.fs : sys.subj +[append]> securityfs.fs ;IFL; 
-
 ;IFL; (TCBintegrity) +> TCB : Harmless +> TCB ;IFL;
 
 (policycap "network_peer_controls")

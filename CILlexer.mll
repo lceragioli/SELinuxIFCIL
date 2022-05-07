@@ -42,7 +42,7 @@ rule token = parse
     | "xor"                 { XOR }
     | '('                   { LPAREN }
     | ')'                   { RPAREN }
-    | "-"                   { ARROWBODY } 
+    | "+"                   { ARROWBODY } 
     | ">"                   { ARROWHEAD }
     | "["                   { LSQUARE }
     | "]"                   { RSQUARE }
