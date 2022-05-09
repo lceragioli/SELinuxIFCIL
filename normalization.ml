@@ -10,16 +10,6 @@ exception NotUniqueMeet of string
 
 exception UncorrectRefinement of string
 
-(* let ifl_refine ns (FLATIFL(lbl, req)) i =
-   try
-     match List.hd
-             (List.filter
-               (fun (lbl'', lbl', req') -> lbl' = ns @ [lbl]) i)
-     with
-     | (lbl'', _, req') -> (FLATIFL(lbl'', meet req req'))
-   with
-     Failure s -> if s = "hd" then (FLATIFL(lbl, req)) else raise (Failure s) *)
-
 let ifl_refine ns (FLATIFL (lbl, req)) i =
   try
     match
@@ -30,95 +20,170 @@ let ifl_refine ns (FLATIFL (lbl, req)) i =
         else raise (UncorrectRefinement "")
   with Failure s -> if s = "hd" then FLATIFL (lbl, req) else raise (Failure s)
 
-let phase1 fstmntls =
+let phase1 ifcilconfig =
   print_string "phase 1\n";
   flush stdout;
+
   let result =
-    List.rev_map
-      (fun fstmnt ->
-        match fstmnt with
-        | pos, FLATBLOCKINHERIT (b, i) ->
-            ( pos,
+    SLM.mapi
+      (fun pos costrls->
+        List.rev_map
+        (fun fstmnt ->
+          match fstmnt with
+          | FLATBLOCKINHERIT (b, i) ->
               FLATBLOCKINHERIT
-                ( (try eval_bl pos BLOCK b fstmntls
-                   with UndefinedReference _ ->
-                     eval_bl [ "#" ] BLOCK b fstmntls),
-                  i ) )
-        | fstmt -> fstmt)
-      fstmntls
+                  ( (try eval_bl pos BLOCK b ifcilconfig
+                     with UndefinedReference _ ->
+                       eval_bl [ "#" ] BLOCK b ifcilconfig),
+                    i )
+          | fstmt -> fstmt)
+        costrls
+      )
+    ifcilconfig
   in
-  (* List.iter (fun i -> print_string (print_flat_CIL i ^ "\n")) result; *)
+  SLM.iter (
+    fun path cons ->
+      (List.iter
+        (fun j ->  print_string (print_path path ^ (print_flat_CIL j ^ "\n")))
+        cons))
+    result;
   result
 
-let rec phase2' fstmntls (pos, FLATBLOCKINHERIT (b, i)) =
-  let fstmntls' =
-    List.rev_append fstmntls
-      (tl_flatten
-         (List.rev_map
-            (fun fstmnt ->
-              match fstmnt with
-              | ns, FLATBLOCKINHERIT (b', i') ->
-                  if listminus ns b != None then
-                    phase2' fstmntls (ns, FLATBLOCKINHERIT (b', i'))
-                  else []
-              | _ -> [])
-            fstmntls))
-  in
-  tl_flatten
-    (List.rev_map
-       (fun (ns, stm) ->
-         match stm with
-         | FLATBLOCKINHERIT (_, _) -> []
-         | _ -> (
-             match listminus ns b with
-             | None -> []
-             | Some ns'' -> (
-                 match stm with
-                 | FLATIFL (lbl', req') ->
-                     [ (pos @ ns'', ifl_refine ns'' stm i) ]
-                 | FLATBLOCKABSTRACT -> []
-                 | _ -> [ (pos @ ns'', stm) ])))
-       fstmntls')
+let rec phase2' ifcilconfig (pos, FLATBLOCKINHERIT (b, i)) =
 
-let phase2 fstmntls =
+  let inherited_ifcilconfigs =
+    SLM.fold
+      (fun pos' costrls ls ->
+          if listminus pos' b != None then
+            List.rev_append
+            (
+              List.filter_map
+                (fun fstmnt ->
+                  match fstmnt with
+                  | FLATBLOCKINHERIT (b', i') ->
+                      Some (phase2' ifcilconfig (pos', FLATBLOCKINHERIT (b', i')))
+                  | _ -> None)
+                costrls
+            )
+            ls
+          else ls
+      )
+      ifcilconfig
+      []
+  in
+  let union_conf =
+    List.fold_left
+      (SLM.union 
+          (fun _ ls1 ls2 -> Some (List.rev_append ls1 ls2))
+      )
+      ifcilconfig
+      inherited_ifcilconfigs
+  in
+  SLM.fold
+    (fun pos' fstmls conf ->
+      match listminus pos' b with
+      | None -> conf
+      | Some pos'' -> 
+          SLM.update
+            (pos @ pos'')
+            (fun old ->
+              let news = 
+                List.map
+                  (fun stm ->
+                    match stm with
+                      | FLATIFL (lbl', req') ->
+                          ifl_refine pos'' stm i
+                      | _ -> stm
+                    )
+                  fstmls
+              in
+              match old with
+              | None -> Some news
+              | Some oldls -> Some (List.rev_append oldls news)
+              )
+              conf)
+    union_conf
+    SLM.empty
+
+let phase2 ifcilconfig =
   print_string "phase 2\n";
   flush stdout;
+  let inherited_ifcilconfigs =
+    SLM.fold
+      (fun pos costrls ls ->
+        if List.exists
+            (fun fstm ->
+              fstm = FLATBLOCKABSTRACT)
+            costrls
+          then ls else
+            List.rev_append
+            (
+              List.filter_map
+                (fun fstmnt ->
+                  match fstmnt with
+                  | FLATBLOCKINHERIT (b, i) ->
+                            Some (phase2' ifcilconfig (pos, FLATBLOCKINHERIT (b, i)))
+                  | _ -> None)
+                costrls
+            )
+            ls
+      )
+      ifcilconfig
+      []
+    in
   let result =
-    tl_flatten
-      (List.rev_map
-         (fun fstmnt ->
-           match fstmnt with
-           | pos, FLATBLOCKINHERIT (b, i) ->
-               List.rev_append
-                 (phase2' fstmntls (pos, FLATBLOCKINHERIT (b, i)))
-                 [ fstmnt ]
-           | _ -> [ fstmnt ])
-         fstmntls)
+    SLM.filter
+      (fun _ fstmls ->
+        not 
+          (List.exists
+            (fun fstm -> fstm = FLATBLOCKABSTRACT)
+            fstmls))
+      (List.fold_left
+        (SLM.union 
+            (fun _ ls1 ls2 -> Some (List.rev_append ls1 ls2))
+        )
+        ifcilconfig
+        inherited_ifcilconfigs)
   in
-  (* List.iter (fun i -> print_string (print_flat_CIL i ^ "\n")) result; *)
+  SLM.iter (
+    fun path cons ->
+      (List.iter
+        (fun j ->  print_string (print_path path ^ (print_flat_CIL j ^ "\n")))
+        cons))
+    result;
   result
 
-let phase3 fstmntls =
+let phase3 ifcilconfig =
   print_string "phase 3\n";
   flush stdout;
+
   let result =
-    List.rev_map
-      (fun fstmnt ->
-        match fstmnt with
-        | pos, FLATCALL (m, par, i) ->
-            ( pos,
+    SLM.mapi
+      (fun pos costrls->
+        List.rev_map
+        (fun fstmnt ->
+          match fstmnt with
+          | FLATCALL (m, par, i) ->
               FLATCALL
-                ( (try eval_bl pos MACRO m fstmntls
-                   with UndefinedReference _ ->
-                     eval_bl [ "#" ] MACRO m fstmntls),
-                  par,
-                  i ) )
-        | fstmt -> fstmt)
-      fstmntls
+                  ( (try eval_bl pos MACRO m ifcilconfig
+                     with UndefinedReference _ ->
+                       eval_bl [ "#" ] MACRO m ifcilconfig),
+                    par,
+                    i )
+          | fstmt -> fstmt)
+        costrls
+      )
+    ifcilconfig
   in
-  (* List.iter (fun i -> print_string (print_flat_CIL i ^ "\n")) result; *)
+  SLM.iter (
+    fun path cons ->
+      (List.iter
+        (fun j ->  print_string (print_path path ^ (print_flat_CIL j ^ "\n")))
+        cons))
+    result;
   result
 
+(* 
 let rec phase4' fstmntls (pos, FLATCALL (m, par, i)) =
   let fstmntls' =
     List.rev_append fstmntls
@@ -634,11 +699,12 @@ let phase6 fstmntls =
         | _ -> (pos, fstmnt))
         :: fstmntls'
       else fstmntls')
-    [] fstmntls
+    [] fstmntls *)
 
-let normalize fstmntls =
+let normalize ifcilconfig =
   let result =
-    (phase6 << phase5 << phase4 << phase3 << phase2 << phase1) fstmntls
+    (* (phase6 << phase5 << phase4 << phase3 << phase2 << phase1) fstmntls *)
+    (phase3 << phase2 << phase1) ifcilconfig
   in
   print_string "normalization completed\n";
   result

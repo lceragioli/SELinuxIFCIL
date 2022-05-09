@@ -108,3 +108,57 @@ let rec flatten_conf stmnts loc =
   List.fold_left
     (fun flatls semiflatstmnt -> flatin semiflatstmnt semiflatstmnts @ flatls)
     [] semiflatstmnts
+
+let ifcil_configuration stmnts =
+  let flat = flatten_conf stmnts [ "#" ] in
+  List.fold_left
+    (
+      fun m (path, stmn) -> 
+        SLM.update
+          path
+          (fun aopt ->
+            match aopt with 
+              | None -> Some [stmn]
+              | Some ls -> Some (stmn :: ls)
+              )
+          m
+    )
+    SLM.empty
+    flat
+
+(* let ifcil_configuration stmnts =
+  let flat = flatten_conf stmnts [ "#" ] in
+  List.fold_left
+    (
+      fun m (path, stmn) -> 
+        SLM.update
+          path
+          (fun aopt : nscontent option  ->
+            match aopt with 
+              | None -> 
+              | Some BLOCKCONTENT { types; typeAlias; typealiasActuals; typeAttributes; typeAttributeSets; allows;
+              calls ; macros ; fls ;
+              commons ;
+              classcommon ;
+              classes ;
+              classpermissions ;
+              classpermissionsets ;
+              classmap ;
+              classmapping ;
+              abstract ;
+              blocks ;
+              blockinherits } -> 
+              | Some MACROCONTENT { types; typeAlias; typealiasActuals; typeAttributes; typeAttributeSets; allows;
+              calls ; fls ;
+              commons ;
+              classcommon ;
+              classes ;
+              classpermissions ;
+              classpermissionsets ;
+              classmap ;
+              classmapping } -> 
+              )
+          m
+    )
+    SLM.empty
+    flat *)

@@ -3,10 +3,12 @@
 opam switch 4.12.0
 eval $(opam env)
 
+ocamlc -c CILsyntax.ml
+
 ocamllex CILlexer.mll
 ocamlyacc CILgrammar.mly
-awk '/%{/{flag=1; next} /let/{flag=0} flag' CILgrammar.mly > temp
-cat temp CILgrammar.mli > temp2 && mv temp2 CILgrammar.mli
+# awk '/%{/{flag=1; next} /let/{flag=0} flag' CILgrammar.mly > temp
+# cat temp CILgrammar.mli > temp2 && mv temp2 CILgrammar.mli
 ocamlc -c CILgrammar.mli
 ocamlc -c CILlexer.ml
 ocamlc -c CILgrammar.ml

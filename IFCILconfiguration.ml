@@ -2,40 +2,57 @@ open CILsyntax
 open CILgrammar
 open Utils
 
-module SS = Set.Make (String)
-
-module StringList = OrderList (String)
-module SLS = Set.Make (StringList)
-
-module StSL = OrderPair (String) (StringList)
-module StSLS = Set.Make (StSL)
-
-module SM = Map.Make (String)
-module SLM = Map.Make (StringList)
-
 exception OurError of string
 
 exception UnsupportedConstruct of string
 
 exception UndefinedReference of string
 
-type macrocontent =
+(* type macrocontent =
   {
-    types : SS.t;
-    typeAlias : SS.t;
-    typealiasActuals : string list SM.t;
-    typeAttribute : SS.t;
-    typeAttributeSet : attributeexp SLM.t;
+    mutable types : SS.t;
+    mutable typeAlias : SS.t;
+    mutable typealiasActuals : string list SM.t;
+    mutable typeAttributes : SS.t;
+    mutable typeAttributeSets : attributeexp SLM.t;
+    mutable allows : (path * path * classpermission) list;
+    mutable calls : (path * path list * refinements) list;
+    mutable ifls : (string * iflreq) list;
+    mutable commons : (string * string list) list;
+    mutable classcommon : (string list * string list) list;
+    mutable classes : (string * string list) list;
+    mutable classpermissions : SS.t;
+    mutable classpermissionsets : (string list * string list * classpermissionsetcon) list;
+    mutable classmap : (string * string list) list;
+    mutable classmapping : (string list * string list * classpermission) list;
   }
 
 type blockcontent =
   {
-    types : SS.t;
-    typeAlias : SS.t;
-    typealiasActuals : string list SM.t;
-    typeAttribute : SS.t;
-    typeAttributeSet : attributeexp SLM.t;
+    mutable types : SS.t;
+    mutable typeAlias : SS.t;
+    mutable typealiasActuals : string list SM.t;
+    mutable typeAttributes : SS.t;
+    mutable typeAttributeSets : attributeexp SLM.t;
+    mutable allows : (path * path * classpermission) list;
+    mutable calls : (path * path list * refinements) list;
+    mutable macros : (string * (parametertype * string)) list;
+    mutable ifls : (string * iflreq) list;
+    mutable commons : (string * string list) list;
+    mutable classcommon : (string list * string list) list;
+    mutable classes : (string * string list) list;
+    mutable classpermissions : SS.t;
+    mutable classpermissionsets : (string list * string list * classpermissionsetcon) list;
+    mutable classmap : (string * string list) list;
+    mutable classmapping : (string list * string list * classpermission) list;
+    mutable abstract : bool;
+    mutable blocks : SS.t;
+    mutable blockinherits : (path * refinements) list;
   }
+
+type nscontent = BLOCKCONTENT of blockcontent | MACROCONTENT of macrocontent
+
+type ifcil_configuration = nscontent SLM.t *)
 
 type flat_statement =
   | FLATTYPE of string
@@ -58,30 +75,35 @@ type flat_statement =
   | FLATCLASSMAP of string * string list
   | FLATCLASSMAPPING of string list * string list * classpermission
 
+  type ifcil_configuration = (flat_statement list) SLM.t
+
 (* ------------------- name resolution ------------------- *)
 
-let rec eval_macr pos construct qname fstmntls =
+let rec eval_macr pos construct qname ifcilconfig =
   (* eval_macr pos construct qname fstmntls
      parameters:
        pos - the path in which the name to be resolved occurs
        construct - the kind of construct we are resolving, may be a type, a typeattribute etc
        qname - the name to be resolved, it is a full name, may be A.c.d, #.B.d, d, etc
-       fstmntls - the consfiguration we are considering
+       ifcilconfig - the consfiguration we are considering
 
      return the real name of the entity of kind construct named with qname appearing in pos WHICH IS A MACRO, i.e., a name starting with #
   *)
+
   let resolve qual condmaps =
     match
       list_find_map
         (fun ps ->
           list_find_map
             (fun (cond, map) ->
-              if
-                List.exists
-                  (fun (ps', i) -> ps' = ps @ qual && cond i qual)
-                  fstmntls
-              then Some (map (ps @ qname))
-              else None)
+              match (SLM.find_opt (ps @ qual) ifcilconfig) with
+                | None -> None
+                | Some ls -> 
+                  if (List.exists
+                        (fun i -> cond i qual)
+                        ls)
+                  then Some (map (ps @ qname))
+                  else None)
             condmaps)
         (if pos = [ "#" ] then [ pos ] else [ pos ])
     with
@@ -109,18 +131,19 @@ let rec eval_macr pos construct qname fstmntls =
                   fun qname ->
                     let name, qual = last_and_list qname in
                     let actual =
-                      List.find_opt
-                        (fun (ps, i) ->
-                          ps = qual
-                          &&
-                          match i with
-                          | FLATTYPEALIASACTUAL (n, t) -> n = name
-                          | _ -> false)
-                        fstmntls
+                      (match (SLM.find_opt qual ifcilconfig) with
+                        | None -> None
+                        | Some ls -> 
+                            List.find_opt
+                              (fun i ->
+                                match i with
+                                | FLATTYPEALIASACTUAL (n, t) -> n = name
+                                | _ -> false)
+                              ls)
                     in
                     match actual with
-                    | Some (ps, FLATTYPEALIASACTUAL (n, t)) ->
-                        eval_macr ps TYPE t fstmntls
+                    | Some (FLATTYPEALIASACTUAL (n, t)) ->
+                        eval_macr qual TYPE t ifcilconfig
                     | _ ->
                         raise
                           (UndefinedReference
@@ -128,35 +151,6 @@ let rec eval_macr pos construct qname fstmntls =
               ]
           with UndefinedReference s ->
             raise (UndefinedReference ("type: " ^ s))
-            (* if
-                 List.exists
-                   (fun (ps, i) -> ps = pos @ qual && i = FLATTYPE name)
-                   fstmntls
-               then pos @ qname
-               else if
-                 qual = []
-                 && List.exists
-                      (fun (ps, i) -> ps = pos @ qual && i = FLATTYPEALIAS name)
-                      fstmntls
-               then
-                 let actual =
-                   List.find_opt
-                     (fun (ps, i) ->
-                       ps = pos @ qual
-                       &&
-                       match i with
-                       | FLATTYPEALIASACTUAL (n, t) -> n = name
-                       | _ -> false)
-                     fstmntls
-                 in
-                 match actual with
-                 | Some (ps, FLATTYPEALIASACTUAL (n, t)) ->
-                     eval_bl ps TYPE t fstmntls
-                 | _ ->
-                 raise (UndefinedReference (String.concat "type " (pos @ qname)))
-
-               else
-                 raise (UndefinedReference (String.concat "type " (pos @ qname))) *)
           )
       | ATTRIBUTE -> (
           try resolve qual [ ((fun i _ -> i = FLATATTRIBUTE name), id) ]
@@ -217,13 +211,13 @@ let rec eval_macr pos construct qname fstmntls =
       (* Not needed: classcommon, classmapping, classpermissionset *)
       | CLASSCOMMON | CLASSPERMISSIONSET | CLASSMAPPING | _ -> qname)
 
-let rec eval_bl pos construct qname fstmntls =
+let rec eval_bl pos construct qname ifcilconfig =
   (* let rec eval_bl pos construct qname fstmntls
      parameters:
        pos - the path in which the name to be resolved occurs
        construct - the kind of construct we are resolving, may be a type, a typeattribute etc
        qname - the name to be resolved, it is a full name, may be A.c.d, #.B.d, d, etc
-       fstmntls - the consfiguration we are considering
+       ifcilconfig - the configuration we are considering
 
      return the real name of the entity of kind construct named with qname appearing in pos WHICH IS A BLOCK, i.e., a name starting with #
   *)
@@ -233,12 +227,14 @@ let rec eval_bl pos construct qname fstmntls =
         (fun ps ->
           list_find_map
             (fun (cond, map) ->
-              if
-                List.exists
-                  (fun (ps', i) -> ps' = ps @ qual && cond i qual)
-                  fstmntls
-              then Some (map (ps @ qname))
-              else None)
+              match (SLM.find_opt (ps @ qual) ifcilconfig) with
+                | None -> None
+                | Some ls -> 
+                  if (List.exists
+                        (fun i -> cond i qual)
+                        ls)
+                  then Some (map (ps @ qname))
+                  else None)
             condmaps)
         (if pos = [ "#" ] then [ pos ]
         else List.map (fun prf -> "#" :: prf) (prefix_list (List.tl pos)))
@@ -261,60 +257,32 @@ let rec eval_bl pos construct qname fstmntls =
       | TYPE -> (
           try
             resolve qual
-              [
-                ((fun i _ -> i = FLATTYPE name), id);
-                ( (fun i qual -> i = FLATTYPEALIAS name && qual = []),
-                  fun qname ->
-                    let name, qual = last_and_list qname in
-                    let actual =
-                      List.find_opt
-                        (fun (ps, i) ->
-                          ps = qual
-                          &&
-                          match i with
-                          | FLATTYPEALIASACTUAL (n, t) -> n = name
-                          | _ -> false)
-                        fstmntls
-                    in
-                    match actual with
-                    | Some (ps, FLATTYPEALIASACTUAL (n, t)) ->
-                        eval_bl ps TYPE t fstmntls
-                    | _ ->
-                        raise
-                          (UndefinedReference
-                             (String.concat "type " (pos @ qname))) );
-              ]
+            [
+              ((fun i _ -> i = FLATTYPE name), id);
+              ( (fun i qual -> i = FLATTYPEALIAS name && qual = []),
+                fun qname ->
+                  let name, qual = last_and_list qname in
+                  let actual =
+                    (match (SLM.find_opt qual ifcilconfig) with
+                      | None -> None
+                      | Some ls -> 
+                          List.find_opt
+                            (fun i ->
+                              match i with
+                              | FLATTYPEALIASACTUAL (n, t) -> n = name
+                              | _ -> false)
+                            ls)
+                  in
+                  match actual with
+                  | Some (FLATTYPEALIASACTUAL (n, t)) ->
+                      eval_bl qual TYPE t ifcilconfig
+                  | _ ->
+                      raise
+                        (UndefinedReference
+                           (String.concat "type " (pos @ qname))) );
+            ]
           with UndefinedReference s ->
             raise (UndefinedReference ("type: " ^ s))
-            (* if
-                 List.exists
-                   (fun (ps, i) -> ps = pos @ qual && i = FLATTYPE name)
-                   fstmntls
-               then pos @ qname
-               else if
-                 qual = []
-                 && List.exists
-                      (fun (ps, i) -> ps = pos @ qual && i = FLATTYPEALIAS name)
-                      fstmntls
-               then
-                 let actual =
-                   List.find_opt
-                     (fun (ps, i) ->
-                       ps = pos @ qual
-                       &&
-                       match i with
-                       | FLATTYPEALIASACTUAL (n, t) -> n = name
-                       | _ -> false)
-                     fstmntls
-                 in
-                 match actual with
-                 | Some (ps, FLATTYPEALIASACTUAL (n, t)) ->
-                     eval_bl ps TYPE t fstmntls
-                 | _ ->
-                 raise (UndefinedReference (String.concat "type " (pos @ qname)))
-
-               else
-                 raise (UndefinedReference (String.concat "type " (pos @ qname))) *)
           )
       | ATTRIBUTE -> (
           try resolve qual [ ((fun i _ -> i = FLATATTRIBUTE name), id) ]
@@ -375,7 +343,7 @@ let rec eval_bl pos construct qname fstmntls =
       (* Not needed: classcommon, classmapping, classpermissionset *)
       | CLASSCOMMON | CLASSPERMISSIONSET | CLASSMAPPING | _ -> qname)
 
-let eval_bl_type_attr pos construct name fstmntls =
+let eval_bl_type_attr pos construct name ifcilconfig =
   (* let eval_bl_type_attr pos construct name fstmntls
      parameters:
        pos - the path in which the name to be resolved occurs
@@ -388,15 +356,15 @@ let eval_bl_type_attr pos construct name fstmntls =
   *)
   if construct = TYPE then
     (* TODO: check, this is done globally and not layer by layer in the nesting of pos, is it right? *)
-    try eval_bl pos TYPE name fstmntls
+    try eval_bl pos TYPE name ifcilconfig
     with UndefinedReference _ -> (
-      try eval_bl pos ATTRIBUTE name fstmntls
+      try eval_bl pos ATTRIBUTE name ifcilconfig
       with UndefinedReference _ ->
         raise
           (UndefinedReference
              ("eval_bl_type_attr - " ^ String.concat "." name ^ " in "
             ^ String.concat "." pos)))
-  else eval_bl pos ATTRIBUTE name fstmntls
+  else eval_bl pos ATTRIBUTE name ifcilconfig
 
 (* ------------------- definition checking ------------------- *)
 
@@ -744,9 +712,7 @@ let print_fparams fparams =
          ^ " " ^ name)
        fparams)
 
-let rec print_flat_CIL (pos, stmnt) =
-  print_path pos
-  ^
+let rec print_flat_CIL stmnt =
   match stmnt with
   | FLATTYPE t -> ".type(" ^ t ^ ")"
   | FLATTYPEALIAS t -> ".typealias(" ^ t ^ ")"

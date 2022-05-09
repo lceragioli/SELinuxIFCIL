@@ -1,8 +1,11 @@
+open Utils
+open IFCILconfiguration
+
 exception UndefinedMeet of string
 
 exception NotUniqueMeet of string
 
 exception UncorrectRefinement of string
 
-val normalize : (string list * IFCILconfiguration.flat_statement) list ->
-  (string list * IFCILconfiguration.flat_statement) list
+val normalize : flat_statement list SLM.t ->
+  flat_statement list SLM.t

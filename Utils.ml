@@ -12,6 +12,15 @@ module OrderPair (Ord1 : Stdlib__set.OrderedType) (Ord2 : Stdlib__set.OrderedTyp
     if Ord1.compare a c == 0 then Ord2.compare b d else Ord1.compare a c
 end;;
 
+module StringList = OrderList (String)
+module SLS = Set.Make (StringList)
+
+module StSL = OrderPair (String) (StringList)
+module StSLS = Set.Make (StSL)
+
+module SM = Map.Make (String)
+module SLM = Map.Make (StringList)
+
 let ( << ) f g x = f (g x)
 
 let rec listminus list list' =
