@@ -19,24 +19,6 @@ exception UnsupportedConstruct of string
 
 exception UndefinedReference of string
 
-type macrocontent =
-  {
-    types : SS.t;
-    typeAlias : SS.t;
-    typealiasActuals : string list SM.t;
-    typeAttribute : SS.t;
-    typeAttributeSet : attributeexp SLM.t;
-  }
-
-type blockcontent =
-  {
-    types : SS.t;
-    typeAlias : SS.t;
-    typealiasActuals : string list SM.t;
-    typeAttribute : SS.t;
-    typeAttributeSet : attributeexp SLM.t;
-  }
-
 type flat_statement =
   | FLATTYPE of string
   | FLATTYPEALIAS of string
