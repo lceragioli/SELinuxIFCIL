@@ -1,3 +1,5 @@
+all: IFCILtoNuSMV IFCILverif
+
 ifcil:
 	ocamlc -c CILsyntax.ml
 	ocamllex CILlexer.mll
@@ -15,12 +17,13 @@ ifcil:
 	ocamlc -c preprocessing.ml
 	ocamlc -c normalization.mli
 	ocamlc -c normalization.ml
-	ocamlc -c IFCILtoNuSMV.ml 
 
 IFCILtoNuSMV: ifcil
+	ocamlc -c IFCILtoNuSMV.ml 
 	ocamlc str.cma -o IFCILtoNuSMV Utils.cmo CILgrammar.cmo CILlexer.cmo IFCILconfiguration.cmo IFL.cmo preprocessing.cmo normalization.cmo IFCILtoNuSMV.cmo
 
 IFCILverif: ifcil
+	ocamlc -c IFCILverif.ml 
 	ocamlc str.cma -o IFCILverif Utils.cmo CILgrammar.cmo CILlexer.cmo IFCILconfiguration.cmo IFL.cmo preprocessing.cmo normalization.cmo IFCILverif.cmo
 
 clean:
