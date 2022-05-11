@@ -8,5 +8,7 @@ CILlexer.ml
 CILlexer.mli
 NuSMVoutput
 main
+IFCILverify
+IFCILtoNuSMV
 _build/
 
