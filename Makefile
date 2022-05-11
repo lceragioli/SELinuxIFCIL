@@ -24,4 +24,4 @@ IFCILverif: ifcil
 	ocamlc str.cma -o IFCILverif Utils.cmo CILgrammar.cmo CILlexer.cmo IFCILconfiguration.cmo IFL.cmo preprocessing.cmo normalization.cmo IFCILverif.cmo
 
 clean:
-	rm *.cmo *.cmi
+	rm *.cmo *.cmi CILlexer.ml CILgrammar.ml CILgrammar.mli
