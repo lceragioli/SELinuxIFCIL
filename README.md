@@ -67,7 +67,7 @@ To replicate the results about the scalability of IFCILverif, run
 ./IFCILverify Examples/IFCILNuSMVconfigurations/cilbase-pipelineNuSMVconf
 ```
 
-The script run_experiments iterates on all the configurations and the considered properties printing the time of execution of IFCILverif.
+The script `run_experiments.sh` iterates on all the configurations and the considered properties printing the results and time of execution of IFCILverif.
 ```
-./run_experiments
+./run_experiments.sh
 ```
