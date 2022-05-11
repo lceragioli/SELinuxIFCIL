@@ -5,6 +5,8 @@ open Sys
 module SS = Set.Make (String)
 module Dict = Map.Make (String)
 
+exception UsageError of string
+
 let is_write c os =
   List.find_opt
     (fun s -> s = os)
@@ -426,7 +428,7 @@ let print_NuSMV fstmntls oc =
   Printf.fprintf oc "(state = pozzo -> next(state = pozzo))\n\n\n";
   List.iter
     (fun (name, rqr) ->
-      Printf.fprintf oc "--  %s\n" name;
+      Printf.fprintf oc "--  (%s) %s \n" name (print_IFL_requirement rqr);
       Printf.fprintf oc "LTLSPEC %s\n" (ifl_to_LTL rqr type_nodes))
     labeledrequirements;
   Printf.fprintf oc "\n";
@@ -434,60 +436,13 @@ let print_NuSMV fstmntls oc =
   print_string "NuSMV generated\n";
   (labeledrequirements, type_nodes)
 
-let parse_response_line line mustfalse =
-  try
-    if String.sub line 0 16 = "-- specification" then
-      try
-        if
-          (String.sub line (String.length line - 8) 8 = "is false" && mustfalse)
-          || String.sub line (String.length line - 7) 7 = "is true"
-             && not mustfalse
-        then "-------- is verified!\n\n"
-        else "-------- is NOT verified!\n\n"
-      with Invalid_argument s ->
-        raise (Invalid_argument (s ^ " when parsing responses"))
-    else ""
-  with Invalid_argument s -> ""
-
-let rec parse_response oc' requirements =
-  if requirements <> [] then (
-    try
-      let mustfalse =
-        match snd (List.hd requirements) with
-        | MUST _ -> true
-        | MUSTNOT _ | EVERYMUST _ -> false
-      in
-      let line = input_line oc' in
-      let result = parse_response_line line mustfalse in
-      (* print_string (line ^ "\n"); *)
-      if result <> "" then (
-        print_string
-          ("++++ ("
-          ^ fst (List.hd requirements)
-          ^ ") "
-          ^ print_IFL_requirement (snd (List.hd requirements))
-          ^ result);
-        parse_response oc' (List.tl requirements))
-      else parse_response oc' requirements
-    with
-    | End_of_file -> close_in oc'
-    | e ->
-        (* some unexpected exception occurs *)
-        close_in_noerr oc';
-        (* emergency closing *)
-        raise e)
-
-let verify config infMC outfMC =
-  let start = Sys.time () in
-  let oc = open_out infMC and oc' = open_in outfMC in
-  let requirements, type_nodes = print_NuSMV config oc in
-  print_newline ();
-  flush stdout;
-  print_string "\n\n";
-  print_newline ();
-  flush stdout;
-  Sys.command ("./NuSMV " ^ infMC ^ " > " ^ outfMC);
-  parse_response oc' requirements;
-  let stop = Sys.time () in
-  Printf.printf "Execution time: %fs\n%!" (stop -. start);
-  close_in_noerr oc'
+let _ =
+  if Array.length Sys.argv != 3 then
+    raise (UsageError "Arguments <IFCIL-input-file> and <NuSMV-output-file> are needed");
+  let in_file = open_in Sys.argv.(1) in
+  let out_file = open_out Sys.argv.(2) in
+  let lexbuf = Lexing.from_channel in_file in
+  let result = CILgrammar.main CILlexer.token lexbuf in
+  let normal = Normalization.normalize (Preprocessing.flatten_conf result [ "#" ]) in
+  print_NuSMV normal out_file
+  

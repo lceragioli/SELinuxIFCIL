@@ -1,12 +1,13 @@
 #!/bin/bash
 
-opam switch 4.12.0
-eval $(opam env)
+# You may need to run the following before compiling
+# opam switch 4.12.0
+# eval $(opam env)
+
+ocamlc -c CILsyntax.ml
 
 ocamllex CILlexer.mll
 ocamlyacc CILgrammar.mly
-awk '/%{/{flag=1; next} /let/{flag=0} flag' CILgrammar.mly > temp
-cat temp CILgrammar.mli > temp2 && mv temp2 CILgrammar.mli
 ocamlc -c CILgrammar.mli
 ocamlc -c CILlexer.ml
 ocamlc -c CILgrammar.ml
@@ -21,8 +22,9 @@ ocamlc -c preprocessing.mli
 ocamlc -c preprocessing.ml
 ocamlc -c normalization.mli
 ocamlc -c normalization.ml
-ocamlc -c verification.mli
-ocamlc -c verification.ml
 
-ocamlc -c main.ml 
-ocamlc str.cma -o main Utils.cmo CILgrammar.cmo CILlexer.cmo IFCILconfiguration.cmo IFL.cmo preprocessing.cmo normalization.cmo verification.cmo main.cmo
+ocamlc -c IFCILtoNuSMV.ml 
+ocamlc str.cma -o IFCILtoNuSMV Utils.cmo CILgrammar.cmo CILlexer.cmo IFCILconfiguration.cmo IFL.cmo preprocessing.cmo normalization.cmo IFCILtoNuSMV.cmo
+
+ocamlc -c IFCILverif.ml 
+ocamlc str.cma -o IFCILverif Utils.cmo CILgrammar.cmo CILlexer.cmo IFCILconfiguration.cmo IFL.cmo preprocessing.cmo normalization.cmo IFCILverif.cmo
