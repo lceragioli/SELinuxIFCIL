@@ -74,10 +74,10 @@ let _ =
   if Array.length Sys.argv != 2 then
     raise (UsageError "Arguments <NuSMV-configuration-file> are needed");
   let in_file = open_in Sys.argv.(1) in
-  let tmp_file = open_in temp in
   let requirements = parse_requirements_from_NuSMV in_file in
   close_in_noerr in_file;
   Sys.command ("./NuSMV " ^ Sys.argv.(1) ^ " > " ^ temp);
+  let tmp_file = open_in temp in
   parse_response tmp_file requirements;
 
 
