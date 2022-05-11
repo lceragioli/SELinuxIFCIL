@@ -10,7 +10,7 @@ SELinuxIFCIL is a SELinux configuration language that extends CIL with informati
 It comes with a pair of tools for verifying that the information flow requirements are met by the configuration.
 
 - IFCILtoNuSMV : translates a IFCIL configuration into a IFCIL-NuSMV configuration file
-- IFCILVerif : uses NuSMV to verify the requirements of a IFCIL-NuSMV configuration file
+- IFCILverif : uses NuSMV to verify the requirements of a IFCIL-NuSMV configuration file
 
 ### Compilation
 
@@ -42,10 +42,10 @@ Where
 
 To verify the IFCIL-NuSMV configuration file run
 ```
-./IFCILverify IFCIL-NuSMV-config-file  
+./IFCILverif IFCIL-NuSMV-config-file  
 ```
 Where
- - `IFCILverify` : is the name of the executable
+ - `IFCILverif` : is the name of the executable
  - `IFCIL-NuSMV-config-file` : is the IFCIL-NuSMV configuration file to be verified, ontained using IFCILtoNuSMV
 
 ### Examples
@@ -55,7 +55,7 @@ The `Examples` directory contains the example from the paper and the test cases.
 To verify the running example from the paper run
 ```
 ./IFCILtoNuSMV Examples/IFCILconfigurations/paper-example.cil paper-example-IFCIL-NuSMV
-./IFCILverify paper-example-IFCIL-NuSMV
+./IFCILverif paper-example-IFCIL-NuSMV
 ```
 
 ### How to Replicate Scalability Experiments of IFCILverif
@@ -64,7 +64,7 @@ The IFCIL-NuSMV configuration files for the experiments can be found in `Example
 There is a single file for every CIL configuration and set of IFL requirements (e.g., `cilbase-pipelineNuSMVconf` is for cilbase CIL configuration and assured pipeline property). 
 To replicate the results about the scalability of IFCILverif, run
 ```
-./IFCILverify Examples/IFCILNuSMVconfigurations/cilbase-pipelineNuSMVconf
+./IFCILverif Examples/IFCILNuSMVconfigurations/cilbase-pipelineNuSMVconf
 ```
 
 The script `run_experiments.sh` iterates on all the configurations and the considered properties printing the results and time of execution of IFCILverif.
