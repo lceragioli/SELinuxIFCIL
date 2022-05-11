@@ -1,6 +1,6 @@
 ; typeattributes for information flows;
-;IFL; (augment1) sys.subj +> sys.subj : sys.subj -[append]> sys.subj ;IFL;
-;IFL; (augment2) sys.subj +> securityfs.fs : sys.subj -[append]> securityfs.fs ;IFL; 
+;IFL; (augment1) sys.subj +> sys.subj : sys.subj +[append]> sys.subj ;IFL;
+;IFL; (augment2) sys.subj +> securityfs.fs : sys.subj +[append]> securityfs.fs ;IFL; 
 
 (policycap "network_peer_controls")
 (policycap "open_perms")

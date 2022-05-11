@@ -1,0 +1,659 @@
+MODULE main
+
+
+     DEFINE
+nonodeatall := FALSE;
+dev_unconfined_subj_type := FALSE;
+dev_storage_obj_type := (( ( ( state = removable_storage#storage_dev | state = fixed_disk#storage_dev) | state = fuse_storage#storage_dev) | state = scsi_generic#storage_dev)) & ! (state = pozzo);
+dev_obj_type := (( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( state = zero#dev | state = wireless#dev) | state = vfio#dev) | state = usbmon#dev) | state = uhid#dev) | state = tpm#dev) | state = ppp#dev) | state = printer#dev) | state = null#dev) | state = memory#dev) | state = lvm_control#dev) | state = kmsg_dev#dev) | state = event#dev) | state = devtty#dev) | state = clock#dev) | state = apm#dev) | state = removable_storage#storage_dev) | state = fixed_disk#storage_dev) | state = tty#serial_dev) | state = console#dev) | state = virtio#serial_dev) | state = fuse_storage#storage_dev) | state = scsi_generic#storage_dev) | state = autofs_dev#dev) | state = cpu#dev) | state = dri#dev) | state = framebuf#dev) | state = kvm#dev) | state = loop_control#dev) | state = mei_misc#dev) | state = mouse#dev) | state = nvram#dev) | state = pm_qos_misc#dev) | state = ptmx#dev) | state = random#dev) | state = sound#dev) | state = tun_tap#dev) | state = urandom#dev) | state = usb#dev) | state = v4l#dev) | state = vhost#dev) | state = watchdog#dev) | state = xserver_misc#dev)) & ! (state = pozzo);
+not_storage_not_write_scsi_generic_subj_type_or_storage_unconfined_subj_type := (! ( storage_not_write_scsi_generic_subj_type_or_storage_unconfined_subj_type)) & ! (state = pozzo);
+storage_not_write_scsi_generic_subj_type_or_storage_unconfined_subj_type := (! ( ( storage_unconfined_subj_type | storage_write_scsi_generic_subj_type))) & ! (state = pozzo);
+storage_write_scsi_generic_subj_type := FALSE;
+not_storage_not_read_scsi_generic_subj_type_or_storage_unconfined_subj_type := (! ( storage_not_read_scsi_generic_subj_type_or_storage_unconfined_subj_type)) & ! (state = pozzo);
+storage_not_read_scsi_generic_subj_type_or_storage_unconfined_subj_type := (! ( ( storage_unconfined_subj_type | storage_read_scsi_generic_subj_type))) & ! (state = pozzo);
+storage_read_scsi_generic_subj_type := FALSE;
+not_storage_not_write_fixed_disk_subj_type_or_storage_unconfined_subj_type := (! ( storage_not_write_fixed_disk_subj_type_or_storage_unconfined_subj_type)) & ! (state = pozzo);
+storage_not_write_fixed_disk_subj_type_or_storage_unconfined_subj_type := (! ( ( storage_unconfined_subj_type | storage_write_fixed_disk_subj_type))) & ! (state = pozzo);
+storage_write_fixed_disk_subj_type := FALSE;
+not_storage_not_read_fixed_disk_subj_type_or_storage_unconfined_subj_type := (! ( storage_not_read_fixed_disk_subj_type_or_storage_unconfined_subj_type)) & ! (state = pozzo);
+storage_not_read_fixed_disk_subj_type_or_storage_unconfined_subj_type := (! ( ( storage_unconfined_subj_type | storage_read_fixed_disk_subj_type))) & ! (state = pozzo);
+storage_read_fixed_disk_subj_type := FALSE;
+storage_unconfined_subj_type := FALSE;
+sec_bool_obj_type_except_sec_load_policy := (( sec_bool_obj_type & ! ( state = sec_load_policy#bool))) & ! (state = pozzo);
+sec_not_setsecparam_subj_type_or_sec_unconfined_subj_type := (! ( ( sec_unconfined_subj_type | sec_setsecparam_subj_type))) & ! (state = pozzo);
+sec_setsecparam_subj_type := FALSE;
+sec_not_setenforce_subj_type_or_sec_unconfined_subj_type := (! ( ( sec_unconfined_subj_type | sec_setenforce_subj_type))) & ! (state = pozzo);
+sec_setenforce_subj_type := FALSE;
+sec_not_load_policy_subj_type_or_sec_unconfined_subj_type := (! ( ( sec_unconfined_subj_type | sec_load_policy_subj_type))) & ! (state = pozzo);
+sec_load_policy_subj_type := FALSE;
+sec_unconfined_subj_type := FALSE;
+sec_bool_obj_type := (( ( ( ( ( ( ( ( ( ( ( ( ( ( ( state = sec_load_policy#bool | state = term_console_login#bool) | state = fs_use_nfs#bool) | state = fs_use_fuse#bool) | state = fs_use_dosfs#bool) | state = sys_load_kernel_module#bool) | state = subj_mmap_low#bool) | state = subj_execmem#bool) | state = file_execmod_all_except#bool) | state = subj_execheap#bool) | state = subj_execstack#bool) | state = subj_ptrace#bool) | state = fs_use_cifs#bool) | state = fs_use_iso9660#bool) | state = fs_use_removable#bool) | state = securityfs#fs)) & ! (state = pozzo);
+term_tty_obj_type := FALSE;
+term_server_pty_obj_type := FALSE;
+term_serial_obj_type := (( state = tty#serial_dev | state = virtio#serial_dev)) & ! (state = pozzo);
+term_pty_obj_type := FALSE;
+fs_trace_client_subj_type := FALSE;
+fs_manage_removable_subj_type := FALSE;
+fs_read_removable_subj_type := FALSE;
+fs_manage_nfs_subj_type := FALSE;
+fs_read_nfs_subj_type := FALSE;
+fs_read_iso9660_subj_type := FALSE;
+fs_manage_fuse_subj_type := FALSE;
+fs_read_fuse_subj_type := FALSE;
+fs_manage_dosfs_subj_type := FALSE;
+fs_read_dosfs_subj_type := FALSE;
+fs_manage_cifs_subj_type := FALSE;
+fs_read_cifs_subj_type := FALSE;
+fs_unconfined_subj_type := FALSE;
+fs_obj_type := (( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( state = securityfs#fs | state = tmpfs#fs) | state = rootfs#fs) | state = proc#fs) | state = nfsd#fs) | state = nfs#fs) | state = iso9660#fs) | state = hugetlbfs#fs) | state = fuse_fs#fs) | state = drm#fs) | state = dosfs#fs) | state = devtmpfs#fs) | state = devpts#fs) | state = debugfs#fs) | state = configfs#fs) | state = cgroup#fs) | state = cifs#fs) | state = binfmt_misc#fs) | state = aio#fs) | state = anon_inodefs#fs) | state = autofs_fs#fs) | state = bdev#fs) | state = efivarfs#fs) | state = fs#fs) | state = pstore#fs) | state = removable_fs#fs) | state = rpc_pipefs#fs) | state = sysfs#fs) | state = tracefs#fs)) & ! (state = pozzo);
+lib_obj_type := (( state = lib#lib_file | state = textrel#lib_file)) & ! (state = pozzo);
+net_unconfined_subj_type := FALSE;
+net_unreserved_port_obj_type := (state = unreserved#port) & ! (state = pozzo);
+net_rpc_port_obj_type := (state = hi_reserved#port) & ! (state = pozzo);
+net_reserved_port_obj_type := (( state = hi_reserved#port | state = reserved#port)) & ! (state = pozzo);
+net_ephemeral_port_obj_type := (state = ephemeral#port) & ! (state = pozzo);
+net_port_obj_type := (( ( ( ( state = unreserved#port | state = hi_reserved#port) | state = port#port) | state = ephemeral#port) | state = reserved#port)) & ! (state = pozzo);
+net_peer_obj_type := (state = peer#peer) & ! (state = pozzo);
+net_packet_obj_type := (state = packet#packet) & ! (state = pozzo);
+net_node_obj_type := (state = node#node) & ! (state = pozzo);
+net_if_obj_type := (state = if#if) & ! (state = pozzo);
+file_unconfined_subj_type := FALSE;
+file_tmpfs_obj_type := FALSE;
+file_var_tmp_obj_type := (state = var_tmp#var_tmp_file) & ! (state = pozzo);
+file_var_spool_obj_type := (state = var_spool#var_spool_file) & ! (state = pozzo);
+file_var_log_obj_type := (( state = sys#var_log_file | state = var_log#var_log_file)) & ! (state = pozzo);
+file_var_lib_obj_type := (state = var_lib#var_lib_file) & ! (state = pozzo);
+file_var_db_obj_type := (state = var_db#var_db_file) & ! (state = pozzo);
+file_var_cache_obj_type := (state = var_cache#var_cache_file) & ! (state = pozzo);
+file_var_obj_type := (state = var#var_file) & ! (state = pozzo);
+file_runtime_lock_obj_type := (state = runtime_lock#runtime_lock_file) & ! (state = pozzo);
+file_runtime_config_obj_type := (state = runtime_config#runtime_config_file) & ! (state = pozzo);
+file_runtime_obj_type := (( state = runtime_user#runtime_file | state = runtime#runtime_file)) & ! (state = pozzo);
+file_data_obj_type := (state = data#data_file) & ! (state = pozzo);
+file_config_obj_type := (state = config#config_file) & ! (state = pozzo);
+file_boot_flag_obj_type := FALSE;
+file_boot_obj_type := (state = boot#boot_file) & ! (state = pozzo);
+file_non_sec_obj_type := (( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( lib_obj_type | state = ld_so#file) | state = sys#var_log_file) | state = unknown#file) | state = runtime_user#runtime_file) | state = runtime_lock#runtime_lock_file) | state = lost_found#file) | state = home#file) | state = data#data_file) | state = config#config_file) | state = boot#boot_file) | state = mnt#file) | state = runtime#runtime_file) | state = runtime_config#runtime_config_file) | state = var#var_file) | state = var_cache#var_cache_file) | state = var_db#var_db_file) | state = var_lib#var_lib_file) | state = var_log#var_log_file) | state = var_spool#var_spool_file) | state = var_tmp#var_tmp_file) | state = ld_so_cache#file) | cmd_obj_type)) & ! (state = pozzo);
+file_sec_obj_type := FALSE;
+file_non_auth_obj_type := (( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( lib_obj_type | state = ld_so#file) | state = sys#var_log_file) | state = unknown#file) | state = runtime_user#runtime_file) | state = runtime_lock#runtime_lock_file) | state = lost_found#file) | state = home#file) | state = data#data_file) | state = config#config_file) | state = boot#boot_file) | state = mnt#file) | state = runtime#runtime_file) | state = runtime_config#runtime_config_file) | state = var#var_file) | state = var_cache#var_cache_file) | state = var_db#var_db_file) | state = var_lib#var_lib_file) | state = var_log#var_log_file) | state = var_spool#var_spool_file) | state = var_tmp#var_tmp_file) | state = ld_so_cache#file) | cmd_obj_type)) & ! (state = pozzo);
+file_auth_obj_type := FALSE;
+file_obj_type := (( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( lib_obj_type | state = ld_so#file) | state = sys#var_log_file) | state = unknown#file) | state = runtime_user#runtime_file) | state = runtime_lock#runtime_lock_file) | state = lost_found#file) | state = home#file) | state = data#data_file) | state = config#config_file) | state = boot#boot_file) | state = mnt#file) | state = runtime#runtime_file) | state = runtime_config#runtime_config_file) | state = var#var_file) | state = var_cache#var_cache_file) | state = var_db#var_db_file) | state = var_lib#var_lib_file) | state = var_log#var_log_file) | state = var_spool#var_spool_file) | state = var_tmp#var_tmp_file) | state = ld_so_cache#file) | cmd_obj_type)) & ! (state = pozzo);
+standard_uncond_exempt_subj_type := (subj_unconfined_type) & ! (state = pozzo);
+standard_user_exemption_target_subj_type := FALSE;
+standard_sys_role_change_exemption_subj_type := FALSE;
+standard_sys_id_change_exemption_subj_type := FALSE;
+standard_obj_sys_id_change_exemption_subj_type := FALSE;
+standard_role_change_exemption_subj_type := FALSE;
+standard_id_change_exemption_subj_type := FALSE;
+standard_obj_id_change_exemption_subj_type := (subj_unconfined_type) & ! (state = pozzo);
+file_except_obj_type := (( file_obj_type & ! ( ( file_sec_obj_type | ( file_exception_obj_type | file_auth_obj_type))))) & ! (state = pozzo);
+file_exception_obj_type := FALSE;
+subj_entry_obj_type := FALSE;
+subj_type := (state = sys#subj) & ! (state = pozzo);
+subj_common_type := (state = sys#subj) & ! (state = pozzo);
+subj_unconfined_type := FALSE;
+subj_interactive_fd_type := FALSE;
+subj_use_interactive_fd_type := FALSE;
+subj_not_subj_entry_obj_type := (! ( subj_entry_obj_type)) & ! (state = pozzo);
+subj_not_subj_type := (! ( subj_type)) & ! (state = pozzo);
+subj_dynamic_subj_type_transition_type := (subj_unconfined_type) & ! (state = pozzo);
+subj_not_dynamic_subj_type_transition_type := (( subj_type & ! ( subj_dynamic_subj_type_transition_type))) & ! (state = pozzo);
+subj_execheap_type := (subj_unconfined_type) & ! (state = pozzo);
+subj_not_execheap_type := (( subj_type & ! ( subj_execheap_type))) & ! (state = pozzo);
+subj_execmem_type := (( subj_unconfined_type | subj_unconfined_type)) & ! (state = pozzo);
+subj_not_execmem_type := (( subj_type & ! ( subj_execmem_type))) & ! (state = pozzo);
+subj_execstack_type := (subj_unconfined_type) & ! (state = pozzo);
+subj_not_execstack_type := (( subj_type & ! ( subj_execstack_type))) & ! (state = pozzo);
+subj_mmap_low_type := (subj_unconfined_type) & ! (state = pozzo);
+subj_not_mmap_low_type := (( subj_type & ! ( subj_mmap_low_type))) & ! (state = pozzo);
+subj_ptrace_type := FALSE;
+subj_not_ptrace_type := (( subj_type & ! ( subj_ptrace_type))) & ! (state = pozzo);
+sys_mountpoint_obj_type := (( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( state = tracefs#fs | state = sysfs#fs) | state = rpc_pipefs#fs) | state = pstore#fs) | state = efivarfs#fs) | state = autofs_fs#fs) | state = fs_sysctl#sysctl) | state = var_tmp#var_tmp_file) | state = var_spool#var_spool_file) | state = var_log#var_log_file) | state = var_lib#var_lib_file) | state = var_db#var_db_file) | state = var_cache#var_cache_file) | state = var#var_file) | state = runtime#runtime_file) | state = mnt#file) | state = boot#boot_file) | state = config#config_file) | state = data#data_file) | state = home#file) | state = runtime_lock#runtime_lock_file) | state = runtime_user#runtime_file) | state = invalid#isid) | state = binfmt_misc#fs) | state = cifs#fs) | state = cgroup#fs) | state = configfs#fs) | state = debugfs#fs) | state = devpts#fs) | state = devtmpfs#fs) | state = dosfs#fs) | state = fuse_fs#fs) | state = hugetlbfs#fs) | state = iso9660#fs) | state = nfs#fs) | state = nfsd#fs) | state = proc#fs) | state = rootfs#fs) | state = tmpfs#fs)) & ! (state = pozzo);
+sys_obj_type := (( ( ( ( ( ( ( ( ( ( ( ( sys_sysfs_obj_type | sys_proc_obj_type) | net_peer_obj_type) | net_node_obj_type) | file_obj_type) | net_if_obj_type) | net_packet_obj_type) | net_port_obj_type) | state = unlabeled#isid) | sys_sysctl_obj_type) | fs_obj_type) | sec_bool_obj_type) | dev_obj_type)) & ! (state = pozzo);
+sys_proc_obj_type := (( ( ( ( ( ( ( ( state = net_proc#proc | state = mdstat#proc) | state = kcore#proc) | state = iomem#proc) | state = cpuinfo#proc) | state = kallsyms#proc) | state = kmsg_proc#proc) | state = mtrr#proc) | state = sysrq#proc)) & ! (state = pozzo);
+sys_sysctl_obj_type := (( ( ( ( ( ( ( ( ( ( ( state = vm_overcommit#sysctl | state = usermodehelper#sysctl) | state = net_unix#sysctl) | state = kernel#sysctl) | state = dev#sysctl) | state = sysctl#sysctl) | state = crypto#sysctl) | state = fs_sysctl#sysctl) | state = irq#sysctl) | state = net_sysctl#sysctl) | state = security#sysctl) | state = vm#sysctl)) & ! (state = pozzo);
+sys_sysfs_obj_type := (( ( ( ( state = node_sysfs#sysfs | state = cpu_online_sysfs#sysfs) | state = cpu_sysfs#sysfs) | state = memory_sysfs#sysfs) | state = node_online_sysfs#sysfs)) & ! (state = pozzo);
+sys_subj_type := (subj_common_type) & ! (state = pozzo);
+sys_audit_client_subj_type := FALSE;
+sys_unconfined_subj_type := FALSE;
+sys_load_kernel_module_subj_type := (sys_unconfined_subj_type) & ! (state = pozzo);
+sys_not_load_kernel_module_subj_type := (! ( sys_load_kernel_module_subj_type)) & ! (state = pozzo);
+sys_read_kernel_message_subj_type := FALSE;
+sys_not_read_kernel_message_subj_type_or_sys_unconfined_subj_type := (! ( ( sys_unconfined_subj_type | sys_read_kernel_message_subj_type))) & ! (state = pozzo);
+sys_dump_kernel_subj_type := FALSE;
+sys_not_dump_kernel_subj_type_or_sys_unconfined_subj_type := (! ( ( sys_unconfined_subj_type | sys_dump_kernel_subj_type))) & ! (state = pozzo);
+sys_security_or_usermodehelper_sysctl_obj_type := (( state = security#sysctl | state = usermodehelper#sysctl)) & ! (state = pozzo);
+sys_not_security_or_usermodehelper_sysctl_obj_type := (( sys_sysctl_obj_type & ! ( sys_security_or_usermodehelper_sysctl_obj_type))) & ! (state = pozzo);
+sys_write_security_and_usermodehelper_sysctl_subj_type := FALSE;
+sys_not_write_security_and_usermodehelper_sysctl_subj_type := (! ( sys_write_security_and_usermodehelper_sysctl_subj_type)) & ! (state = pozzo);
+cmd_obj_type := (( ( state = shell#cmd_file | subj_entry_obj_type) | state = cmd#cmd_file)) & ! (state = pozzo);
+dev_read_memory_subj_type := (state = sys#subj) & ! (state = pozzo);
+dev_not_read_memory_subj_type_or_dev_unconfined_subj_type := (! ( ( dev_unconfined_subj_type | dev_read_memory_subj_type))) & ! (state = pozzo);
+not_dev_not_read_memory_subj_type_or_dev_unconfined_subj_type := (! ( dev_not_read_memory_subj_type_or_dev_unconfined_subj_type)) & ! (state = pozzo);
+dev_write_memory_subj_type := (state = sys#subj) & ! (state = pozzo);
+dev_not_write_memory_subj_type_or_dev_unconfined_subj_type := (! ( ( dev_unconfined_subj_type | dev_write_memory_subj_type))) & ! (state = pozzo);
+not_dev_not_write_memory_subj_type_or_dev_unconfined_subj_type := (! ( dev_not_write_memory_subj_type_or_dev_unconfined_subj_type)) & ! (state = pozzo);
+dev_except_storage_obj_type := (( dev_obj_type & ! ( dev_storage_obj_type))) & ! (state = pozzo);
+mls_file_read_subj_type := FALSE;
+mls_file_read_to_clr_subj_type := FALSE;
+mls_file_write_subj_type := FALSE;
+mls_file_write_to_clr_subj_type := FALSE;
+mls_file_write_in_range_subj_type := FALSE;
+mls_file_upgrade_subj_type := FALSE;
+mls_file_downgrade_subj_type := FALSE;
+mls_net_read_subj_type := FALSE;
+mls_net_read_to_clr_subj_type := FALSE;
+mls_net_write_subj_type := FALSE;
+mls_net_write_to_clr_subj_type := FALSE;
+mls_net_write_ranged_subj_type := FALSE;
+mls_net_inbound_subj_type := FALSE;
+mls_net_outbound_subj_type := FALSE;
+mls_ipc_read_subj_type := FALSE;
+mls_ipc_read_to_clr_subj_type := FALSE;
+mls_ipc_write_subj_type := FALSE;
+mls_ipc_write_to_clr_subj_type := FALSE;
+mls_proc_read_subj_type := FALSE;
+mls_proc_read_to_clr_subj_type := FALSE;
+mls_proc_write_subj_type := FALSE;
+mls_proc_write_to_clr_subj_type := FALSE;
+mls_proc_set_sl_subj_type := FALSE;
+mls_trusted_obj_type := (( ( ( ( ( ( ( state = vhost#dev | state = ptmx#dev) | state = kvm#dev) | state = devtmpfs#fs) | state = anon_inodefs#fs) | state = devtty#dev) | state = null#dev) | state = zero#dev)) & ! (state = pozzo);
+mls_priv_range_trans_subj_type := (state = sys#subj) & ! (state = pozzo);
+mls_range_trans_subj_type := FALSE;
+mls_fd_use_subj_type := FALSE;
+mls_fd_share_subj_type := FALSE;
+mcs_constrained_subj_type := FALSE;
+rbacsep_read_state_source_subj_type := FALSE;
+rbacsep_read_state_target_subj_type := FALSE;
+rbacsep_exempt_obj_type := FALSE;
+rbacsep_exempt_subj_type := FALSE;
+rbacsep_obj_role_change_exemption_subj_type := FALSE;
+rbacsep_obj_sys_role_change_exemption_subj_type := FALSE;
+
+
+
+     VAR
+
+         state : { pozzo, aio#fs,
+              anon_inodefs#fs,
+              apm#dev,
+              autofs_dev#dev,
+              autofs_fs#fs,
+              bdev#fs,
+              binfmt_misc#fs,
+              boot#boot_file,
+              cgroup#fs,
+              cifs#fs,
+              clock#dev,
+              cmd#cmd_file,
+              config#config_file,
+              configfs#fs,
+              console#dev,
+              cpu#dev,
+              cpu_online_sysfs#sysfs,
+              cpu_sysfs#sysfs,
+              cpuinfo#proc,
+              crypto#sysctl,
+              data#data_file,
+              debugfs#fs,
+              dev#sysctl,
+              devpts#fs,
+              devtmpfs#fs,
+              devtty#dev,
+              dosfs#fs,
+              dri#dev,
+              drm#fs,
+              efivarfs#fs,
+              ephemeral#port,
+              event#dev,
+              file_execmod_all_except#bool,
+              fixed_disk#storage_dev,
+              framebuf#dev,
+              fs#fs,
+              fs_sysctl#sysctl,
+              fs_use_cifs#bool,
+              fs_use_dosfs#bool,
+              fs_use_fuse#bool,
+              fs_use_iso9660#bool,
+              fs_use_nfs#bool,
+              fs_use_removable#bool,
+              fuse_fs#fs,
+              fuse_storage#storage_dev,
+              hi_reserved#port,
+              home#file,
+              hugetlbfs#fs,
+              if#if,
+              invalid#isid,
+              iomem#proc,
+              irq#sysctl,
+              iso9660#fs,
+              kallsyms#proc,
+              kcore#proc,
+              kernel#sysctl,
+              kmsg_dev#dev,
+              kmsg_proc#proc,
+              kvm#dev,
+              ld_so#file,
+              ld_so_cache#file,
+              lib#lib_file,
+              loop_control#dev,
+              lost_found#file,
+              lvm_control#dev,
+              mdstat#proc,
+              mei_misc#dev,
+              memory#dev,
+              memory_sysfs#sysfs,
+              mnt#file,
+              mouse#dev,
+              mtrr#proc,
+              net_proc#proc,
+              net_sysctl#sysctl,
+              net_unix#sysctl,
+              nfs#fs,
+              nfsd#fs,
+              node#node,
+              node_online_sysfs#sysfs,
+              node_sysfs#sysfs,
+              null#dev,
+              nvram#dev,
+              packet#packet,
+              peer#peer,
+              pm_qos_misc#dev,
+              port#port,
+              ppp#dev,
+              printer#dev,
+              proc#fs,
+              pstore#fs,
+              ptmx#dev,
+              random#dev,
+              removable_fs#fs,
+              removable_storage#storage_dev,
+              reserved#port,
+              rootfs#fs,
+              rpc_pipefs#fs,
+              runtime#runtime_file,
+              runtime_config#runtime_config_file,
+              runtime_lock#runtime_lock_file,
+              runtime_user#runtime_file,
+              scsi_generic#storage_dev,
+              sec_load_policy#bool,
+              security#sysctl,
+              securityfs#fs,
+              shell#cmd_file,
+              sound#dev,
+              subj_execheap#bool,
+              subj_execmem#bool,
+              subj_execstack#bool,
+              subj_mmap_low#bool,
+              subj_ptrace#bool,
+              sys#subj,
+              sys#var_log_file,
+              sys_load_kernel_module#bool,
+              sysctl#sysctl,
+              sysfs#fs,
+              sysrq#proc,
+              term_console_login#bool,
+              textrel#lib_file,
+              tmpfs#fs,
+              tpm#dev,
+              tracefs#fs,
+              tty#serial_dev,
+              tun_tap#dev,
+              uhid#dev,
+              unknown#file,
+              unlabeled#isid,
+              unreserved#port,
+              urandom#dev,
+              usb#dev,
+              usbmon#dev,
+              usermodehelper#sysctl,
+              v4l#dev,
+              var#var_file,
+              var_cache#var_cache_file,
+              var_db#var_db_file,
+              var_lib#var_lib_file,
+              var_log#var_log_file,
+              var_spool#var_spool_file,
+              var_tmp#var_tmp_file,
+              vfio#dev,
+              vhost#dev,
+              virtio#serial_dev,
+              vm#sysctl,
+              vm_overcommit#sysctl,
+              watchdog#dev,
+              wireless#dev,
+              xserver_misc#dev,
+              zero#dev  };
+
+
+
+
+     IVAR
+
+         operation : { accept,
+              add_name,
+              append,
+              associate,
+              attach_queue,
+              audit_access,
+              audit_control,
+              audit_read,
+              audit_write,
+              bind,
+              block_suspend,
+              call,
+              check_context,
+              chown,
+              compute_av,
+              compute_create,
+              compute_member,
+              compute_relabel,
+              compute_user,
+              connect,
+              connectto,
+              create,
+              create_files_as,
+              dac_override,
+              dac_read_search,
+              destroy,
+              dyntransition,
+              egress,
+              enqueue,
+              entrypoint,
+              execheap,
+              execmem,
+              execmod,
+              execstack,
+              execute,
+              execute_no_trans,
+              fork,
+              forward_in,
+              forward_out,
+              fowner,
+              fsetid,
+              getattr,
+              getcap,
+              getopt,
+              getpgid,
+              getsched,
+              getsession,
+              impersonate,
+              ingress,
+              ioctl,
+              ipc_info,
+              ipc_lock,
+              ipc_owner,
+              kill,
+              lease,
+              link,
+              linux_immutable,
+              listen,
+              load_policy,
+              lock,
+              mac_admin,
+              mac_override,
+              mknod,
+              mmap_zero,
+              module_request,
+              mount,
+              mounton,
+              name_bind,
+              name_connect,
+              net_admin,
+              net_bind_service,
+              net_broadcast,
+              net_raw,
+              nlmsg_read,
+              nlmsg_readpriv,
+              nlmsg_relay,
+              nlmsg_tty_audit,
+              nlmsg_write,
+              noatsecure,
+              node_bind,
+              open,
+              polmatch,
+              ptrace,
+              quotaget,
+              quotamod,
+              quotaon,
+              read,
+              read_policy,
+              receive,
+              recv,
+              recvfrom,
+              relabelfrom,
+              relabelto,
+              remount,
+              remove_name,
+              rename,
+              reparent,
+              rlimitinh,
+              rmdir,
+              search,
+              send,
+              sendto,
+              set_context_mgr,
+              setattr,
+              setbool,
+              setcap,
+              setcheckreqprot,
+              setcontext,
+              setcurrent,
+              setenforce,
+              setexec,
+              setfcap,
+              setfscreate,
+              setgid,
+              setkeycreate,
+              setopt,
+              setpcap,
+              setpgid,
+              setrlimit,
+              setsched,
+              setsecparam,
+              setsockcreate,
+              setuid,
+              share,
+              shutdown,
+              sigchld,
+              siginh,
+              sigkill,
+              signal,
+              signull,
+              sigstop,
+              sys_admin,
+              sys_boot,
+              sys_chroot,
+              sys_module,
+              sys_nice,
+              sys_pacct,
+              sys_ptrace,
+              sys_rawio,
+              sys_resource,
+              sys_time,
+              sys_tty_config,
+              syslog,
+              syslog_console,
+              syslog_mod,
+              syslog_read,
+              transfer,
+              transition,
+              unix_read,
+              unix_write,
+              unlink,
+              unmount,
+              use,
+              use_as_override,
+              view,
+              wake_alarm,
+              write  };
+
+
+
+    TRANS
+(state = aio#fs -> (  next(state = pozzo) )) &
+(state = anon_inodefs#fs -> (  next(state = pozzo) )) &
+(state = apm#dev -> (  next(state = pozzo) )) &
+(state = autofs_dev#dev -> (  next(state = pozzo) )) &
+(state = autofs_fs#fs -> (  next(state = pozzo) )) &
+(state = bdev#fs -> (  next(state = pozzo) )) &
+(state = binfmt_misc#fs -> (  next(state = pozzo) )) &
+(state = boot#boot_file -> (  next(state = pozzo) )) &
+(state = cgroup#fs -> (  next(state = pozzo) )) &
+(state = cifs#fs -> (  next(state = pozzo) )) &
+(state = clock#dev -> (  next(state = pozzo) )) &
+(state = cmd#cmd_file -> ( (operation = getattr & next(subj_common_type)) | (operation = open & next(subj_common_type)) | (operation = search & next(subj_common_type)) | (operation = read & next(subj_common_type)) | (operation = getattr & next(subj_common_type)) |  next(state = pozzo) )) &
+(state = config#config_file -> (  next(state = pozzo) )) &
+(state = configfs#fs -> (  next(state = pozzo) )) &
+(state = console#dev -> (  next(state = pozzo) )) &
+(state = cpu#dev -> (  next(state = pozzo) )) &
+(state = cpu_online_sysfs#sysfs -> (  next(state = pozzo) )) &
+(state = cpu_sysfs#sysfs -> (  next(state = pozzo) )) &
+(state = cpuinfo#proc -> (  next(state = pozzo) )) &
+(state = crypto#sysctl -> (  next(state = pozzo) )) &
+(state = data#data_file -> ( (operation = getattr & next(state = sys#subj)) | (operation = ioctl & next(state = sys#subj)) | (operation = lock & next(state = sys#subj)) | (operation = open & next(state = sys#subj)) | (operation = read & next(state = sys#subj)) | (operation = search & next(state = sys#subj)) | (operation = open & next(state = sys#subj)) | (operation = getattr & next(state = sys#subj)) | (operation = getattr & next(subj_common_type)) | (operation = open & next(subj_common_type)) | (operation = search & next(subj_common_type)) |  next(state = pozzo) )) &
+(state = debugfs#fs -> ( (operation = getattr & next(state = sys#subj)) | (operation = read & next(state = sys#subj)) | (operation = getattr & next(state = sys#subj)) | (operation = ioctl & next(state = sys#subj)) | (operation = lock & next(state = sys#subj)) | (operation = open & next(state = sys#subj)) | (operation = read & next(state = sys#subj)) | (operation = getattr & next(state = sys#subj)) | (operation = ioctl & next(state = sys#subj)) | (operation = lock & next(state = sys#subj)) | (operation = open & next(state = sys#subj)) | (operation = read & next(state = sys#subj)) | (operation = search & next(state = sys#subj)) | (operation = getattr & next(fs_trace_client_subj_type)) | (operation = ioctl & next(fs_trace_client_subj_type)) | (operation = lock & next(fs_trace_client_subj_type)) | (operation = open & next(fs_trace_client_subj_type)) | (operation = read & next(fs_trace_client_subj_type)) | (operation = search & next(fs_trace_client_subj_type)) | (operation = getattr & next(fs_trace_client_subj_type)) | (operation = ioctl & next(fs_trace_client_subj_type)) | (operation = lock & next(fs_trace_client_subj_type)) | (operation = open & next(fs_trace_client_subj_type)) | (operation = read & next(fs_trace_client_subj_type)) | (operation = getattr & next(fs_trace_client_subj_type)) | (operation = read & next(fs_trace_client_subj_type)) | (operation = getattr & next(fs_trace_client_subj_type)) | (operation = search & next(fs_trace_client_subj_type)) | (operation = open & next(fs_trace_client_subj_type)) | (operation = getattr & next(fs_trace_client_subj_type)) |  next(state = pozzo) )) &
+(state = dev#sysctl -> (  next(state = pozzo) )) &
+(state = devpts#fs -> ( (operation = associate & next(term_pty_obj_type)) |  next(state = pozzo) )) &
+(state = devtmpfs#fs -> ( (operation = associate & next(state = unlabeled#isid)) | (operation = getattr & next(state = sys#subj)) | (operation = open & next(state = sys#subj)) | (operation = search & next(state = sys#subj)) | (operation = getattr & next(state = sys#subj)) | (operation = ioctl & next(state = sys#subj)) | (operation = lock & next(state = sys#subj)) | (operation = open & next(state = sys#subj)) | (operation = read & next(state = sys#subj)) | (operation = search & next(state = sys#subj)) | (operation = getattr & next(state = sys#subj)) | (operation = ioctl & next(state = sys#subj)) | (operation = link & next(state = sys#subj)) | (operation = lock & next(state = sys#subj)) | (operation = open & next(state = sys#subj)) | (operation = read & next(state = sys#subj)) | (operation = search & next(state = sys#subj)) | (operation = unlink & next(state = sys#subj)) | (operation = getattr & next(state = sys#subj)) | (operation = ioctl & next(state = sys#subj)) | (operation = lock & next(state = sys#subj)) | (operation = open & next(state = sys#subj)) | (operation = read & next(state = sys#subj)) | (operation = search & next(state = sys#subj)) | (operation = getattr & next(state = sys#subj)) | (operation = ioctl & next(state = sys#subj)) | (operation = link & next(state = sys#subj)) | (operation = lock & next(state = sys#subj)) | (operation = read & next(state = sys#subj)) | (operation = unlink & next(state = sys#subj)) | (operation = getattr & next(state = sys#subj)) | (operation = ioctl & next(state = sys#subj)) | (operation = lock & next(state = sys#subj)) | (operation = open & next(state = sys#subj)) | (operation = read & next(state = sys#subj)) | (operation = search & next(state = sys#subj)) | (operation = associate & next(state = fs#fs)) | (operation = associate & next(dev_obj_type)) | (operation = getattr & next(subj_common_type)) | (operation = open & next(subj_common_type)) | (operation = search & next(subj_common_type)) | (operation = getattr & next(subj_common_type)) | (operation = open & next(subj_common_type)) | (operation = search & next(subj_common_type)) | (operation = getattr & next(subj_common_type)) | (operation = open & next(subj_common_type)) | (operation = search & next(subj_common_type)) |  next(state = pozzo) )) &
+(state = devtty#dev -> ( (operation = associate & next(state = tmpfs#fs)) | (operation = read & next(subj_common_type)) | (operation = open & next(subj_common_type)) | (operation = lock & next(subj_common_type)) | (operation = ioctl & next(subj_common_type)) | (operation = getattr & next(subj_common_type)) |  next(state = pozzo) )) &
+(state = dosfs#fs -> (  next(state = pozzo) )) &
+(state = dri#dev -> (  next(state = pozzo) )) &
+(state = drm#fs -> (  next(state = pozzo) )) &
+(state = efivarfs#fs -> (  next(state = pozzo) )) &
+(state = ephemeral#port -> (  next(state = pozzo) )) &
+(state = event#dev -> (  next(state = pozzo) )) &
+(state = file_execmod_all_except#bool -> (  next(state = pozzo) )) &
+(state = fixed_disk#storage_dev -> ( (operation = audit_access & next(storage_unconfined_subj_type)) | (operation = execute & next(storage_unconfined_subj_type)) | (operation = getattr & next(storage_unconfined_subj_type)) | (operation = ioctl & next(storage_unconfined_subj_type)) | (operation = link & next(storage_unconfined_subj_type)) | (operation = lock & next(storage_unconfined_subj_type)) | (operation = open & next(storage_unconfined_subj_type)) | (operation = quotaon & next(storage_unconfined_subj_type)) | (operation = read & next(storage_unconfined_subj_type)) | (operation = unlink & next(storage_unconfined_subj_type)) | (operation = unlink & next(storage_unconfined_subj_type)) | (operation = read & next(storage_unconfined_subj_type)) | (operation = quotaon & next(storage_unconfined_subj_type)) | (operation = open & next(storage_unconfined_subj_type)) | (operation = lock & next(storage_unconfined_subj_type)) | (operation = link & next(storage_unconfined_subj_type)) | (operation = ioctl & next(storage_unconfined_subj_type)) | (operation = getattr & next(storage_unconfined_subj_type)) | (operation = execute & next(storage_unconfined_subj_type)) | (operation = audit_access & next(storage_unconfined_subj_type)) |  next(state = pozzo) )) &
+(state = framebuf#dev -> (  next(state = pozzo) )) &
+(state = fs#fs -> ( (operation = associate & next(state = tmpfs#fs)) | (operation = associate & next(state = rootfs#fs)) | (operation = associate & next(state = proc#fs)) | (operation = associate & next(state = invalid#isid)) | (operation = associate & next(state = unlabeled#isid)) | (operation = associate & next(state = devtmpfs#fs)) | (operation = associate & next(state = sysfs#fs)) | (operation = associate & next(file_obj_type)) |  next(state = pozzo) )) &
+(state = fs_sysctl#sysctl -> (  next(state = pozzo) )) &
+(state = fs_use_cifs#bool -> (  next(state = pozzo) )) &
+(state = fs_use_dosfs#bool -> (  next(state = pozzo) )) &
+(state = fs_use_fuse#bool -> (  next(state = pozzo) )) &
+(state = fs_use_iso9660#bool -> (  next(state = pozzo) )) &
+(state = fs_use_nfs#bool -> (  next(state = pozzo) )) &
+(state = fs_use_removable#bool -> (  next(state = pozzo) )) &
+(state = fuse_fs#fs -> (  next(state = pozzo) )) &
+(state = fuse_storage#storage_dev -> ( (operation = unlink & next(storage_unconfined_subj_type)) | (operation = read & next(storage_unconfined_subj_type)) | (operation = quotaon & next(storage_unconfined_subj_type)) | (operation = open & next(storage_unconfined_subj_type)) | (operation = lock & next(storage_unconfined_subj_type)) | (operation = link & next(storage_unconfined_subj_type)) | (operation = ioctl & next(storage_unconfined_subj_type)) | (operation = getattr & next(storage_unconfined_subj_type)) | (operation = execute & next(storage_unconfined_subj_type)) | (operation = audit_access & next(storage_unconfined_subj_type)) |  next(state = pozzo) )) &
+(state = hi_reserved#port -> (  next(state = pozzo) )) &
+(state = home#file -> (  next(state = pozzo) )) &
+(state = hugetlbfs#fs -> (  next(state = pozzo) )) &
+(state = if#if -> (  next(state = pozzo) )) &
+(state = invalid#isid -> ( (operation = open & next(state = proc#fs)) | (operation = associate & next(state = fs#fs)) | (operation = sigchld & next(state = invalid#isid)) | (operation = sigchld & next(state = invalid#isid)) | (operation = getattr & next(state = invalid#isid)) | (operation = ioctl & next(state = invalid#isid)) | (operation = lock & next(state = invalid#isid)) | (operation = open & next(state = invalid#isid)) | (operation = read & next(state = invalid#isid)) | (operation = append & next(state = invalid#isid)) | (operation = ioctl & next(state = invalid#isid)) | (operation = lock & next(state = invalid#isid)) | (operation = open & next(state = invalid#isid)) | (operation = write & next(state = invalid#isid)) | (operation = getattr & next(state = invalid#isid)) | (operation = ioctl & next(state = invalid#isid)) | (operation = lock & next(state = invalid#isid)) | (operation = open & next(state = invalid#isid)) | (operation = read & next(state = invalid#isid)) | (operation = search & next(state = invalid#isid)) | (operation = ioctl & next(state = invalid#isid)) | (operation = lock & next(state = invalid#isid)) | (operation = open & next(state = invalid#isid)) | (operation = getattr & next(state = invalid#isid)) | (operation = read & next(state = invalid#isid)) | (operation = associate & next(state = tmpfs#fs)) | (operation = getattr & next(subj_common_type)) | (operation = open & next(subj_common_type)) | (operation = search & next(subj_common_type)) | (operation = sigchld & next(sys_unconfined_subj_type)) | (operation = sigkill & next(sys_unconfined_subj_type)) | (operation = signal & next(sys_unconfined_subj_type)) | (operation = signull & next(sys_unconfined_subj_type)) | (operation = sigstop & next(sys_unconfined_subj_type)) | (operation = audit_access & next(sys_unconfined_subj_type)) | (operation = execute & next(sys_unconfined_subj_type)) | (operation = execute_no_trans & next(sys_unconfined_subj_type)) | (operation = getattr & next(sys_unconfined_subj_type)) | (operation = ioctl & next(sys_unconfined_subj_type)) | (operation = link & next(sys_unconfined_subj_type)) | (operation = lock & next(sys_unconfined_subj_type)) | (operation = open & next(sys_unconfined_subj_type)) | (operation = quotaon & next(sys_unconfined_subj_type)) | (operation = read & next(sys_unconfined_subj_type)) | (operation = unlink & next(sys_unconfined_subj_type)) | (operation = audit_access & next(sys_unconfined_subj_type)) | (operation = execute & next(sys_unconfined_subj_type)) | (operation = getattr & next(sys_unconfined_subj_type)) | (operation = ioctl & next(sys_unconfined_subj_type)) | (operation = link & next(sys_unconfined_subj_type)) | (operation = lock & next(sys_unconfined_subj_type)) | (operation = open & next(sys_unconfined_subj_type)) | (operation = quotaon & next(sys_unconfined_subj_type)) | (operation = read & next(sys_unconfined_subj_type)) | (operation = search & next(sys_unconfined_subj_type)) | (operation = unlink & next(sys_unconfined_subj_type)) | (operation = audit_access & next(sys_unconfined_subj_type)) | (operation = execute & next(sys_unconfined_subj_type)) | (operation = getattr & next(sys_unconfined_subj_type)) | (operation = ioctl & next(sys_unconfined_subj_type)) | (operation = link & next(sys_unconfined_subj_type)) | (operation = lock & next(sys_unconfined_subj_type)) | (operation = open & next(sys_unconfined_subj_type)) | (operation = quotaon & next(sys_unconfined_subj_type)) | (operation = read & next(sys_unconfined_subj_type)) | (operation = unlink & next(sys_unconfined_subj_type)) | (operation = audit_access & next(sys_unconfined_subj_type)) | (operation = execute & next(sys_unconfined_subj_type)) | (operation = getattr & next(sys_unconfined_subj_type)) | (operation = ioctl & next(sys_unconfined_subj_type)) | (operation = link & next(sys_unconfined_subj_type)) | (operation = lock & next(sys_unconfined_subj_type)) | (operation = open & next(sys_unconfined_subj_type)) | (operation = quotaon & next(sys_unconfined_subj_type)) | (operation = read & next(sys_unconfined_subj_type)) | (operation = unlink & next(sys_unconfined_subj_type)) | (operation = audit_access & next(sys_unconfined_subj_type)) | (operation = execute & next(sys_unconfined_subj_type)) | (operation = getattr & next(sys_unconfined_subj_type)) | (operation = ioctl & next(sys_unconfined_subj_type)) | (operation = link & next(sys_unconfined_subj_type)) | (operation = lock & next(sys_unconfined_subj_type)) | (operation = open & next(sys_unconfined_subj_type)) | (operation = quotaon & next(sys_unconfined_subj_type)) | (operation = read & next(sys_unconfined_subj_type)) | (operation = unlink & next(sys_unconfined_subj_type)) | (operation = audit_access & next(sys_unconfined_subj_type)) | (operation = execute & next(sys_unconfined_subj_type)) | (operation = getattr & next(sys_unconfined_subj_type)) | (operation = ioctl & next(sys_unconfined_subj_type)) | (operation = link & next(sys_unconfined_subj_type)) | (operation = lock & next(sys_unconfined_subj_type)) | (operation = open & next(sys_unconfined_subj_type)) | (operation = quotaon & next(sys_unconfined_subj_type)) | (operation = read & next(sys_unconfined_subj_type)) | (operation = unlink & next(sys_unconfined_subj_type)) | (operation = audit_access & next(sys_unconfined_subj_type)) | (operation = execute & next(sys_unconfined_subj_type)) | (operation = getattr & next(sys_unconfined_subj_type)) | (operation = ioctl & next(sys_unconfined_subj_type)) | (operation = link & next(sys_unconfined_subj_type)) | (operation = lock & next(sys_unconfined_subj_type)) | (operation = open & next(sys_unconfined_subj_type)) | (operation = quotaon & next(sys_unconfined_subj_type)) | (operation = read & next(sys_unconfined_subj_type)) | (operation = unlink & next(sys_unconfined_subj_type)) | (operation = unmount & next(sys_unconfined_subj_type)) | (operation = quotamod & next(sys_unconfined_subj_type)) | (operation = quotaget & next(sys_unconfined_subj_type)) | (operation = getattr & next(sys_unconfined_subj_type)) | (operation = associate & next(sys_unconfined_subj_type)) |  next(state = pozzo) )) &
+(state = iomem#proc -> (  next(state = pozzo) )) &
+(state = irq#sysctl -> (  next(state = pozzo) )) &
+(state = iso9660#fs -> (  next(state = pozzo) )) &
+(state = kallsyms#proc -> (  next(state = pozzo) )) &
+(state = kcore#proc -> (  next(state = pozzo) )) &
+(state = kernel#sysctl -> (  next(state = pozzo) )) &
+(state = kmsg_dev#dev -> (  next(state = pozzo) )) &
+(state = kmsg_proc#proc -> (  next(state = pozzo) )) &
+(state = kvm#dev -> (  next(state = pozzo) )) &
+(state = ld_so#file -> (  next(state = pozzo) )) &
+(state = ld_so_cache#file -> (  next(state = pozzo) )) &
+(state = lib#lib_file -> (  next(state = pozzo) )) &
+(state = loop_control#dev -> (  next(state = pozzo) )) &
+(state = lost_found#file -> (  next(state = pozzo) )) &
+(state = lvm_control#dev -> (  next(state = pozzo) )) &
+(state = mdstat#proc -> (  next(state = pozzo) )) &
+(state = mei_misc#dev -> (  next(state = pozzo) )) &
+(state = memory#dev -> (  next(state = pozzo) )) &
+(state = memory_sysfs#sysfs -> (  next(state = pozzo) )) &
+(state = mnt#file -> (  next(state = pozzo) )) &
+(state = mouse#dev -> (  next(state = pozzo) )) &
+(state = mtrr#proc -> (  next(state = pozzo) )) &
+(state = net_proc#proc -> (  next(state = pozzo) )) &
+(state = net_sysctl#sysctl -> (  next(state = pozzo) )) &
+(state = net_unix#sysctl -> (  next(state = pozzo) )) &
+(state = nfs#fs -> (  next(state = pozzo) )) &
+(state = nfsd#fs -> (  next(state = pozzo) )) &
+(state = node#node -> (  next(state = pozzo) )) &
+(state = node_online_sysfs#sysfs -> (  next(state = pozzo) )) &
+(state = node_sysfs#sysfs -> (  next(state = pozzo) )) &
+(state = null#dev -> ( (operation = associate & next(state = tmpfs#fs)) | (operation = read & next(subj_common_type)) | (operation = open & next(subj_common_type)) | (operation = lock & next(subj_common_type)) | (operation = ioctl & next(subj_common_type)) | (operation = getattr & next(subj_common_type)) |  next(state = pozzo) )) &
+(state = nvram#dev -> (  next(state = pozzo) )) &
+(state = packet#packet -> (  next(state = pozzo) )) &
+(state = peer#peer -> (  next(state = pozzo) )) &
+(state = pm_qos_misc#dev -> (  next(state = pozzo) )) &
+(state = port#port -> (  next(state = pozzo) )) &
+(state = ppp#dev -> (  next(state = pozzo) )) &
+(state = printer#dev -> (  next(state = pozzo) )) &
+(state = proc#fs -> ( (operation = associate & next(state = fs#fs)) | (operation = getattr & next(state = invalid#isid)) | (operation = open & next(state = invalid#isid)) | (operation = search & next(state = invalid#isid)) | (operation = getattr & next(state = sys#subj)) | (operation = open & next(state = sys#subj)) | (operation = search & next(state = sys#subj)) | (operation = getattr & next(fs_trace_client_subj_type)) | (operation = open & next(fs_trace_client_subj_type)) | (operation = search & next(fs_trace_client_subj_type)) | (operation = getattr & next(subj_common_type)) | (operation = open & next(subj_common_type)) | (operation = search & next(subj_common_type)) | (operation = getattr & next(subj_common_type)) | (operation = read & next(subj_common_type)) | (operation = getattr & next(subj_common_type)) | (operation = ioctl & next(subj_common_type)) | (operation = lock & next(subj_common_type)) | (operation = open & next(subj_common_type)) | (operation = read & next(subj_common_type)) | (operation = getattr & next(subj_common_type)) | (operation = ioctl & next(subj_common_type)) | (operation = lock & next(subj_common_type)) | (operation = open & next(subj_common_type)) | (operation = read & next(subj_common_type)) | (operation = search & next(subj_common_type)) | (operation = search & next(fs_trace_client_subj_type)) | (operation = open & next(fs_trace_client_subj_type)) | (operation = getattr & next(fs_trace_client_subj_type)) |  next(state = pozzo) )) &
+(state = pstore#fs -> (  next(state = pozzo) )) &
+(state = ptmx#dev -> (  next(state = pozzo) )) &
+(state = random#dev -> ( (operation = associate & next(state = tmpfs#fs)) |  next(state = pozzo) )) &
+(state = removable_fs#fs -> (  next(state = pozzo) )) &
+(state = removable_storage#storage_dev -> ( (operation = unlink & next(storage_unconfined_subj_type)) | (operation = read & next(storage_unconfined_subj_type)) | (operation = quotaon & next(storage_unconfined_subj_type)) | (operation = open & next(storage_unconfined_subj_type)) | (operation = lock & next(storage_unconfined_subj_type)) | (operation = link & next(storage_unconfined_subj_type)) | (operation = ioctl & next(storage_unconfined_subj_type)) | (operation = getattr & next(storage_unconfined_subj_type)) | (operation = execute & next(storage_unconfined_subj_type)) | (operation = audit_access & next(storage_unconfined_subj_type)) |  next(state = pozzo) )) &
+(state = reserved#port -> (  next(state = pozzo) )) &
+(state = rootfs#fs -> ( (operation = associate & next(state = fs#fs)) | (operation = mounton & next(state = sys#subj)) | (operation = search & next(state = sys#subj)) | (operation = read & next(state = sys#subj)) | (operation = open & next(state = sys#subj)) | (operation = lock & next(state = sys#subj)) | (operation = ioctl & next(state = sys#subj)) | (operation = getattr & next(state = sys#subj)) | (operation = getattr & next(subj_type)) | (operation = open & next(subj_type)) | (operation = search & next(subj_type)) | (operation = getattr & next(file_unconfined_subj_type)) | (operation = ioctl & next(file_unconfined_subj_type)) | (operation = lock & next(file_unconfined_subj_type)) | (operation = open & next(file_unconfined_subj_type)) | (operation = read & next(file_unconfined_subj_type)) | (operation = search & next(file_unconfined_subj_type)) | (operation = getattr & next(file_unconfined_subj_type)) | (operation = ioctl & next(file_unconfined_subj_type)) | (operation = lock & next(file_unconfined_subj_type)) | (operation = open & next(file_unconfined_subj_type)) | (operation = read & next(file_unconfined_subj_type)) | (operation = search & next(file_unconfined_subj_type)) | (operation = getattr & next(file_unconfined_subj_type)) | (operation = ioctl & next(file_unconfined_subj_type)) | (operation = lock & next(file_unconfined_subj_type)) | (operation = open & next(file_unconfined_subj_type)) | (operation = read & next(file_unconfined_subj_type)) | (operation = search & next(file_unconfined_subj_type)) | (operation = getattr & next(file_unconfined_subj_type)) | (operation = ioctl & next(file_unconfined_subj_type)) | (operation = lock & next(file_unconfined_subj_type)) | (operation = open & next(file_unconfined_subj_type)) | (operation = read & next(file_unconfined_subj_type)) | (operation = search & next(file_unconfined_subj_type)) | (operation = getattr & next(file_unconfined_subj_type)) | (operation = ioctl & next(file_unconfined_subj_type)) | (operation = lock & next(file_unconfined_subj_type)) | (operation = open & next(file_unconfined_subj_type)) | (operation = read & next(file_unconfined_subj_type)) | (operation = search & next(file_unconfined_subj_type)) | (operation = getattr & next(file_unconfined_subj_type)) | (operation = ioctl & next(file_unconfined_subj_type)) | (operation = lock & next(file_unconfined_subj_type)) | (operation = open & next(file_unconfined_subj_type)) | (operation = read & next(file_unconfined_subj_type)) | (operation = search & next(file_unconfined_subj_type)) | (operation = getattr & next(file_unconfined_subj_type)) | (operation = ioctl & next(file_unconfined_subj_type)) | (operation = lock & next(file_unconfined_subj_type)) | (operation = open & next(file_unconfined_subj_type)) | (operation = read & next(file_unconfined_subj_type)) | (operation = search & next(file_unconfined_subj_type)) |  next(state = pozzo) )) &
+(state = rpc_pipefs#fs -> (  next(state = pozzo) )) &
+(state = runtime#runtime_file -> (  next(state = pozzo) )) &
+(state = runtime_config#runtime_config_file -> (  next(state = pozzo) )) &
+(state = runtime_lock#runtime_lock_file -> (  next(state = pozzo) )) &
+(state = runtime_user#runtime_file -> (  next(state = pozzo) )) &
+(state = scsi_generic#storage_dev -> ( (operation = unlink & next(storage_unconfined_subj_type)) | (operation = read & next(storage_unconfined_subj_type)) | (operation = quotaon & next(storage_unconfined_subj_type)) | (operation = open & next(storage_unconfined_subj_type)) | (operation = lock & next(storage_unconfined_subj_type)) | (operation = link & next(storage_unconfined_subj_type)) | (operation = ioctl & next(storage_unconfined_subj_type)) | (operation = getattr & next(storage_unconfined_subj_type)) | (operation = execute & next(storage_unconfined_subj_type)) | (operation = audit_access & next(storage_unconfined_subj_type)) |  next(state = pozzo) )) &
+(state = sec_load_policy#bool -> (  next(state = pozzo) )) &
+(state = security#sysctl -> (  next(state = pozzo) )) &
+(state = securityfs#fs -> ( (operation = getattr & next(state = sys#subj)) | (operation = ioctl & next(state = sys#subj)) | (operation = lock & next(state = sys#subj)) | (operation = open & next(state = sys#subj)) | (operation = read & next(state = sys#subj)) | (operation = search & next(state = sys#subj)) | (operation = getattr & next(state = sys#subj)) | (operation = ioctl & next(state = sys#subj)) | (operation = lock & next(state = sys#subj)) | (operation = open & next(state = sys#subj)) | (operation = read & next(state = sys#subj)) | (operation = getattr & next(state = sys#subj)) | (operation = open & next(state = sys#subj)) | (operation = search & next(state = sys#subj)) | (operation = compute_create & next(state = sys#subj)) | (operation = check_context & next(sec_unconfined_subj_type)) | (operation = compute_av & next(sec_unconfined_subj_type)) | (operation = compute_create & next(sec_unconfined_subj_type)) | (operation = compute_member & next(sec_unconfined_subj_type)) | (operation = compute_relabel & next(sec_unconfined_subj_type)) | (operation = compute_user & next(sec_unconfined_subj_type)) | (operation = read_policy & next(sec_unconfined_subj_type)) | (operation = getattr & next(sec_unconfined_subj_type)) | (operation = read & next(sec_unconfined_subj_type)) | (operation = getattr & next(sec_unconfined_subj_type)) | (operation = ioctl & next(sec_unconfined_subj_type)) | (operation = lock & next(sec_unconfined_subj_type)) | (operation = open & next(sec_unconfined_subj_type)) | (operation = read & next(sec_unconfined_subj_type)) | (operation = search & next(sec_unconfined_subj_type)) |  next(state = pozzo) )) &
+(state = shell#cmd_file -> (  next(state = pozzo) )) &
+(state = sound#dev -> (  next(state = pozzo) )) &
+(state = subj_execheap#bool -> (  next(state = pozzo) )) &
+(state = subj_execmem#bool -> (  next(state = pozzo) )) &
+(state = subj_execstack#bool -> (  next(state = pozzo) )) &
+(state = subj_mmap_low#bool -> (  next(state = pozzo) )) &
+(state = subj_ptrace#bool -> (  next(state = pozzo) )) &
+(state = sys#subj -> ( (operation = ioctl & next(state = securityfs#fs)) | (operation = lock & next(state = securityfs#fs)) | (operation = open & next(state = securityfs#fs)) | (operation = open & next(state = sysfs#fs)) | (operation = open & next(state = tmpfs#fs)) | (operation = open & next(state = devtmpfs#fs)) | (operation = mounton & next(state = rootfs#fs)) | (operation = add_name & next(state = devtmpfs#fs)) | (operation = ioctl & next(state = devtmpfs#fs)) | (operation = lock & next(state = devtmpfs#fs)) | (operation = open & next(state = devtmpfs#fs)) | (operation = remove_name & next(state = devtmpfs#fs)) | (operation = write & next(state = devtmpfs#fs)) | (operation = add_name & next(state = devtmpfs#fs)) | (operation = create & next(state = devtmpfs#fs)) | (operation = ioctl & next(state = devtmpfs#fs)) | (operation = link & next(state = devtmpfs#fs)) | (operation = lock & next(state = devtmpfs#fs)) | (operation = open & next(state = devtmpfs#fs)) | (operation = remove_name & next(state = devtmpfs#fs)) | (operation = rename & next(state = devtmpfs#fs)) | (operation = reparent & next(state = devtmpfs#fs)) | (operation = rmdir & next(state = devtmpfs#fs)) | (operation = setattr & next(state = devtmpfs#fs)) | (operation = unlink & next(state = devtmpfs#fs)) | (operation = write & next(state = devtmpfs#fs)) | (operation = add_name & next(state = devtmpfs#fs)) | (operation = ioctl & next(state = devtmpfs#fs)) | (operation = lock & next(state = devtmpfs#fs)) | (operation = open & next(state = devtmpfs#fs)) | (operation = remove_name & next(state = devtmpfs#fs)) | (operation = write & next(state = devtmpfs#fs)) | (operation = module_request & next(state = sys#subj)) | (operation = module_request & next(state = sys#subj)) | (operation = net_admin & next(state = sys#subj)) | (operation = sys_admin & next(state = sys#subj)) | (operation = sys_nice & next(state = sys#subj)) | (operation = sys_tty_config & next(state = sys#subj)) | (operation = net_admin & next(state = sys#subj)) | (operation = net_bind_service & next(state = sys#subj)) | (operation = sys_admin & next(state = sys#subj)) | (operation = sys_nice & next(state = sys#subj)) | (operation = sys_tty_config & next(state = sys#subj)) | (operation = block_suspend & next(state = sys#subj)) | (operation = block_suspend & next(state = sys#subj)) | (operation = setsched & next(state = sys#subj)) | (operation = bind & next(state = sys#subj)) | (operation = connect & next(state = sys#subj)) | (operation = getattr & next(state = sys#subj)) | (operation = getopt & next(state = sys#subj)) | (operation = ioctl & next(state = sys#subj)) | (operation = read & next(state = sys#subj)) | (operation = append & next(state = sys#subj)) | (operation = bind & next(state = sys#subj)) | (operation = connect & next(state = sys#subj)) | (operation = create & next(state = sys#subj)) | (operation = ioctl & next(state = sys#subj)) | (operation = setattr & next(state = sys#subj)) | (operation = setopt & next(state = sys#subj)) | (operation = shutdown & next(state = sys#subj)) | (operation = write & next(state = sys#subj)) | (operation = append & next(state = sys#var_log_file)) | (operation = create & next(state = sys#var_log_file)) | (operation = ioctl & next(state = sys#var_log_file)) | (operation = link & next(state = sys#var_log_file)) | (operation = lock & next(state = sys#var_log_file)) | (operation = open & next(state = sys#var_log_file)) | (operation = rename & next(state = sys#var_log_file)) | (operation = setattr & next(state = sys#var_log_file)) | (operation = unlink & next(state = sys#var_log_file)) | (operation = write & next(state = sys#var_log_file)) | (operation = syslog_console & next(state = sys#subj)) | (operation = syslog_console & next(state = sys#subj)) | (operation = syslog & next(state = sys#subj)) | (operation = syslog & next(state = sys#subj)) | (operation = ioctl & next(state = data#data_file)) | (operation = lock & next(state = data#data_file)) | (operation = open & next(state = data#data_file)) | (operation = open & next(state = data#data_file)) | (operation = ioctl & next(state = rootfs#fs)) | (operation = lock & next(state = rootfs#fs)) | (operation = open & next(state = rootfs#fs)) | (operation = create & next(state = devtmpfs#fs)) | (operation = ioctl & next(state = devtmpfs#fs)) | (operation = link & next(state = devtmpfs#fs)) | (operation = lock & next(state = devtmpfs#fs)) | (operation = rename & next(state = devtmpfs#fs)) | (operation = setattr & next(state = devtmpfs#fs)) | (operation = unlink & next(state = devtmpfs#fs)) | (operation = write & next(state = devtmpfs#fs)) | (operation = add_name & next(state = devtmpfs#fs)) | (operation = ioctl & next(state = devtmpfs#fs)) | (operation = lock & next(state = devtmpfs#fs)) | (operation = open & next(state = devtmpfs#fs)) | (operation = remove_name & next(state = devtmpfs#fs)) | (operation = write & next(state = devtmpfs#fs)) | (operation = open & next(state = proc#fs)) | (operation = ioctl & next(state = debugfs#fs)) | (operation = lock & next(state = debugfs#fs)) | (operation = open & next(state = debugfs#fs)) | (operation = ioctl & next(state = debugfs#fs)) | (operation = lock & next(state = debugfs#fs)) | (operation = open & next(state = debugfs#fs)) | (operation = append & next(state = securityfs#fs)) | (operation = ioctl & next(state = securityfs#fs)) | (operation = lock & next(state = securityfs#fs)) | (operation = open & next(state = securityfs#fs)) | (operation = write & next(state = securityfs#fs)) | (operation = open & next(state = securityfs#fs)) | (operation = open & next(state = sysfs#fs)) | (operation = compute_create & next(state = securityfs#fs)) | (operation = append & next(dev_except_storage_obj_type)) | (operation = create & next(dev_except_storage_obj_type)) | (operation = ioctl & next(dev_except_storage_obj_type)) | (operation = link & next(dev_except_storage_obj_type)) | (operation = lock & next(dev_except_storage_obj_type)) | (operation = open & next(dev_except_storage_obj_type)) | (operation = rename & next(dev_except_storage_obj_type)) | (operation = setattr & next(dev_except_storage_obj_type)) | (operation = unlink & next(dev_except_storage_obj_type)) | (operation = write & next(dev_except_storage_obj_type)) | (operation = syslog_read & next(sys_unconfined_subj_type)) | (operation = syslog_mod & next(sys_unconfined_subj_type)) | (operation = syslog_console & next(sys_unconfined_subj_type)) | (operation = module_request & next(sys_unconfined_subj_type)) | (operation = ipc_info & next(sys_unconfined_subj_type)) |  next(state = pozzo) )) &
+(state = sys#var_log_file -> ( (operation = unlink & next(state = sys#subj)) | (operation = read & next(state = sys#subj)) | (operation = open & next(state = sys#subj)) | (operation = lock & next(state = sys#subj)) | (operation = link & next(state = sys#subj)) | (operation = ioctl & next(state = sys#subj)) | (operation = getattr & next(state = sys#subj)) |  next(state = pozzo) )) &
+(state = sys_load_kernel_module#bool -> (  next(state = pozzo) )) &
+(state = sysctl#sysctl -> ( (operation = search & next(subj_common_type)) | (operation = open & next(subj_common_type)) | (operation = getattr & next(subj_common_type)) |  next(state = pozzo) )) &
+(state = sysfs#fs -> ( (operation = getattr & next(state = sys#subj)) | (operation = open & next(state = sys#subj)) | (operation = search & next(state = sys#subj)) | (operation = getattr & next(state = sys#subj)) | (operation = open & next(state = sys#subj)) | (operation = search & next(state = sys#subj)) | (operation = associate & next(state = fs#fs)) | (operation = getattr & next(subj_common_type)) | (operation = open & next(subj_common_type)) | (operation = search & next(subj_common_type)) |  next(state = pozzo) )) &
+(state = sysrq#proc -> (  next(state = pozzo) )) &
+(state = term_console_login#bool -> (  next(state = pozzo) )) &
+(state = textrel#lib_file -> (  next(state = pozzo) )) &
+(state = tmpfs#fs -> ( (operation = associate & next(state = zero#dev)) | (operation = associate & next(state = urandom#dev)) | (operation = associate & next(state = random#dev)) | (operation = associate & next(state = null#dev)) | (operation = associate & next(state = devtty#dev)) | (operation = associate & next(state = fs#fs)) | (operation = associate & next(state = unlabeled#isid)) | (operation = getattr & next(state = sys#subj)) | (operation = open & next(state = sys#subj)) | (operation = search & next(state = sys#subj)) | (operation = associate & next(state = invalid#isid)) | (operation = associate & next(file_tmpfs_obj_type)) | (operation = associate & next(file_runtime_obj_type)) | (operation = associate & next(file_runtime_lock_obj_type)) |  next(state = pozzo) )) &
+(state = tpm#dev -> (  next(state = pozzo) )) &
+(state = tracefs#fs -> ( (operation = getattr & next(fs_trace_client_subj_type)) | (operation = read & next(fs_trace_client_subj_type)) | (operation = getattr & next(fs_trace_client_subj_type)) | (operation = ioctl & next(fs_trace_client_subj_type)) | (operation = lock & next(fs_trace_client_subj_type)) | (operation = open & next(fs_trace_client_subj_type)) | (operation = read & next(fs_trace_client_subj_type)) | (operation = search & next(fs_trace_client_subj_type)) | (operation = read & next(fs_trace_client_subj_type)) | (operation = open & next(fs_trace_client_subj_type)) | (operation = lock & next(fs_trace_client_subj_type)) | (operation = ioctl & next(fs_trace_client_subj_type)) | (operation = getattr & next(fs_trace_client_subj_type)) |  next(state = pozzo) )) &
+(state = tty#serial_dev -> (  next(state = pozzo) )) &
+(state = tun_tap#dev -> (  next(state = pozzo) )) &
+(state = uhid#dev -> (  next(state = pozzo) )) &
+(state = unknown#file -> (  next(state = pozzo) )) &
+(state = unlabeled#isid -> ( (operation = associate & next(state = tmpfs#fs)) | (operation = associate & next(state = devtmpfs#fs)) | (operation = associate & next(state = fs#fs)) | (operation = recv & next(net_unconfined_subj_type)) | (operation = recvfrom & next(net_unconfined_subj_type)) | (operation = recvfrom & next(net_unconfined_subj_type)) | (operation = recvfrom & next(net_unconfined_subj_type)) | (operation = recvfrom & next(net_unconfined_subj_type)) | (operation = audit_access & next(sys_unconfined_subj_type)) | (operation = execute & next(sys_unconfined_subj_type)) | (operation = execute_no_trans & next(sys_unconfined_subj_type)) | (operation = getattr & next(sys_unconfined_subj_type)) | (operation = ioctl & next(sys_unconfined_subj_type)) | (operation = link & next(sys_unconfined_subj_type)) | (operation = lock & next(sys_unconfined_subj_type)) | (operation = open & next(sys_unconfined_subj_type)) | (operation = quotaon & next(sys_unconfined_subj_type)) | (operation = read & next(sys_unconfined_subj_type)) | (operation = unlink & next(sys_unconfined_subj_type)) | (operation = audit_access & next(sys_unconfined_subj_type)) | (operation = execute & next(sys_unconfined_subj_type)) | (operation = getattr & next(sys_unconfined_subj_type)) | (operation = ioctl & next(sys_unconfined_subj_type)) | (operation = link & next(sys_unconfined_subj_type)) | (operation = lock & next(sys_unconfined_subj_type)) | (operation = open & next(sys_unconfined_subj_type)) | (operation = quotaon & next(sys_unconfined_subj_type)) | (operation = read & next(sys_unconfined_subj_type)) | (operation = search & next(sys_unconfined_subj_type)) | (operation = unlink & next(sys_unconfined_subj_type)) | (operation = audit_access & next(sys_unconfined_subj_type)) | (operation = execute & next(sys_unconfined_subj_type)) | (operation = getattr & next(sys_unconfined_subj_type)) | (operation = ioctl & next(sys_unconfined_subj_type)) | (operation = link & next(sys_unconfined_subj_type)) | (operation = lock & next(sys_unconfined_subj_type)) | (operation = open & next(sys_unconfined_subj_type)) | (operation = quotaon & next(sys_unconfined_subj_type)) | (operation = read & next(sys_unconfined_subj_type)) | (operation = unlink & next(sys_unconfined_subj_type)) | (operation = audit_access & next(sys_unconfined_subj_type)) | (operation = execute & next(sys_unconfined_subj_type)) | (operation = getattr & next(sys_unconfined_subj_type)) | (operation = ioctl & next(sys_unconfined_subj_type)) | (operation = link & next(sys_unconfined_subj_type)) | (operation = lock & next(sys_unconfined_subj_type)) | (operation = open & next(sys_unconfined_subj_type)) | (operation = quotaon & next(sys_unconfined_subj_type)) | (operation = read & next(sys_unconfined_subj_type)) | (operation = unlink & next(sys_unconfined_subj_type)) | (operation = audit_access & next(sys_unconfined_subj_type)) | (operation = execute & next(sys_unconfined_subj_type)) | (operation = getattr & next(sys_unconfined_subj_type)) | (operation = ioctl & next(sys_unconfined_subj_type)) | (operation = link & next(sys_unconfined_subj_type)) | (operation = lock & next(sys_unconfined_subj_type)) | (operation = open & next(sys_unconfined_subj_type)) | (operation = quotaon & next(sys_unconfined_subj_type)) | (operation = read & next(sys_unconfined_subj_type)) | (operation = unlink & next(sys_unconfined_subj_type)) | (operation = audit_access & next(sys_unconfined_subj_type)) | (operation = execute & next(sys_unconfined_subj_type)) | (operation = getattr & next(sys_unconfined_subj_type)) | (operation = ioctl & next(sys_unconfined_subj_type)) | (operation = link & next(sys_unconfined_subj_type)) | (operation = lock & next(sys_unconfined_subj_type)) | (operation = open & next(sys_unconfined_subj_type)) | (operation = quotaon & next(sys_unconfined_subj_type)) | (operation = read & next(sys_unconfined_subj_type)) | (operation = unlink & next(sys_unconfined_subj_type)) | (operation = unlink & next(sys_unconfined_subj_type)) | (operation = read & next(sys_unconfined_subj_type)) | (operation = quotaon & next(sys_unconfined_subj_type)) | (operation = open & next(sys_unconfined_subj_type)) | (operation = lock & next(sys_unconfined_subj_type)) | (operation = link & next(sys_unconfined_subj_type)) | (operation = ioctl & next(sys_unconfined_subj_type)) | (operation = getattr & next(sys_unconfined_subj_type)) | (operation = execute & next(sys_unconfined_subj_type)) | (operation = audit_access & next(sys_unconfined_subj_type)) |  next(state = pozzo) )) &
+(state = unreserved#port -> (  next(state = pozzo) )) &
+(state = urandom#dev -> ( (operation = associate & next(state = tmpfs#fs)) |  next(state = pozzo) )) &
+(state = usb#dev -> (  next(state = pozzo) )) &
+(state = usbmon#dev -> (  next(state = pozzo) )) &
+(state = usermodehelper#sysctl -> (  next(state = pozzo) )) &
+(state = v4l#dev -> (  next(state = pozzo) )) &
+(state = var#var_file -> (  next(state = pozzo) )) &
+(state = var_cache#var_cache_file -> (  next(state = pozzo) )) &
+(state = var_db#var_db_file -> (  next(state = pozzo) )) &
+(state = var_lib#var_lib_file -> (  next(state = pozzo) )) &
+(state = var_log#var_log_file -> (  next(state = pozzo) )) &
+(state = var_spool#var_spool_file -> (  next(state = pozzo) )) &
+(state = var_tmp#var_tmp_file -> (  next(state = pozzo) )) &
+(state = vfio#dev -> (  next(state = pozzo) )) &
+(state = vhost#dev -> (  next(state = pozzo) )) &
+(state = virtio#serial_dev -> (  next(state = pozzo) )) &
+(state = vm#sysctl -> ( (operation = search & next(subj_common_type)) | (operation = open & next(subj_common_type)) | (operation = getattr & next(subj_common_type)) |  next(state = pozzo) )) &
+(state = vm_overcommit#sysctl -> ( (operation = read & next(subj_common_type)) | (operation = open & next(subj_common_type)) | (operation = lock & next(subj_common_type)) | (operation = ioctl & next(subj_common_type)) | (operation = getattr & next(subj_common_type)) |  next(state = pozzo) )) &
+(state = watchdog#dev -> (  next(state = pozzo) )) &
+(state = wireless#dev -> (  next(state = pozzo) )) &
+(state = xserver_misc#dev -> (  next(state = pozzo) )) &
+(state = zero#dev -> ( (operation = associate & next(state = tmpfs#fs)) | (operation = read & next(subj_common_type)) | (operation = open & next(subj_common_type)) | (operation = lock & next(subj_common_type)) | (operation = ioctl & next(subj_common_type)) | (operation = getattr & next(subj_common_type)) |  next(state = pozzo) )) &
+(state = pozzo -> next(state = pozzo))
+
+
+--  (pipeline4) .IFL-every  ( #.sysfs.fs,  -[any-mod]> , #.sys.subj )  must be  ( #.sysfs.fs,  -[any-mod]> , #.sys.subj )  ( #.sys.subj,  -[any-mod]> , #.devtmpfs.fs )  ( #.devtmpfs.fs,  -[any-mod]> , #.sys.subj )  ( #.sys.subj,  -[any-mod]> , #.devtmpfs.fs )  ( #.devtmpfs.fs,  -[any-mod]> , #.sys.subj ) 
+ 
+LTLSPEC (!(state = sysfs#fs &  X ( F state = sys#subj)) | (state = sysfs#fs &  X ( F (state = sys#subj &  X ( F (state = devtmpfs#fs &  X ( F (state = sys#subj &  X ( F (state = devtmpfs#fs &  X ( F state = sys#subj)))))))))))
+--  (pipeline3) .IFL-every  ( #.sysfs.fs,  -[any-mod]> , #.devtmpfs.fs )  must be  ( #.sysfs.fs,  -[any-mod]> , #.sys.subj )  ( #.sys.subj,  -[any-mod]> , #.devtmpfs.fs )  ( #.devtmpfs.fs,  -[any-mod]> , #.sys.subj )  ( #.sys.subj,  -[any-mod]> , #.devtmpfs.fs ) 
+ 
+LTLSPEC (!(state = sysfs#fs &  X ( F state = devtmpfs#fs)) | (state = sysfs#fs &  X ( F (state = sys#subj &  X ( F (state = devtmpfs#fs &  X ( F (state = sys#subj &  X ( F state = devtmpfs#fs)))))))))
+--  (pipeline2) .IFL-every  ( #.sysfs.fs,  -[any-mod]> , #.sys.subj )  must be  ( #.sysfs.fs,  -[any-mod]> , #.sys.subj )  ( #.sys.subj,  -[any-mod]> , #.devtmpfs.fs )  ( #.devtmpfs.fs,  -[any-mod]> , #.sys.subj ) 
+ 
+LTLSPEC (!(state = sysfs#fs &  X ( F state = sys#subj)) | (state = sysfs#fs &  X ( F (state = sys#subj &  X ( F (state = devtmpfs#fs &  X ( F state = sys#subj)))))))
+--  (pipeline1) .IFL-every  ( #.sysfs.fs,  -[any-mod]> , #.devtmpfs.fs )  must be  ( #.sysfs.fs,  -[any-mod]> , #.sys.subj )  ( #.sys.subj,  -[any-mod]> , #.devtmpfs.fs ) 
+ 
+LTLSPEC (!(state = sysfs#fs &  X ( F state = devtmpfs#fs)) | (state = sysfs#fs &  X ( F (state = sys#subj &  X ( F state = devtmpfs#fs)))))
+
