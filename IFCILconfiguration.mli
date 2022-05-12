@@ -124,13 +124,13 @@ val remove_recursion : ('a * flat_statement) list -> ('a * flat_statement) list
 (* ------------------- metadata access ------------------- *)
 
 val all_defined_operations :
-  ('a * flat_statement) list -> Stdlib__set.Make(Stdlib__string).t
+  ('a * flat_statement) list -> Set.Make(String).t
 (* returns the set of the names of all the defined operations in the input configuration *)
 
 val filter_operations :
-  Stdlib__set.Make(Stdlib__string).t ->
+  Set.Make(String).t ->
   CILsyntax.attributeexp ->
-  Stdlib__set.Make(Stdlib__string).t
+  Set.Make(String).t
 (* given a set of operations and an expression
    returns the subset of operations defined bu the expression
 *)
