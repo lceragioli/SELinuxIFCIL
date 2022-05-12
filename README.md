@@ -11,7 +11,7 @@ IFCIL configurations are legal CIL configurations and can be compiled using the 
 Moreover, IFCIL comes with a pair of tools for verifying that the information flow requirements are met by the configuration.
 
 - IFCILtoNuSMV : translates a IFCIL configuration into a IFCIL-NuSMV configuration file
-- IFCILverif : uses NuSMV to verify the requirements of a IFCIL-NuSMV configuration file
+- IFCILverif : uses the model checker NuSMV to verify the requirements of a IFCIL-NuSMV configuration file
 
 ### Compilation
 
@@ -72,4 +72,37 @@ The script `run_experiments.sh` iterates on all the configurations and the consi
 Table 1 of the paper lists the configuration, properties and the execution time obtained through the `time` command.
 ```
 ./run_experiments.sh
+```
+
+### Project structure
+
+Here is a description of content of the repository
+
+```
+ Examples/                 <-- Running example from the paper and real-world policies
+
+ README.md                 <-- This file
+
+ CILlexer.mll              <-- Ocamllex configuration file
+ CILgrammar.mly            <-- Ocamlyacc configuration file
+
+ CILsyntax.ml              <-- Source for CIL language syntax
+ IFL.mli                   <-- Interface for IFL language syntax and refinement 
+ IFL.ml                    <-- Source for IFL language syntax and refinement 
+ IFCILconfiguration.mli    <-- Interface for IFLCIL configurations 
+ IFCILconfiguration.ml     <-- Source for IFLCIL configurations 
+ normalization.mli         <-- Interface for the normalization pipeline of IFCIL  
+ normalization.ml          <-- Source for the normalization pipeline of IFCIL
+ preprocessing.mli         <-- Interface for preprocessing on IFCIL configurations   
+ preprocessing.ml          <-- Source for preprocessing on IFCIL configurations
+ Utils.mli                 <-- Interface for utilities data structures and functions 
+ Utils.ml                  <-- Source for utilities data structures and functions  
+
+ IFCILtoNuSMV.ml           <-- Source for IFCILtoNuSMV tool
+ IFCILverif.ml             <-- Source for IFCILverif tool
+
+ NuSMV                     <-- NuSMV model checker executable 
+
+ Makefile                  
+ run_experiments.sh        <-- Script for the scalability experiments
 ```
