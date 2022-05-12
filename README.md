@@ -6,8 +6,9 @@ Ocaml, Ocamllex, Ocamlyacc >= 4.12.0
 
 ### Overview
 
-SELinuxIFCIL is a SELinux configuration language that extends CIL with information flow requirements.
-It comes with a pair of tools for verifying that the information flow requirements are met by the configuration.
+SELinux IFCIL is a SELinux configuration language that extends CIL with information flow requirements.
+IFCIL configurations are legal CIL configurations and can be compiled using the standard SELinux CIL compiler.
+Moreover, IFCIL comes with a pair of tools for verifying that the information flow requirements are met by the configuration.
 
 - IFCILtoNuSMV : translates a IFCIL configuration into a IFCIL-NuSMV configuration file
 - IFCILverif : uses NuSMV to verify the requirements of a IFCIL-NuSMV configuration file
