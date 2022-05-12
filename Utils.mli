@@ -67,14 +67,14 @@ sig
 end *)
 
 module OrderPair:
-  functor (Ord1 : Stdlib__set.OrderedType) (Ord2 : Stdlib__set.OrderedType) ->
+  functor (Ord1 : Set.OrderedType) (Ord2 : Set.OrderedType) ->
     sig
       type t = Ord1.t * Ord2.t
       val compare : Ord1.t * Ord2.t -> Ord1.t * Ord2.t -> int
     end
 
 module OrderList:
-  functor (Ord : Stdlib__set.OrderedType) ->
+  functor (Ord : Set.OrderedType) ->
     sig
       val length : 'a list -> int
       val compare_lengths : 'a list -> 'b list -> int
@@ -147,7 +147,7 @@ module OrderList:
 module SS :
   sig
     type elt = String.t
-    type t = Stdlib__set.Make(String).t
+    type t = Set.Make(String).t
     val empty : t
     val is_empty : t -> bool
     val mem : elt -> t -> bool

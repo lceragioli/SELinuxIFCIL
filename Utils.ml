@@ -1,12 +1,12 @@
 module SS = Set.Make (String)
 
-module OrderList (Ord : Stdlib__set.OrderedType) = struct
+module OrderList (Ord : Set.OrderedType) = struct
   include List
   type t = Ord.t list
   let compare = List.compare Ord.compare
 end;;
 
-module OrderPair (Ord1 : Stdlib__set.OrderedType) (Ord2 : Stdlib__set.OrderedType) = struct
+module OrderPair (Ord1 : Set.OrderedType) (Ord2 : Set.OrderedType) = struct
   type t = Ord1.t * Ord2.t
   let compare (a, b) (c, d) = 
     if Ord1.compare a c == 0 then Ord2.compare b d else Ord1.compare a c
