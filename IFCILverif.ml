@@ -76,7 +76,7 @@ let _ =
   let in_file = open_in Sys.argv.(1) in
   let requirements = parse_requirements_from_NuSMV in_file in
   close_in_noerr in_file;
-  Sys.command ("./NuSMV " ^ Sys.argv.(1) ^ " > " ^ temp);
+  Sys.command ("./NuSMV  -v 0 " ^ Sys.argv.(1) ^ " > " ^ temp ^ " 2>/dev/null");
   let tmp_file = open_in temp in
   parse_response tmp_file requirements;
 
