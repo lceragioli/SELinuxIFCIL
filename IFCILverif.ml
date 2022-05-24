@@ -17,8 +17,8 @@ let parse_response_line line mustfalse =
           (String.sub line (String.length line - 8) 8 = "is false" && mustfalse)
           || String.sub line (String.length line - 7) 7 = "is true"
              && not mustfalse
-        then "-------- is verified!\n\n"
-        else "-------- is NOT verified!\n\n"
+        then "-------- is satisfied!\n\n"
+        else "-------- is violated!\n\n"
       with Invalid_argument s ->
         raise (Invalid_argument (s ^ " when parsing responses"))
     else ""
