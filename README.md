@@ -74,7 +74,7 @@ Table 1 of the paper lists the configuration, properties and the execution time 
 ./run_experiments.sh
 ```
 
-The expected execution time is as follows
+The expected results are in `IFCILtoNuSMV` and the execution time should be approximately as follows
 
 | Properties                | Verification Time         |
 | ------------------------- | ------------------------- |
@@ -126,4 +126,5 @@ Here is a description of content of the repository
 
  Makefile                  
  run_experiments.sh        <-- Script for the scalability experiments
+ expected_results.txt      <-- Expected results of run_experiments.sh
 ```
