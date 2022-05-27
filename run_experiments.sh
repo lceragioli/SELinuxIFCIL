@@ -13,12 +13,9 @@ for filename in Examples/IFCILNuSMVconfigurations/*; do
     exec 3>&1 4>&2
     time=$( { time ./IFCILverif $filename 1>&3 2>&4; } 2>&1 )
     exec 3>&- 4>&-
-#get everything to the left of the first "s*"
     time="${time//[$'\r\n ']}"
     user=${time%%s*}
-#get everything to the right of first "*user "
     user=${user#real }
-#    user=${user#[[:digit:]]}
     user=${user:5} 
     namelen=${#bname}
     timelen=${#user}
