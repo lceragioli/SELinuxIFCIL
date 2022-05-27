@@ -74,25 +74,26 @@ Table 1 of the paper lists the configuration, properties and the execution time 
 ./run_experiments.sh
 ```
 
-The expected results are as follows
+The expected execution time is as follows
 
-| Properties         | Verification Time   |
-| -------------      | ------------------- |
-| openWRT : TCB      | 3.50 sec            |  
-| openWRT : pipeline | 8.39 sec            |
-| openWRT : wrap     | 12.3 sec            |
-| openWRT : augment  | 7.86 sec            |
-| openWRT : total    | 29.6 sec            |
-| cilbase : TCB      | 0.063 sec           |
-| cilbase : pipeline | 0.130 sec           |
-| cilbase : wrap     | 0.149 sec           |
-| cilbase : augment  | 0.116 sec           |
-| cilbase : total    | 0.258 sec           |
-| dspp5 : TCB        | 0.149 sec           |
-| dspp5 : pipeline   | 0.199 sec           |
-| dspp5 : wrap       | 0.299 sec           |
-| dspp5 : total      | 0.447 sec           |
-| paper example      | 0.040 sec           |
+| Properties                | Verification Time         |
+| ------------------------- | ------------------------- |
+| cilbase-augmentNuSMVconf  | 0m 0,103s                 |
+| cilbaseNuSMVconf          | 0m 0,287s                 |
+| cilbase-pipelineNuSMVconf | 0m 0,113s                 |
+| cilbase-TCBNuSMVconf      | 0m 0,053s                 |
+| cilbase-wrappingNuSMVconf | 0m 0,128s                 |
+| dssp5NuSMVconf            | 0m 0,427s                 |
+| dssp5-pipelineNuSMVconf   | 0m 0,180s                 |
+| dssp5-TCBNuSMVconf        | 0m 0,132s                 |
+| dssp5-wrappingNuSMVconf   | 0m 0,279s                 |
+| openWRT-augmentNuSMVconf  | 0m 7,420s                 |
+| openWRTNuSMVconf          | 0m 27,469s                |
+| openWRT-pipelineNuSMVconf | 0m 8,079s                 |
+| openWRT-TCBNuSMVconf      | 0m 3,346s                 |
+| openWRT-wrappingNuSMVconf | 0m 9,850s                 |
+| paper-exampleNuSMVconf    | 0m 0,021s                 |
+
 
 ### Project structure
 
