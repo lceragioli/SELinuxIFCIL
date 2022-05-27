@@ -1,0 +1,261 @@
+----------------------------------------------
+  verifying cilbase-augmentNuSMVconf
+----------------------------------------------
+
+++++ (augment2) .IFL-every  ( #.sys.subj,  -[any-mod]> , #.securityfs.fs )  must be  ( #.sys.subj,  -[append]> , #.securityfs.fs )-------- is violated!
+
+++++ (augment1) .IFL-every  ( #.sys.subj,  -[any-mod]> , #.sys.subj )  must be  ( #.sys.subj,  -[append]> , #.sys.subj )-------- is violated!
+
+----------------------------------------------
+  verifying cilbaseNuSMVconf
+----------------------------------------------
+
+++++ (wrapping1) .IFL-every  ( #.sysfs.fs,  [any-mod]> , any-node )  must be  ( any-node,  [any-mod]> , #.sys.subj )-------- is violated!
+
+++++ (wrapping2) .IFL-every  ( any-node,  [any-mod]> , #.sys.subj )  must be  ( #.sysfs.fs,  [any-mod]> , any-node )-------- is violated!
+
+++++ (wrapping3) .IFL-every  ( #.sys.subj,  [any-mod]> , any-node )  must be  ( any-node,  [any-mod]> , #.devtmpfs.fs )-------- is violated!
+
+++++ (wrapping4) .IFL-every  ( any-node,  [any-mod]> , #.devtmpfs.fs )  must be  ( #.sys.subj,  [any-mod]> , any-node )-------- is violated!
+
+++++ (wrapping5) .IFL-every  ( #.devtmpfs.fs,  [any-mod]> , any-node )  must be  ( any-node,  [any-mod]> , #.loop_control.dev )-------- is violated!
+
+++++ (wrapping6) .IFL-every  ( any-node,  [any-mod]> , #.loop_control.dev )  must be  ( #.devtmpfs.fs,  [any-mod]> , any-node )-------- is violated!
+
+++++ (pipeline1) .IFL-every  ( #.sysfs.fs,  -[any-mod]> , #.devtmpfs.fs )  must be  ( #.sysfs.fs,  -[any-mod]> , #.sys.subj )  ( #.sys.subj,  -[any-mod]> , #.devtmpfs.fs )-------- is violated!
+
+++++ (pipeline2) .IFL-every  ( #.sysfs.fs,  -[any-mod]> , #.sys.subj )  must be  ( #.sysfs.fs,  -[any-mod]> , #.sys.subj )  ( #.sys.subj,  -[any-mod]> , #.devtmpfs.fs )  ( #.devtmpfs.fs,  -[any-mod]> , #.sys.subj )-------- is violated!
+
+++++ (pipeline3) .IFL-every  ( #.sysfs.fs,  -[any-mod]> , #.devtmpfs.fs )  must be  ( #.sysfs.fs,  -[any-mod]> , #.sys.subj )  ( #.sys.subj,  -[any-mod]> , #.devtmpfs.fs )  ( #.devtmpfs.fs,  -[any-mod]> , #.sys.subj )  ( #.sys.subj,  -[any-mod]> , #.devtmpfs.fs )-------- is violated!
+
+++++ (pipeline4) .IFL-every  ( #.sysfs.fs,  -[any-mod]> , #.sys.subj )  must be  ( #.sysfs.fs,  -[any-mod]> , #.sys.subj )  ( #.sys.subj,  -[any-mod]> , #.devtmpfs.fs )  ( #.devtmpfs.fs,  -[any-mod]> , #.sys.subj )  ( #.sys.subj,  -[any-mod]> , #.devtmpfs.fs )  ( #.devtmpfs.fs,  -[any-mod]> , #.sys.subj )-------- is violated!
+
+++++ (augment1) .IFL-every  ( #.sys.subj,  -[any-mod]> , #.sys.subj )  must be  ( #.sys.subj,  -[append]> , #.sys.subj )-------- is violated!
+
+++++ (augment2) .IFL-every  ( #.sys.subj,  -[any-mod]> , #.securityfs.fs )  must be  ( #.sys.subj,  -[append]> , #.securityfs.fs )-------- is violated!
+
+++++ (TCBintegrity) .IFL-every  ( any-node,  -[any-mod]> , #.TCB )  must be  ( #.Harmless,  -[any-mod]> , #.TCB )-------- is violated!
+
+----------------------------------------------
+  verifying cilbase-pipelineNuSMVconf
+----------------------------------------------
+
+++++ (pipeline4) .IFL-every  ( #.sysfs.fs,  -[any-mod]> , #.sys.subj )  must be  ( #.sysfs.fs,  -[any-mod]> , #.sys.subj )  ( #.sys.subj,  -[any-mod]> , #.devtmpfs.fs )  ( #.devtmpfs.fs,  -[any-mod]> , #.sys.subj )  ( #.sys.subj,  -[any-mod]> , #.devtmpfs.fs )  ( #.devtmpfs.fs,  -[any-mod]> , #.sys.subj )-------- is violated!
+
+++++ (pipeline3) .IFL-every  ( #.sysfs.fs,  -[any-mod]> , #.devtmpfs.fs )  must be  ( #.sysfs.fs,  -[any-mod]> , #.sys.subj )  ( #.sys.subj,  -[any-mod]> , #.devtmpfs.fs )  ( #.devtmpfs.fs,  -[any-mod]> , #.sys.subj )  ( #.sys.subj,  -[any-mod]> , #.devtmpfs.fs )-------- is violated!
+
+++++ (pipeline2) .IFL-every  ( #.sysfs.fs,  -[any-mod]> , #.sys.subj )  must be  ( #.sysfs.fs,  -[any-mod]> , #.sys.subj )  ( #.sys.subj,  -[any-mod]> , #.devtmpfs.fs )  ( #.devtmpfs.fs,  -[any-mod]> , #.sys.subj )-------- is violated!
+
+++++ (pipeline1) .IFL-every  ( #.sysfs.fs,  -[any-mod]> , #.devtmpfs.fs )  must be  ( #.sysfs.fs,  -[any-mod]> , #.sys.subj )  ( #.sys.subj,  -[any-mod]> , #.devtmpfs.fs )-------- is violated!
+
+----------------------------------------------
+  verifying cilbase-TCBNuSMVconf
+----------------------------------------------
+
+++++ (TCBintegrity) .IFL-every  ( any-node,  -[any-mod]> , #.TCB )  must be  ( #.Harmless,  -[any-mod]> , #.TCB )-------- is violated!
+
+----------------------------------------------
+  verifying cilbase-wrappingNuSMVconf
+----------------------------------------------
+
+++++ (wrapping6) .IFL-every  ( any-node,  [any-mod]> , #.loop_control.dev )  must be  ( #.devtmpfs.fs,  [any-mod]> , any-node )-------- is violated!
+
+++++ (wrapping5) .IFL-every  ( #.devtmpfs.fs,  [any-mod]> , any-node )  must be  ( any-node,  [any-mod]> , #.loop_control.dev )-------- is violated!
+
+++++ (wrapping4) .IFL-every  ( any-node,  [any-mod]> , #.devtmpfs.fs )  must be  ( #.sys.subj,  [any-mod]> , any-node )-------- is violated!
+
+++++ (wrapping3) .IFL-every  ( #.sys.subj,  [any-mod]> , any-node )  must be  ( any-node,  [any-mod]> , #.devtmpfs.fs )-------- is violated!
+
+++++ (wrapping2) .IFL-every  ( any-node,  [any-mod]> , #.sys.subj )  must be  ( #.sysfs.fs,  [any-mod]> , any-node )-------- is violated!
+
+++++ (wrapping1) .IFL-every  ( #.sysfs.fs,  [any-mod]> , any-node )  must be  ( any-node,  [any-mod]> , #.sys.subj )-------- is violated!
+
+----------------------------------------------
+  verifying dssp5NuSMVconf
+----------------------------------------------
+
+++++ (TCBintegrity) .IFL-every  ( any-node,  -[any-mod]> , #.TCB )  must be  ( #.Harmless,  -[any-mod]> , #.TCB )-------- is satisfied!
+
+++++ (wrapping1) .IFL-every  ( #.selinux,  [any-mod]> , any-node )  must be  ( any-node,  [any-mod]> , #.sys.subj )-------- is satisfied!
+
+++++ (wrapping2) .IFL-every  ( any-node,  [any-mod]> , #.sys.subj )  must be  ( #.selinux,  [any-mod]> , any-node )-------- is violated!
+
+++++ (wrapping3) .IFL-every  ( #.sys.subj,  [any-mod]> , any-node )  must be  ( any-node,  [any-mod]> , #.mqueue.fs )-------- is violated!
+
+++++ (wrapping4) .IFL-every  ( any-node,  [any-mod]> , #.mqueue.fs )  must be  ( #.sys.subj,  [any-mod]> , any-node )-------- is violated!
+
+++++ (wrapping5) .IFL-every  ( #.mqueue.fs,  [any-mod]> , any-node )  must be  ( any-node,  [any-mod]> , #.lostfound.file )-------- is violated!
+
+++++ (wrapping6) .IFL-every  ( any-node,  [any-mod]> , #.lostfound.file )  must be  ( #.mqueue.fs,  [any-mod]> , any-node )-------- is violated!
+
+++++ (wrapping7) .IFL-every  ( #.lostfound.file,  [any-mod]> , any-node )  must be  ( any-node,  [any-mod]> , #.xattr.fs )-------- is satisfied!
+
+++++ (wrapping8) .IFL-every  ( any-node,  [any-mod]> , #.xattr.fs )  must be  ( #.lostfound.file,  [any-mod]> , any-node )-------- is violated!
+
+++++ (pipeline1) .IFL-every  ( #.selinux,  -[any-mod]> , #.lostfound.file )  must be  ( #.selinux,  -[any-mod]> , #.sys.subj )  ( #.sys.subj,  -[any-mod]> , #.mqueue.fs )  ( #.mqueue.fs,  -[any-mod]> , #.lostfound.file )-------- is violated!
+
+++++ (pipeline2) .IFL-every  ( #.selinux,  -[any-mod]> , #.hugetlb.fs )  must be  ( #.selinux,  -[any-mod]> , #.sys.subj )  ( #.sys.subj,  -[any-mod]> , #.hugetlb.fs )-------- is satisfied!
+
+++++ (pipeline3) .IFL-every  ( #.boot.file,  -[any-mod]> , #.sys.subj )  must be  ( #.boot.file,  -[any-mod]> , #.hugetlb.fs )  ( #.hugetlb.fs,  -[any-mod]> , #.sys.subj )-------- is violated!
+
+++++ (pipeline4) .IFL-every  ( #.xattr.fs,  -[any-mod]> , #.sys.subj )  must be  ( #.xattr.fs,  -[any-mod]> , #.boot.file )  ( #.boot.file,  -[any-mod]> , #.sys.subj )-------- is violated!
+
+----------------------------------------------
+  verifying dssp5-pipelineNuSMVconf
+----------------------------------------------
+
+++++ (pipeline1) .IFL-every  ( #.selinux,  -[any-mod]> , #.lostfound.file )  must be  ( #.selinux,  -[any-mod]> , #.sys.subj )  ( #.sys.subj,  -[any-mod]> , #.mqueue.fs )  ( #.mqueue.fs,  -[any-mod]> , #.lostfound.file )-------- is violated!
+
+++++ (pipeline2) .IFL-every  ( #.selinux,  -[any-mod]> , #.hugetlb.fs )  must be  ( #.selinux,  -[any-mod]> , #.sys.subj )  ( #.sys.subj,  -[any-mod]> , #.hugetlb.fs )-------- is satisfied!
+
+++++ (pipeline3) .IFL-every  ( #.boot.file,  -[any-mod]> , #.sys.subj )  must be  ( #.boot.file,  -[any-mod]> , #.hugetlb.fs )  ( #.hugetlb.fs,  -[any-mod]> , #.sys.subj )-------- is violated!
+
+++++ (pipeline4) .IFL-every  ( #.xattr.fs,  -[any-mod]> , #.sys.subj )  must be  ( #.xattr.fs,  -[any-mod]> , #.boot.file )  ( #.boot.file,  -[any-mod]> , #.sys.subj )-------- is violated!
+
+----------------------------------------------
+  verifying dssp5-TCBNuSMVconf
+----------------------------------------------
+
+++++ (TCBintegrity) .IFL-every  ( any-node,  -[any-mod]> , #.TCB )  must be  ( #.Harmless,  -[any-mod]> , #.TCB )-------- is violated!
+
+++++ (Prova) .IFL-must  ( #.lostfound.file,  -[any-mod]> , #.sys.fs )-------- is satisfied!
+
+----------------------------------------------
+  verifying dssp5-wrappingNuSMVconf
+----------------------------------------------
+
+++++ (wrapping1) .IFL-every  ( #.selinux,  [any-mod]> , any-node )  must be  ( any-node,  [any-mod]> , #.sys.subj )-------- is satisfied!
+
+++++ (wrapping2) .IFL-every  ( any-node,  [any-mod]> , #.sys.subj )  must be  ( #.selinux,  [any-mod]> , any-node )-------- is violated!
+
+++++ (wrapping3) .IFL-every  ( #.sys.subj,  [any-mod]> , any-node )  must be  ( any-node,  [any-mod]> , #.mqueue.fs )-------- is violated!
+
+++++ (wrapping4) .IFL-every  ( any-node,  [any-mod]> , #.mqueue.fs )  must be  ( #.sys.subj,  [any-mod]> , any-node )-------- is violated!
+
+++++ (wrapping5) .IFL-every  ( #.mqueue.fs,  [any-mod]> , any-node )  must be  ( any-node,  [any-mod]> , #.lostfound.file )-------- is violated!
+
+++++ (wrapping6) .IFL-every  ( any-node,  [any-mod]> , #.lostfound.file )  must be  ( #.mqueue.fs,  [any-mod]> , any-node )-------- is violated!
+
+++++ (wrapping7) .IFL-every  ( #.lostfound.file,  [any-mod]> , any-node )  must be  ( any-node,  [any-mod]> , #.xattr.fs )-------- is satisfied!
+
+++++ (wrapping8) .IFL-every  ( any-node,  [any-mod]> , #.xattr.fs )  must be  ( #.lostfound.file,  [any-mod]> , any-node )-------- is violated!
+
+----------------------------------------------
+  verifying openWRT-augmentNuSMVconf
+----------------------------------------------
+
+++++ (augment2) .IFL-every  ( #.fwenv.subj,  -[any-mod]> , #.fwenv.subj )  must be  ( #.fwenv.subj,  -[append]> , #.fwenv.subj )-------- is violated!
+
+++++ (augment1) .IFL-every  ( #.fwenv.subj,  -[any-mod]> , #.tmpfile.locktmpfile )  must be  ( #.fwenv.subj,  -[append]> , #.tmpfile.locktmpfile )-------- is violated!
+
+----------------------------------------------
+  verifying openWRTNuSMVconf
+----------------------------------------------
+
+++++ (pipeline3) .IFL-every  ( #.luci.subj,  -[any-mod]> , #.dnsmasq.subj )  must be  ( #.luci.subj,  -[any-mod]> , #.nameservice.miscfile )  ( #.nameservice.miscfile,  -[any-mod]> , #.dnsmasq.subj )-------- is violated!
+
+++++ (pipeline2) .IFL-every  ( #.dnsmasq.subj,  -[any-mod]> , #.nameservice.miscfile )  must be  ( #.dnsmasq.subj,  -[any-mod]> , #.luci.subj )  ( #.luci.subj,  -[any-mod]> , #.nameservice.miscfile )-------- is violated!
+
+++++ (pipeline1) .IFL-every  ( #.nameservice.miscfile,  -[any-mod]> , #.luci.subj )  must be  ( #.nameservice.miscfile,  -[any-mod]> , #.dnsmasq.subj )  ( #.dnsmasq.subj,  -[any-mod]> , #.luci.subj )-------- is violated!
+
+++++ (wrapping10) .IFL-every  ( any-node,  [any-mod]> , #.ntpdhotplug.subj )  must be  ( #.libubox.datafile,  [any-mod]> , any-node )-------- is violated!
+
+++++ (wrapping9) .IFL-every  ( #.libubox.datafile,  [any-mod]> , any-node )  must be  ( any-node,  [any-mod]> , #.ntpdhotplug.subj )-------- is violated!
+
+++++ (wrapping8) .IFL-every  ( #.tmpfile.locktmpfile,  [any-mod]> , any-node )  must be  ( any-node,  [any-mod]> , #.fwenv.subj )-------- is violated!
+
+++++ (wrapping7) .IFL-every  ( any-node,  [any-mod]> , #.fwenv.subj )  must be  ( #.tmpfile.locktmpfile,  [any-mod]> , any-node )-------- is violated!
+
+++++ (wrapping6) .IFL-every  ( any-node,  [any-mod]> , #.tmpfile.locktmpfile )  must be  ( #.fwenv.subj,  [any-mod]> , any-node )-------- is violated!
+
+++++ (wrapping5) .IFL-every  ( #.fwenv.subj,  [any-mod]> , any-node )  must be  ( any-node,  [any-mod]> , #.tmpfile.locktmpfile )-------- is violated!
+
+++++ (wrapping4) .IFL-every  ( any-node,  [any-mod]> , #.nameservice.miscfile )  must be  ( #.luci.subj,  [any-mod]> , any-node )-------- is violated!
+
+++++ (wrapping3) .IFL-every  ( #.luci.subj,  [any-mod]> , any-node )  must be  ( any-node,  [any-mod]> , #.nameservice.miscfile )-------- is violated!
+
+++++ (wrapping2) .IFL-every  ( any-node,  [any-mod]> , #.dnsmasq.subj )  must be  ( #.nameservice.miscfile,  [any-mod]> , any-node )-------- is violated!
+
+++++ (wrapping1) .IFL-every  ( #.nameservice.miscfile,  [any-mod]> , any-node )  must be  ( any-node,  [any-mod]> , #.dnsmasq.subj )-------- is violated!
+
+++++ (augment2) .IFL-every  ( #.fwenv.subj,  -[any-mod]> , #.fwenv.subj )  must be  ( #.fwenv.subj,  -[append]> , #.fwenv.subj )-------- is violated!
+
+++++ (augment1) .IFL-every  ( #.fwenv.subj,  -[any-mod]> , #.tmpfile.locktmpfile )  must be  ( #.fwenv.subj,  -[append]> , #.tmpfile.locktmpfile )-------- is violated!
+
+++++ (TCBintegrity) .IFL-every  ( any-node,  -[any-mod]> , #.TCB )  must be  ( #.Harmless,  -[any-mod]> , #.TCB )-------- is satisfied!
+
+----------------------------------------------
+  verifying openWRT-pipelineNuSMVconf
+----------------------------------------------
+
+++++ (pipeline3) .IFL-every  ( #.luci.subj,  -[any-mod]> , #.dnsmasq.subj )  must be  ( #.luci.subj,  -[any-mod]> , #.nameservice.miscfile )  ( #.nameservice.miscfile,  -[any-mod]> , #.dnsmasq.subj )-------- is violated!
+
+++++ (pipeline2) .IFL-every  ( #.dnsmasq.subj,  -[any-mod]> , #.nameservice.miscfile )  must be  ( #.dnsmasq.subj,  -[any-mod]> , #.luci.subj )  ( #.luci.subj,  -[any-mod]> , #.nameservice.miscfile )-------- is violated!
+
+++++ (pipeline1) .IFL-every  ( #.nameservice.miscfile,  -[any-mod]> , #.luci.subj )  must be  ( #.nameservice.miscfile,  -[any-mod]> , #.dnsmasq.subj )  ( #.dnsmasq.subj,  -[any-mod]> , #.luci.subj )-------- is violated!
+
+----------------------------------------------
+  verifying openWRT-TCBNuSMVconf
+----------------------------------------------
+
+++++ (TCBintegrity) .IFL-every  ( any-node,  -[any-mod]> , #.TCB )  must be  ( #.Harmless,  -[any-mod]> , #.TCB )-------- is violated!
+
+----------------------------------------------
+  verifying openWRT-wrappingNuSMVconf
+----------------------------------------------
+
+++++ (wrapping10) .IFL-every  ( any-node,  [any-mod]> , #.ntpdhotplug.subj )  must be  ( #.libubox.datafile,  [any-mod]> , any-node )-------- is violated!
+
+++++ (wrapping9) .IFL-every  ( #.libubox.datafile,  [any-mod]> , any-node )  must be  ( any-node,  [any-mod]> , #.ntpdhotplug.subj )-------- is violated!
+
+++++ (wrapping8) .IFL-every  ( #.tmpfile.locktmpfile,  [any-mod]> , any-node )  must be  ( any-node,  [any-mod]> , #.fwenv.subj )-------- is violated!
+
+++++ (wrapping7) .IFL-every  ( any-node,  [any-mod]> , #.fwenv.subj )  must be  ( #.tmpfile.locktmpfile,  [any-mod]> , any-node )-------- is violated!
+
+++++ (wrapping6) .IFL-every  ( any-node,  [any-mod]> , #.tmpfile.locktmpfile )  must be  ( #.fwenv.subj,  [any-mod]> , any-node )-------- is violated!
+
+++++ (wrapping5) .IFL-every  ( #.fwenv.subj,  [any-mod]> , any-node )  must be  ( any-node,  [any-mod]> , #.tmpfile.locktmpfile )-------- is violated!
+
+++++ (wrapping4) .IFL-every  ( any-node,  [any-mod]> , #.nameservice.miscfile )  must be  ( #.luci.subj,  [any-mod]> , any-node )-------- is violated!
+
+++++ (wrapping3) .IFL-every  ( #.luci.subj,  [any-mod]> , any-node )  must be  ( any-node,  [any-mod]> , #.nameservice.miscfile )-------- is violated!
+
+++++ (wrapping2) .IFL-every  ( any-node,  [any-mod]> , #.dnsmasq.subj )  must be  ( #.nameservice.miscfile,  [any-mod]> , any-node )-------- is violated!
+
+++++ (wrapping1) .IFL-every  ( #.nameservice.miscfile,  [any-mod]> , any-node )  must be  ( any-node,  [any-mod]> , #.dnsmasq.subj )-------- is violated!
+
+----------------------------------------------
+  verifying paper-exampleNuSMVconf
+----------------------------------------------
+
+++++ (S1R) .IFL-every  ( #.DB,  -[any-mod]> , #.net )  must be  ( #.DB,  [read]> , #.anon )  ( #.anon,  -[any-mod]> , #.net )-------- is satisfied!
+
+++++ (F1) .IFL-must  ( #.net,  -[any-mod]> , #.http )-------- is satisfied!
+
+++++ (F2) .IFL-must  ( #.http,  -[any-mod]> , #.net )-------- is satisfied!
+
+++++ (F2R) .IFL-must  ( #.DB,  -[any-mod]> , #.http )  ( #.http,  -[any-mod]> , #.net )-------- is satisfied!
+
+++++ (F1R) .IFL-must  ( #.net,  -[any-mod]> , #.http )  ( #.http,  -[any-mod]> , #.DB )-------- is satisfied!
+
+++++ (S2) .IFL-mustnot  ( #.DB,  -[any-mod]> , #.other )-------- is satisfied!
+
+
+| Properties                | Verification Time         |
+| ------------------------- | ------------------------- |
+| cilbase-augmentNuSMVconf  | 0m0,113s                  |
+| cilbaseNuSMVconf          | 0m0,286s                  |
+| cilbase-pipelineNuSMVconf | 0m0,109s                  |
+| cilbase-TCBNuSMVconf      | 0m0,049s                  |
+| cilbase-wrappingNuSMVconf | 0m0,123s                  |
+| dssp5NuSMVconf            | 0m0,409s                  |
+| dssp5-pipelineNuSMVconf   | 0m0,175s                  |
+| dssp5-TCBNuSMVconf        | 0m0,126s                  |
+| dssp5-wrappingNuSMVconf   | 0m0,274s                  |
+| openWRT-augmentNuSMVconf  | 0m7,358s                  |
+| openWRTNuSMVconf          | 0m27,341s                 |
+| openWRT-pipelineNuSMVconf | 0m7,979s                  |
+| openWRT-TCBNuSMVconf      | 0m3,285s                  |
+| openWRT-wrappingNuSMVconf | 0m10,233s                 |
+| paper-exampleNuSMVconf    | 0m0,020s                  |
+
