@@ -74,6 +74,26 @@ Table 1 of the paper lists the configuration, properties and the execution time 
 ./run_experiments.sh
 ```
 
+The expected results are as follows
+
+| Properties         | Verification Time   |
+| -------------      | ------------------- |
+| openWRT : TCB      | 3.50 sec            |  
+| openWRT : pipeline | 8.39 sec            |
+| openWRT : wrap     | 12.3 sec            |
+| openWRT : augment  | 7.86 sec            |
+| openWRT : total    | 29.6 sec            |
+| cilbase : TCB      | 0.063 sec           |
+| cilbase : pipeline | 0.130 sec           |
+| cilbase : wrap     | 0.149 sec           |
+| cilbase : augment  | 0.116 sec           |
+| cilbase : total    | 0.258 sec           |
+| dspp5 : TCB        | 0.149 sec           |
+| dspp5 : pipeline   | 0.199 sec           |
+| dspp5 : wrap       | 0.299 sec           |
+| dspp5 : total      | 0.447 sec           |
+| paper example      | 0.040 sec           |
+
 ### Project structure
 
 Here is a description of content of the repository
