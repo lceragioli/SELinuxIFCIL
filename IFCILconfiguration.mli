@@ -33,14 +33,33 @@ type flat_statement =
   | FLATCLASSMAP of string * string list
   | FLATCLASSMAPPING of string list * string list * classpermission
 
+type named_constructs =
+  | BLOCK 
+  | TYPE 
+  | ATTRIBUTE 
+  | TYPEorATTR
+  | MACRO 
+  | COMMON 
+  | CLASS 
+  | CLASSMAP
+  | CLASSPERMISSION
+
 (* ------------------- name resolution ------------------- *)
+
+val eval_local :
+  string list ->
+    named_constructs ->
+    string list -> (string list * flat_statement) list -> string list option
+
+val eval_scope :
+  string list ->
+    named_constructs ->
+    string list -> (string list * flat_statement) list -> string list option
 
 val eval_macr :
   string list ->
-  CILgrammar.token ->
-  string list ->
-  (string list * flat_statement) list ->
-  string list
+    named_constructs ->
+    string list -> (string list * flat_statement) list -> string list
 (* eval_macr pos construct qname fstmntls
    parameters:
      pos - the path in which the name to be resolved occurs
@@ -53,32 +72,13 @@ val eval_macr :
 
 val eval_bl :
   string list ->
-  CILgrammar.token ->
-  string list ->
-  (string list * flat_statement) list ->
-  string list
+  named_constructs ->
+  string list -> (string list * flat_statement) list -> string list
 (* let rec eval_bl pos construct qname fstmntls
    parameters:
      pos - the path in which the name to be resolved occurs
      construct - the kind of construct we are resolving, may be a type, a typeattribute etc
      qname - the name to be resolved, it is a full name, may be A.c.d, #.B.d, d, etc
-     fstmntls - the consfiguration we are considering
-
-   return the real name of the entity of kind construct named with qname appearing in pos WHICH IS A BLOCK, i.e., a name starting with #
-*)
-
-val eval_bl_type_attr :
-  string list ->
-  CILgrammar.token ->
-  string list ->
-  (string list * flat_statement) list ->
-  string list
-(* let eval_bl_type_attr pos construct name fstmntls
-   parameters:
-     pos - the path in which the name to be resolved occurs
-     construct - in lots of contexts, types and typeattributes can appear one in place oif another;
-       if construct is TYPE than we are looking for a type and if not defined for an attribute, if construct is TYPEATTRIBUTE than we are looking for an attribute
-     name - the name to be resolved, it is a (relative or absolute) full name, may be A.c.d, #.B.d, d, etc
      fstmntls - the consfiguration we are considering
 
    return the real name of the entity of kind construct named with qname appearing in pos WHICH IS A BLOCK, i.e., a name starting with #
@@ -183,3 +183,11 @@ val print_classpermission : CILsyntax.classpermission -> string
 val print_fparams : (CILsyntax.parametertype * string) list -> string
 
 val print_flat_CIL : string list * flat_statement -> string
+
+(* -------------- Recognize IFL requirements -------------- *)
+
+val is_forbid: string -> bool
+
+val is_constraint: string -> bool
+
+val is_functional: string -> bool

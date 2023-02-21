@@ -27,12 +27,11 @@ let parse_response_line line mustfalse =
 let rec parse_response oc' requirements =
   if requirements <> [] then (
     try
-      let mustfalse =
-        not
-          (String.sub (snd (List.hd requirements)) 0 10 = ".IFL-every" 
-          || 
-          String.sub (snd (List.hd requirements)) 0 12 = ".IFL-mustnot")
+      let mustfalse = is_functional (snd (List.hd requirements))
       in
+      (* print_string (if mustfalse then "mustfalse " ^ (snd (List.hd requirements)) ^ "\n" else "mustrue" ^ (snd (List.hd requirements)) ^ "\n");
+      print_string (if is_forbid (snd (List.hd requirements)) then "forbid " ^ (snd (List.hd requirements)) ^ "\n" else "not forbid " ^ (snd (List.hd requirements)) ^ "\n");
+      print_string (if is_constraint (snd (List.hd requirements)) then "constraint " ^ (snd (List.hd requirements)) ^ "\n" else "not constraint " ^ (snd (List.hd requirements)) ^ "\n"); *)
       let line = input_line oc' in
       let result = parse_response_line line mustfalse in
       if result <> "" then (

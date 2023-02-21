@@ -3,6 +3,10 @@ module SS = Set.Make (String)
 let ( << ) f g x = f (g x)
 
 let rec listminus list list' =
+  (* listminus list list' returns either
+     - Some list'' - where list'' is the postfix of list where list' is removed
+     - None - if list' is not a prefix of list
+  *)
   if list' = [] then Some list
   else if list = [] then None
   else if List.hd list = List.hd list' then
@@ -33,13 +37,11 @@ let rec list_find_map f ls =
       match f a with None -> list_find_map f als | Some b -> Some b)
 
 let rec prefix_list ls =
-  match ls with
-  | [] -> [ [] ]
-  | [ a ] -> [ [ a ] ]
-  | a :: als ->
-      let ls' = prefix_list als in
-      [ a ] :: List.map (List.cons a) ls'
-
+  if ls = [] then []
+  else 
+    let _, fstprefix = last_and_list ls in
+    [ls] @ (prefix_list fstprefix)
+    
 let id x = x
 
 let breake ls =

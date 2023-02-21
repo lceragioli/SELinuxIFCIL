@@ -1,5 +1,4 @@
 open CILsyntax
-open CILgrammar
 open Utils
 
 module SS = Set.Make (String)
@@ -31,345 +30,228 @@ type flat_statement =
   | FLATCLASSMAP of string * string list
   | FLATCLASSMAPPING of string list * string list * classpermission
 
+type named_constructs =
+  | BLOCK 
+  | TYPE 
+  | ATTRIBUTE 
+  | TYPEorATTR
+  | MACRO 
+  | COMMON 
+  | CLASS 
+  | CLASSMAP
+  | CLASSPERMISSION
+  (* Not needed: classcommon, classmapping, classpermissionset *)
+
 (* ------------------- name resolution ------------------- *)
 
-let rec eval_macr pos construct qname fstmntls =
-  (* eval_macr pos construct qname fstmntls
-     parameters:
-       pos - the path in which the name to be resolved occurs
-       construct - the kind of construct we are resolving, may be a type, a typeattribute etc
-       qname - the name to be resolved, it is a full name, may be A.c.d, #.B.d, d, etc
-       fstmntls - the consfiguration we are considering
-
-     return the real name of the entity of kind construct named with qname appearing in pos WHICH IS A MACRO, i.e., a name starting with #
-  *)
-  let resolve qual condmaps =
-    match
-      list_find_map
-        (fun ps ->
-          list_find_map
-            (fun (cond, map) ->
-              if
-                List.exists
-                  (fun (ps', i) -> ps' = ps @ qual && cond i qual)
-                  fstmntls
-              then Some (map (ps @ qname))
-              else None)
-            condmaps)
-        (if pos = [ "#" ] then [ pos ] else [ pos ])
-    with
-    | Some fqname -> fqname
-    | None ->
-        raise
-          (UndefinedReference
-             (String.concat "." qname ^ " in " ^ String.concat "." pos))
-  in
-  match qname with
-  | "#" :: bs -> qname
-  | _ -> (
-      let name, qual = last_and_list qname in
-      match construct with
-      | BLOCK -> (
-          try resolve qual [ ((fun i _ -> i = FLATBLOCK name), id) ]
-          with UndefinedReference s ->
-            raise (UndefinedReference ("block: " ^ s)))
-      | TYPE -> (
-          try
-            resolve qual
-              [
-                ((fun i _ -> i = FLATTYPE name), id);
-                ( (fun i qual -> i = FLATTYPEALIAS name && qual = []),
-                  fun qname ->
-                    let name, qual = last_and_list qname in
-                    let actual =
-                      List.find_opt
-                        (fun (ps, i) ->
-                          ps = qual
-                          &&
-                          match i with
-                          | FLATTYPEALIASACTUAL (n, t) -> n = name
-                          | _ -> false)
+let rec eval_name pos construct qname fstmntls vis =
+        (* let rec eval_name pos construct qname fstmntls vis
+           parameters:
+             pos - the path in which the name to be resolved occurs
+             construct - the kind of construct we are resolving, may be a type, a typeattribute etc,
+                  we use TYPEorATTR for resolving the name to the first type or a typeattribute name, 
+             qname - the name to be resolved, it is a qualified name, may be A.c.d, #.B.d, d, etc
+             fstmntls - the consfiguration we are considering
+             vis - the visibility rule for the environment: where to look while resolving and in
+                    which order
+      
+           return the real name of the entity of kind construct named with qname appearing in pos
+        *)
+        let resolve qual condmaps =
+          (* 
+            qual - the relative or absolute path in the that qualifies the name
+            condmaps - list of pairs composed by
+              -- a condition that a CIL instruction satisfies if it defines the actual name to resolve
+              -- a map that tells which is the actual name defined by the CIL construct 
+                  (usually trivial unless alis are used)
+          *)
+          match
+            list_find_map
+              (fun ps ->
+                list_find_map
+                  (fun (cond, map) ->
+                    if
+                      List.exists
+                        (fun (ps', i) -> ps' = ps @ qual && cond i)
                         fstmntls
-                    in
-                    match actual with
-                    | Some (ps, FLATTYPEALIASACTUAL (n, t)) ->
-                        eval_macr ps TYPE t fstmntls
-                    | _ ->
-                        raise
-                          (UndefinedReference
-                             (String.concat "type " (pos @ qname))) );
-              ]
-          with UndefinedReference s ->
-            raise (UndefinedReference ("type: " ^ s))
-            (* if
-                 List.exists
-                   (fun (ps, i) -> ps = pos @ qual && i = FLATTYPE name)
-                   fstmntls
-               then pos @ qname
-               else if
-                 qual = []
-                 && List.exists
-                      (fun (ps, i) -> ps = pos @ qual && i = FLATTYPEALIAS name)
-                      fstmntls
-               then
-                 let actual =
-                   List.find_opt
-                     (fun (ps, i) ->
-                       ps = pos @ qual
-                       &&
-                       match i with
-                       | FLATTYPEALIASACTUAL (n, t) -> n = name
-                       | _ -> false)
-                     fstmntls
-                 in
-                 match actual with
-                 | Some (ps, FLATTYPEALIASACTUAL (n, t)) ->
-                     eval_bl ps TYPE t fstmntls
-                 | _ ->
-                 raise (UndefinedReference (String.concat "type " (pos @ qname)))
-
-               else
-                 raise (UndefinedReference (String.concat "type " (pos @ qname))) *)
-          )
-      | ATTRIBUTE -> (
-          try resolve qual [ ((fun i _ -> i = FLATATTRIBUTE name), id) ]
-          with UndefinedReference s ->
-            raise (UndefinedReference ("attribute: " ^ s)))
-      | MACRO -> (
-          try
-            resolve qual
-              [
-                ( (fun i _ ->
-                    match i with FLATMACRO (n, _) -> n = name | _ -> false),
-                  id );
-              ]
-          with UndefinedReference s ->
-            raise (UndefinedReference ("macro: " ^ s)))
-      | COMMON -> (
-          try
-            resolve qual
-              [
-                ( (fun i _ ->
-                    match i with FLATCOMMON (n, _) -> n = name | _ -> false),
-                  id );
-              ]
-          with UndefinedReference s ->
-            raise (UndefinedReference ("common: " ^ s)))
-      | CLASS -> (
-          try
-            resolve qual
-              [
-                ( (fun i _ ->
-                    match i with FLATCLASS (n, _) -> n = name | _ -> false),
-                  id );
-              ]
-          with UndefinedReference s ->
-            raise (UndefinedReference ("class: " ^ s)))
-      | CLASSMAP -> (
-          try
-            resolve qual
-              [
-                ( (fun i _ ->
-                    match i with FLATCLASSMAP (n, _) -> n = name | _ -> false),
-                  id );
-              ]
-          with UndefinedReference s ->
-            raise (UndefinedReference ("classmap: " ^ s)))
-      | CLASSPERMISSION -> (
-          try
-            resolve qual
-              [
-                ( (fun i _ ->
-                    match i with
-                    | FLATCLASSPERMISSION n -> n = name
-                    | _ -> false),
-                  id );
-              ]
-          with UndefinedReference s ->
-            raise (UndefinedReference ("classmap: " ^ s)))
-      (* Not needed: classcommon, classmapping, classpermissionset *)
-      | CLASSCOMMON | CLASSPERMISSIONSET | CLASSMAPPING | _ -> qname)
-
-let rec eval_bl pos construct qname fstmntls =
-  (* let rec eval_bl pos construct qname fstmntls
-     parameters:
-       pos - the path in which the name to be resolved occurs
-       construct - the kind of construct we are resolving, may be a type, a typeattribute etc
-       qname - the name to be resolved, it is a full name, may be A.c.d, #.B.d, d, etc
-       fstmntls - the consfiguration we are considering
-
-     return the real name of the entity of kind construct named with qname appearing in pos WHICH IS A BLOCK, i.e., a name starting with #
-  *)
-  let resolve qual condmaps =
-    match
-      list_find_map
-        (fun ps ->
-          list_find_map
-            (fun (cond, map) ->
-              if
-                List.exists
-                  (fun (ps', i) -> ps' = ps @ qual && cond i qual)
-                  fstmntls
-              then Some (map (ps @ qname))
-              else None)
-            condmaps)
-        (if pos = [ "#" ] then [ pos ]
-        else List.map (fun prf -> "#" :: prf) (prefix_list (List.tl pos)))
-    with
-    | Some fqname -> fqname
-    | None ->
-        raise
-          (UndefinedReference
-             (String.concat "." qname ^ " in " ^ String.concat "." pos))
-  in
-  match qname with
-  | "#" :: bs -> qname
-  | _ -> (
-      let name, qual = last_and_list qname in
-      match construct with
-      | BLOCK -> (
-          try resolve qual [ ((fun i _ -> i = FLATBLOCK name), id) ]
-          with UndefinedReference s ->
-            raise (UndefinedReference ("block: " ^ s)))
-      | TYPE -> (
-          try
-            resolve qual
-              [
-                ((fun i _ -> i = FLATTYPE name), id);
-                ( (fun i qual -> i = FLATTYPEALIAS name && qual = []),
-                  fun qname ->
-                    let name, qual = last_and_list qname in
-                    let actual =
-                      List.find_opt
-                        (fun (ps, i) ->
-                          ps = qual
-                          &&
+                    then Some (map (ps @ qname))
+                    else None)
+                  condmaps)
+              (vis pos) 
+          with
+          | Some fqname -> fqname
+          | None ->
+              raise
+                (UndefinedReference
+                   (String.concat "." qname ^ " in " ^ String.concat "." pos))
+        in
+        let cond_map_for_alias name =
+          ( (fun i -> i = FLATTYPEALIAS name),
+                        fun qname ->
+                          let name, qual = last_and_list qname in
+                          let actual =
+                            List.find_opt
+                              (fun (ps, i) ->
+                                ps = qual
+                                &&
+                                match i with
+                                | FLATTYPEALIASACTUAL (n, t) -> n = name
+                                | _ -> false)
+                              fstmntls
+                          in
+                          match actual with
+                          | Some (ps, FLATTYPEALIASACTUAL (n, t)) ->
+                              eval_name ps TYPE t fstmntls vis
+                          | _ ->
+                              raise
+                                (UndefinedReference
+                                   (String.concat "type " (pos @ qname))) )
+        in
+        match qname with
+        | "#" :: bs -> qname
+        | _ -> (
+            let name, qual = last_and_list qname in
+            match construct with
+            | BLOCK -> (
+                try resolve qual [ ((fun i -> i = FLATBLOCK name), id) ]
+                with UndefinedReference s ->
+                  raise (UndefinedReference ("block: " ^ s)))
+            | TYPE -> (
+                try
+                  resolve qual
+                    [
+                      ((fun i -> i = FLATTYPE name), id);
+                      (cond_map_for_alias name)
+                    ]
+                with UndefinedReference s ->
+                  raise (UndefinedReference ("type: " ^ s))
+                )
+            | ATTRIBUTE -> (
+                try resolve qual [ ((fun i -> i = FLATATTRIBUTE name), id) ]
+                with UndefinedReference s ->
+                  raise (UndefinedReference ("attribute: " ^ s)))
+            | TYPEorATTR -> (
+                try
+                  resolve qual
+                    [
+                      ((fun i -> i = FLATTYPE name), id);
+                      ((fun i -> i = FLATATTRIBUTE name), id);
+                      (cond_map_for_alias name)
+                    ]
+                with UndefinedReference s ->
+                  raise (UndefinedReference ("type or attribute: " ^ s))
+              )
+            | MACRO -> (
+                try
+                  resolve qual
+                    [
+                      ( (fun i ->
+                          match i with FLATMACRO (n, _) -> n = name | _ -> false),
+                        id );
+                    ]
+                with UndefinedReference s ->
+                  raise (UndefinedReference ("macro: " ^ s)))
+            | COMMON -> (
+                try
+                  resolve qual
+                    [
+                      ( (fun i ->
+                          match i with FLATCOMMON (n, _) -> n = name | _ -> false),
+                        id );
+                    ]
+                with UndefinedReference s ->
+                  raise (UndefinedReference ("common: " ^ s)))
+            | CLASS -> (
+                try
+                  resolve qual
+                    [
+                      ( (fun i ->
+                          match i with FLATCLASS (n, _) -> n = name | _ -> false),
+                        id );
+                    ]
+                with UndefinedReference s ->
+                  raise (UndefinedReference ("class: " ^ s)))
+            | CLASSMAP -> (
+                try
+                  resolve qual
+                    [
+                      ( (fun i ->
+                          match i with FLATCLASSMAP (n, _) -> n = name | _ -> false),
+                        id );
+                    ]
+                with UndefinedReference s ->
+                  raise (UndefinedReference ("classmap: " ^ s)))
+            | CLASSPERMISSION -> (
+                try
+                  resolve qual
+                    [
+                      ( (fun i ->
                           match i with
-                          | FLATTYPEALIASACTUAL (n, t) -> n = name
-                          | _ -> false)
-                        fstmntls
-                    in
-                    match actual with
-                    | Some (ps, FLATTYPEALIASACTUAL (n, t)) ->
-                        eval_bl ps TYPE t fstmntls
-                    | _ ->
-                        raise
-                          (UndefinedReference
-                             (String.concat "type " (pos @ qname))) );
-              ]
-          with UndefinedReference s ->
-            raise (UndefinedReference ("type: " ^ s))
-            (* if
-                 List.exists
-                   (fun (ps, i) -> ps = pos @ qual && i = FLATTYPE name)
-                   fstmntls
-               then pos @ qname
-               else if
-                 qual = []
-                 && List.exists
-                      (fun (ps, i) -> ps = pos @ qual && i = FLATTYPEALIAS name)
-                      fstmntls
-               then
-                 let actual =
-                   List.find_opt
-                     (fun (ps, i) ->
-                       ps = pos @ qual
-                       &&
-                       match i with
-                       | FLATTYPEALIASACTUAL (n, t) -> n = name
-                       | _ -> false)
-                     fstmntls
-                 in
-                 match actual with
-                 | Some (ps, FLATTYPEALIASACTUAL (n, t)) ->
-                     eval_bl ps TYPE t fstmntls
-                 | _ ->
-                 raise (UndefinedReference (String.concat "type " (pos @ qname)))
+                          | FLATCLASSPERMISSION n -> n = name
+                          | _ -> false),
+                        id );
+                    ]
+                with UndefinedReference s ->
+                  raise (UndefinedReference ("classpermission: " ^ s))))
 
-               else
-                 raise (UndefinedReference (String.concat "type " (pos @ qname))) *)
-          )
-      | ATTRIBUTE -> (
-          try resolve qual [ ((fun i _ -> i = FLATATTRIBUTE name), id) ]
-          with UndefinedReference s ->
-            raise (UndefinedReference ("attribute: " ^ s)))
-      | MACRO -> (
-          try
-            resolve qual
-              [
-                ( (fun i _ ->
-                    match i with FLATMACRO (n, _) -> n = name | _ -> false),
-                  id );
-              ]
-          with UndefinedReference s ->
-            raise (UndefinedReference ("macro: " ^ s)))
-      | COMMON -> (
-          try
-            resolve qual
-              [
-                ( (fun i _ ->
-                    match i with FLATCOMMON (n, _) -> n = name | _ -> false),
-                  id );
-              ]
-          with UndefinedReference s ->
-            raise (UndefinedReference ("common: " ^ s)))
-      | CLASS -> (
-          try
-            resolve qual
-              [
-                ( (fun i _ ->
-                    match i with FLATCLASS (n, _) -> n = name | _ -> false),
-                  id );
-              ]
-          with UndefinedReference s ->
-            raise (UndefinedReference ("class: " ^ s)))
-      | CLASSMAP -> (
-          try
-            resolve qual
-              [
-                ( (fun i _ ->
-                    match i with FLATCLASSMAP (n, _) -> n = name | _ -> false),
-                  id );
-              ]
-          with UndefinedReference s ->
-            raise (UndefinedReference ("classmap: " ^ s)))
-      | CLASSPERMISSION -> (
-          try
-            resolve qual
-              [
-                ( (fun i _ ->
-                    match i with
-                    | FLATCLASSPERMISSION n -> n = name
-                    | _ -> false),
-                  id );
-              ]
-          with UndefinedReference s ->
-            raise (UndefinedReference ("classpermission: " ^ s)))
-      (* Not needed: classcommon, classmapping, classpermissionset *)
-      | CLASSCOMMON | CLASSPERMISSIONSET | CLASSMAPPING | _ -> qname)
+let eval_local pos construct qname fstmntls =
+  let vis pos =
+    (
+      let global, locals = last_and_list (prefix_list pos)
+      in
+      locals
+    )
+  in
+  try
+    Some (eval_name pos construct qname fstmntls vis)
+  with UndefinedReference _ -> None
 
-let eval_bl_type_attr pos construct name fstmntls =
-  (* let eval_bl_type_attr pos construct name fstmntls
-     parameters:
-       pos - the path in which the name to be resolved occurs
-       construct - in lots of contexts, types and typeattributes can appear one in place oif another;
-         if construct is TYPE than we are looking for a type and if not defined for an attribute, if construct is TYPEATTRIBUTE than we are looking for an attribute
-       name - the name to be resolved, it is a (relative or absolute) full name, may be A.c.d, #.B.d, d, etc
-       fstmntls - the consfiguration we are considering
+let eval_scope pos construct qname fstmntls =
+    try
+      Some (eval_name pos construct qname fstmntls (fun pos -> [pos]))
+    with UndefinedReference _ -> None
 
-     return the real name of the entity of kind construct named with qname appearing in pos WHICH IS A BLOCK, i.e., a name starting with #
+let eval_bl pos construct qname fstmntls =
+   (* let rec eval_bl pos construct qname fstmntls
+      parameters:
+        pos - the path in which the name to be resolved occurs
+        construct - the kind of construct we are resolving, may be a type, a typeattribute etc,
+               we use TYPEorATTR for resolving the name to the first type or a typeattribute name, 
+        qname - the name to be resolved, it is a qualified name, may be A.c.d, #.B.d, d, etc
+        fstmntls - the consfiguration we are considering
+      
+      return the real name of the entity of kind construct named with qname appearing in the 
+      block at pos
   *)
-  if construct = TYPE then
-    (* TODO: check, this is done globally and not layer by layer in the nesting of pos, is it right? *)
-    try eval_bl pos TYPE name fstmntls
-    with UndefinedReference _ -> (
-      try eval_bl pos ATTRIBUTE name fstmntls
-      with UndefinedReference _ ->
-        raise
-          (UndefinedReference
-             ("eval_bl_type_attr - " ^ String.concat "." name ^ " in "
-            ^ String.concat "." pos)))
-  else eval_bl pos ATTRIBUTE name fstmntls
+
+  eval_name pos construct qname fstmntls (
+    fun pos -> if pos = [ "#" ] then [ pos ]
+    else 
+      prefix_list pos
+  )
+
+let eval_macr pos construct qname fstmntls =
+   (* let rec eval_macr pos construct qname fstmntls
+      parameters:
+        pos - the path of the macro in which the name to be resolved occurs
+        construct - the kind of construct we are resolving, may be a type, a typeattribute etc,
+               we use TYPEorATTR for resolving the name to the first type or a typeattribute name, 
+        qname - the name to be resolved, it is a qualified name, may be A.c.d, #.B.d, d, etc
+        fstmntls - the consfiguration we are considering
+      
+      if the name is defined in pos (i.e., inside the macro), it is returned unvevaluated,
+      otherwise, if the name is defined in the local env then it returns its evaluation, 
+      otherwise retuns qname unevaluated
+  *)
+  match eval_scope pos construct qname fstmntls
+  with
+    | Some path -> qname
+    | None ->
+        let _, containing_block = last_and_list pos in
+        match eval_local containing_block construct qname fstmntls
+        with
+          | Some path -> path
+          | None -> qname
 
 (* ------------------- definition checking ------------------- *)
 
@@ -660,17 +542,17 @@ let print_IFL (node, marrow, node') =
 let print_IFL_requirement r =
   match r with
   | CILsyntax.MUST iflpath ->
-      ".IFL-must "
+      ".IFL-requirement "
       ^ List.fold_right (fun p s -> print_IFL p ^ s) iflpath ""
       ^ "\n"
   | CILsyntax.MUSTNOT iflpath ->
-      ".IFL-mustnot "
+      ".IFL-requirement ~ "
       ^ List.fold_right (fun p s -> print_IFL p ^ s) iflpath ""
       ^ "\n"
   | CILsyntax.EVERYMUST (iflpath, iflpath') ->
-      ".IFL-every "
+      ".IFL-requirement "
       ^ List.fold_right (fun p s -> print_IFL p ^ s) iflpath ""
-      ^ " must be "
+      ^ " : "
       ^ List.fold_right (fun p s -> print_IFL p ^ s) iflpath' ""
       ^ "\n"
 
@@ -756,3 +638,15 @@ let rec print_flat_CIL (pos, stmnt) =
   | FLATCLASSMAPPING (clsmap, clsmapping, clsperm) ->
       ".classmapping " ^ print_path clsmap ^ " " ^ print_path clsmapping
       ^ print_classpermission clsperm
+
+(* -------------- Recognize IFL requirements -------------- *)
+
+let is_forbid str =
+  String.contains str '~'
+
+let is_constraint str =
+  String.contains str ':'
+
+let is_functional str =
+  (not (is_forbid str)) && (not (is_constraint str))
+  

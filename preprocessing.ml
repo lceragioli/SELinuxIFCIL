@@ -98,13 +98,14 @@ let rec flatten_conf stmnts loc =
             | _ ->
                 raise
                   (UnsupportedConstruct
-                     "'in' statements inside 'in' statements are not allowed \
-                      by CIL"))
+                     "nested 'in' statements are not allowed by CIL"))
           (semi_flatten_conf stmnts block)
     | FLAT f -> [ (loc, f) ]
   in
   let sstmnts = simplifyin stmnts in
   let semiflatstmnts = semi_flatten_conf sstmnts loc in
-  List.fold_left
-    (fun flatls semiflatstmnt -> flatin semiflatstmnt semiflatstmnts @ flatls)
-    [] semiflatstmnts
+  List.sort_uniq 
+    compare
+    (List.fold_left
+      (fun flatls semiflatstmnt -> flatin semiflatstmnt semiflatstmnts @ flatls)
+      [] semiflatstmnts)
