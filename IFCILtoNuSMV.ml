@@ -239,6 +239,23 @@ let attr_to_smv ex type_nodes =
   in
   "(" ^ attr_to_smv' ex ^ ") & ! (state = pozzo)"
 
+let get_functional_reqs rqs = 
+  List.filter_map
+  (fun rqr -> match rqr with
+    | MUST path -> Some path
+    | _ -> None)
+  rqs
+
+let print_expected_if frqs type_nodes =
+  List.fold_left
+    (fun ltl rqr -> ltl ^ " & !(" ^ (kind_to_LTL rqr type_nodes) ^ ")")
+    "TRUE"
+    frqs
+
+let print_unexpected_flow a o b rqs_post type_nodes =
+  let pre = kind_to_LTL([(["any-node"], (["any-mod"], LONGARROW), a); (a, ([o], SHORTARROW), b); (b, (["any-mod"], LONGARROW), ["any-node"])]) type_nodes
+in "(" ^ pre  ^ ") -> (" ^ rqs_post ^ ")"
+
 let print_NuSMV fstmntls oc =
   (* List of full names of types *)
   let fstmntls =
@@ -268,6 +285,19 @@ let print_NuSMV fstmntls oc =
       SS.empty fstmntls
   in
   print_string "typenodes computed\n";
+  (* Set of attributes *)
+  let attr_nodes =
+    List.fold_left
+      (fun nds fstmnt ->
+        match fstmnt with
+        | pos, FLATATTRIBUTE a ->
+            if pos = [ "#" ] || is_block pos fstmntls then
+              SS.add (name (pos @ [ a ])) nds
+            else nds
+        | _ -> nds)
+      SS.empty fstmntls
+  in
+  print_string "attrnodes computed\n";
   (* List of pairs (full name of attribute, expression defining the attribute) *)
   let attributesreal =
     List.fold_left
@@ -294,6 +324,25 @@ let print_NuSMV fstmntls oc =
             else nds
         | _ -> nds)
       [] fstmntls
+  in
+  let attributetypes =
+    List.map
+      (fun (att, expr) -> 
+        let types =
+          List.filter 
+            (fun t -> type_in_attr t expr typesreal attributesreal)
+            typesreal
+        in
+        (att, types))
+      attributesreal
+  in
+  let find_attributetypes at =
+    match List.find_opt 
+      (fun (attr, types) -> attr = at)
+      attributetypes
+    with
+      | Some (attr, types) -> types
+      | None -> []
   in
   let attributes =
     print_string "attributesreal computed\n";
@@ -380,11 +429,15 @@ let print_NuSMV fstmntls oc =
               let da', dt' =
                 if is_type src fstmntls then
                   (da, add_dst src dst write_os pos dt)
-                else (add_dst src dst write_os pos da, dt)
+                else 
+                  List.fold_right
+                  (fun t (da'', dt'') ->
+                    (da'', add_dst t dst write_os pos dt'')
+                  )
+                  (find_attributetypes src)
+                  (da, dt)
               in
-              if is_type dst fstmntls then
                 (da', add_dst dst src read_os pos dt', oset')
-              else (add_dst dst src read_os pos da', dt', oset')
             else (da, dt, oset)
         | _, _ -> (da, dt, oset))
       (Dict.empty, Dict.empty, SS.empty)
@@ -412,11 +465,13 @@ let print_NuSMV fstmntls oc =
       (Printf.fprintf oc "(state = %s -> ( " t;
        try
          let type_ars_t = Dict.find t type_arcs in
+         (* Transitions starting from type to type *)
          List.iter
            (fun (d, o) ->
              Printf.fprintf oc "(operation = %s & next(state = %s)) | " o d)
            (fst type_ars_t);
 
+         (* Transitions starting from type to attribute *)
          List.iter
            (fun (d, o) ->
              Printf.fprintf oc "(operation = %s & next(%s)) | " o d)
