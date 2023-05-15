@@ -23,6 +23,9 @@
 
 ;IFL; (TCBintegrity) +> TCB : Harmless +> TCB ;IFL;
 
+;IFL; (fromTCB) +> TCB +> ;IFL;
+;IFL; (TCB) +> Harmless +> TCB ;IFL;
+
 (policycap "network_peer_controls")
 (policycap "open_perms")
 

@@ -23,6 +23,8 @@
 ;IFL; (pipeline3) boot.file +> sys.subj : boot.file +> hugetlb.fs +> sys.subj ;IFL;
 ;IFL; (pipeline4) xattr.fs +> sys.subj : xattr.fs +> boot.file +> sys.subj ;IFL;
 
+;IFL; (fromTCB) +> TCB +> ;IFL;
+;IFL; (TCB) +> Harmless +> TCB ;IFL;
 
 (classmap constrainobject (append create getattr read relabelto setattr write))
 

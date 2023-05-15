@@ -1,0 +1,177 @@
+/.*	sys.id:sys.role:unknown.file
+/etc(/.*)?	sys.id:sys.role:config.config_file
+/opt(/.*)?	sys.id:sys.role:data.data_file
+/srv(/.*)?	sys.id:sys.role:var.var_file
+/usr(/.*)?	sys.id:sys.role:data.data_file
+/var(/.*)?	sys.id:sys.role:var.var_file
+/dev(/.*)?	<<none>>
+/sys(/.*)?	<<none>>
+/tmp(/.*)?	<<none>>
+/mnt(/[^/]*)?	-d	sys.id:sys.role:mnt.file
+/mnt(/[^/]*)?	-l	sys.id:sys.role:mnt.file
+/boot(/.*)?	sys.id:sys.role:boot.boot_file
+/proc(/.*)?	<<none>>
+/mnt/[^/]*/.*	<<none>>
+/dev/[shmxv]d[^/]*	-b	sys.id:sys.role:fixed_disk.storage_dev
+/home/.*	<<none>>
+/media(/[^/]*)?	-d	sys.id:sys.role:mnt.file
+/media(/[^/]*)?	-l	sys.id:sys.role:mnt.file
+/dev/sg[0-9]+	-c	sys.id:sys.role:scsi_generic.storage_dev
+/dev/sr[0-9]+	-b	sys.id:sys.role:removable_storage.storage_dev
+/var/db(/.*)?	sys.id:sys.role:var_db.var_db_file
+/media/[^/]*/.*	<<none>>
+/dev/fb([0-9]+)?	-c	sys.id:sys.role:framebuf.dev
+/dev/tty.+	-c	sys.id:sys.role:tty.serial_dev
+/dev/vcs[^/]*	-c	sys.id:sys.role:tty.serial_dev
+/dev/hvc[0-9]+	-c	sys.id:sys.role:tty.serial_dev
+/dev/dm-[0-9]+	-b	sys.id:sys.role:fixed_disk.storage_dev
+/var/lib(/.*)?	sys.id:sys.role:var_lib.var_lib_file
+/var/log(/.*)?	sys.id:sys.role:var_log.var_log_file
+/var/run(/.*)?	sys.id:sys.role:runtime.runtime_file
+/usr/lib(/.*)?	sys.id:sys.role:lib.lib_file
+/usr/bin(/.*)?	sys.id:sys.role:cmd.cmd_file
+/dev/mei([0-9]+)?	-c	sys.id:sys.role:mei_misc.dev
+/dev/ptp([0-9]+)?	-c	sys.id:sys.role:clock.dev
+/dev/rtc([0-9]+)?	-c	sys.id:sys.role:clock.dev
+/dev/tpm([0-9]+)?	-c	sys.id:sys.role:tpm.dev
+/dev/bsg/.+	-c	sys.id:sys.role:scsi_generic.storage_dev
+/dev/loop.+	-c	sys.id:sys.role:fixed_disk.storage_dev
+/dev/raw/.+	-c	sys.id:sys.role:fixed_disk.storage_dev
+/dev/cpu/.+	-c	sys.id:sys.role:cpu.dev
+/dev/dri/.+	-c	sys.id:sys.role:dri.dev
+/dev/snd/.+	-c	sys.id:sys.role:sound.dev
+/var/tmp/.*	<<none>>
+/boot/efi(/.*)?	<<none>>
+/usr/sbin(/.*)?	sys.id:sys.role:cmd.cmd_file
+/dev/vfio/.+	-c	sys.id:sys.role:vfio.dev
+/var/cache(/.*)?	sys.id:sys.role:var_cache.var_cache_file
+/var/spool(/.*)?	sys.id:sys.role:var_spool.var_spool_file
+/dev/media([0-9]+)?	-c	sys.id:sys.role:v4l.dev
+/dev/ndctl([0-9]+)?	-c	sys.id:sys.role:nvram.dev
+/dev/video([0-9]+)?	-c	sys.id:sys.role:v4l.dev
+/dev/vport[0-9]p[0-9]+	-c	sys.id:sys.role:virtio.serial_dev
+/dev/mmcblk.+	-b	sys.id:sys.role:removable_storage.storage_dev
+/dev/mspblk.+	-b	sys.id:sys.role:removable_storage.storage_dev
+/dev/hidraw[0-9]+	-c	sys.id:sys.role:usb.dev
+/dev/usbmon[0-9]+	-c	sys.id:sys.role:usbmon.dev
+/lost\+found/.*	<<none>>
+/usr/libexec(/.*)?	sys.id:sys.role:cmd.cmd_file
+/dev/parport([0-9]+)?	-c	sys.id:sys.role:printer.dev
+/usr/lib/ld-[^/]*\.so(\.[^/]*)*	--	sys.id:sys.role:ld_so.file
+/dev/bus/usb/.+	-c	sys.id:sys.role:usb.dev
+/var/run/lock(/.*)?	sys.id:sys.role:runtime_lock.runtime_lock_file
+/var/run/user(/.*)?	<<none>>
+/dev/watchdog([0-9]+)?	-c	sys.id:sys.role:watchdog.dev
+/var/run/user/.*	<<none>>
+/etc/profile\.d(/.*)?	--	sys.id:sys.role:cmd.cmd_file
+/etc/ld\.so\.cache.*	--	sys.id:sys.role:ld_so_cache.file
+/etc/lost\+found/.*	<<none>>
+/opt/lost\+found/.*	<<none>>
+/srv/lost\+found/.*	<<none>>
+/usr/lost\+found/.*	<<none>>
+/var/lost\+found/.*	<<none>>
+/etc/rc\.d/init\.d(/.*)?	--	sys.id:sys.role:cmd.cmd_file
+/dev/input/event([0-9]+)?	-c	sys.id:sys.role:event.dev
+/dev/input/mouse([0-9]+)?	-c	sys.id:sys.role:mouse.dev
+/boot/lost\+found/.*	<<none>>
+/home/lost\+found/.*	<<none>>
+/etc/ld\.so\.preload.*	--	sys.id:sys.role:ld_so_cache.file
+/usr/libexec/sudo/.*	sys.id:sys.role:lib.lib_file
+/var/run/sysconfig(/.*)?	sys.id:sys.role:runtime_config.runtime_config_file
+/var/db/lost\+found/.*	<<none>>
+/var/lib/lost\+found/.*	<<none>>
+/var/log/lost\+found/.*	<<none>>
+/var/tmp/lost\+found/.*	<<none>>
+/var/cache/lost\+found/.*	<<none>>
+/var/spool/lost\+found/.*	<<none>>
+/etc/kernel/postinst\.d(/.*)?	--	sys.id:sys.role:cmd.cmd_file
+/etc/sysconfig/network-scripts/ifup-.*	--	sys.id:sys.role:cmd.cmd_file
+/etc/sysconfig/network-scripts/ifdown-.*	--	sys.id:sys.role:cmd.cmd_file
+/etc/sysconfig/network-scripts/network-functions.*	--	sys.id:sys.role:config.config_file
+/	-d	sys.id:sys.role:rootfs.fs
+/dev	-d	sys.id:sys.role:devtmpfs.fs
+/sys	-d	sys.id:sys.role:sysfs.fs
+/tmp	-d	sys.id:sys.role:tmpfs.fs
+/home	-d	sys.id:sys.role:home.file
+/proc	-d	sys.id:sys.role:proc.fs
+/home	-l	sys.id:sys.role:home.file
+/var/tmp	-d	sys.id:sys.role:var_tmp.var_tmp_file
+/dev/kvm	-c	sys.id:sys.role:kvm.dev
+/dev/mem	-c	sys.id:sys.role:memory.dev
+/dev/ppp	-c	sys.id:sys.role:ppp.dev
+/dev/tty	-c	sys.id:sys.role:devtty.dev
+/usr/tmp	-l	sys.id:sys.role:var_tmp.var_tmp_file
+/var/run	-l	sys.id:sys.role:runtime.runtime_file
+/usr/lib	-l	sys.id:sys.role:lib.lib_file
+/usr/bin	-l	sys.id:sys.role:cmd.cmd_file
+/dev/fuse	-c	sys.id:sys.role:fuse_storage.storage_dev
+/dev/full	-c	sys.id:sys.role:null.dev
+/dev/hpet	-c	sys.id:sys.role:clock.dev
+/dev/kmsg	-c	sys.id:sys.role:kmsg_dev.dev
+/dev/null	-c	sys.id:sys.role:null.dev
+/dev/port	-c	sys.id:sys.role:memory.dev
+/dev/ptmx	-c	sys.id:sys.role:ptmx.dev
+/dev/uhid	-c	sys.id:sys.role:uhid.dev
+/dev/vhci	-c	sys.id:sys.role:vhost.dev
+/dev/zero	-c	sys.id:sys.role:zero.dev
+/var/lock	-l	sys.id:sys.role:runtime_lock.runtime_lock_file
+/var/mail	-l	sys.id:sys.role:var_spool.var_spool_file
+/usr/sbin	-l	sys.id:sys.role:cmd.cmd_file
+/\.journal	<<none>>
+/dev/hwrng	-c	sys.id:sys.role:random.dev
+/dev/nvram	-c	sys.id:sys.role:nvram.dev
+/lost\+found	-d	sys.id:sys.role:lost_found.file
+/dev/autofs	-c	sys.id:sys.role:autofs_dev.dev
+/dev/mcelog	-c	sys.id:sys.role:kmsg_dev.dev
+/dev/random	-c	sys.id:sys.role:random.dev
+/dev/rfkill	-c	sys.id:sys.role:wireless.dev
+/dev/uinput	-c	sys.id:sys.role:event.dev
+/dev/console	-c	sys.id:sys.role:console.dev
+/dev/net/tun	-c	sys.id:sys.role:tun_tap.dev
+/dev/urandom	-c	sys.id:sys.role:urandom.dev
+/usr/bin/bash	--	sys.id:sys.role:shell.cmd_file
+/var/run/user	-d	sys.id:sys.role:runtime_user.runtime_file
+/dev/snapshot	-c	sys.id:sys.role:apm.dev
+/var/run/lock	-l	sys.id:sys.role:runtime_lock.runtime_lock_file
+/etc/\.journal	<<none>>
+/opt/\.journal	<<none>>
+/srv/\.journal	<<none>>
+/usr/\.journal	<<none>>
+/var/\.journal	<<none>>
+/dev/vhost-net	-c	sys.id:sys.role:vhost.dev
+/boot/\.journal	<<none>>
+/home/\.journal	<<none>>
+/etc/lost\+found	-d	sys.id:sys.role:lost_found.file
+/opt/lost\+found	-d	sys.id:sys.role:lost_found.file
+/srv/lost\+found	-d	sys.id:sys.role:lost_found.file
+/usr/lost\+found	-d	sys.id:sys.role:lost_found.file
+/var/lost\+found	-d	sys.id:sys.role:lost_found.file
+/dev/input/mice	-c	sys.id:sys.role:mouse.dev
+/boot/lost\+found	-d	sys.id:sys.role:lost_found.file
+/home/lost\+found	-d	sys.id:sys.role:lost_found.file
+/dev/vga_arbiter	-c	sys.id:sys.role:xserver_misc.dev
+/var/db/\.journal	<<none>>
+/var/log/boot\.log	--	sys.id:sys.role:sys.var_log_file
+/usr/sbin/nologin	--	sys.id:sys.role:shell.cmd_file
+/dev/loop-control	-c	sys.id:sys.role:loop_control.dev
+/var/lib/\.journal	<<none>>
+/var/log/\.journal	<<none>>
+/var/tmp/\.journal	<<none>>
+/etc/rc\.d/rc\.local	--	sys.id:sys.role:cmd.cmd_file
+/var/db/lost\+found	-d	sys.id:sys.role:lost_found.file
+/dev/btrfs-control	-c	sys.id:sys.role:lvm_control.dev
+/var/lib/lost\+found	-d	sys.id:sys.role:lost_found.file
+/var/log/lost\+found	-d	sys.id:sys.role:lost_found.file
+/var/tmp/lost\+found	-d	sys.id:sys.role:lost_found.file
+/dev/mapper/control	-c	sys.id:sys.role:lvm_control.dev
+/var/cache/\.journal	<<none>>
+/var/spool/\.journal	<<none>>
+/dev/cpu_dma_latency	-c	sys.id:sys.role:pm_qos_misc.dev
+/dev/network_latency	-c	sys.id:sys.role:pm_qos_misc.dev
+/var/cache/lost\+found	-d	sys.id:sys.role:lost_found.file
+/var/spool/lost\+found	-d	sys.id:sys.role:lost_found.file
+/dev/memory_bandwidth	-c	sys.id:sys.role:pm_qos_misc.dev
+/etc/rc\.d/init\.d/README	--	sys.id:sys.role:config.config_file
+/dev/network_throughput	-c	sys.id:sys.role:pm_qos_misc.dev
+/etc/rc\.d/init\.d/functions	--	sys.id:sys.role:config.config_file
+/etc/sysconfig/network-scripts/init\.ipv6-global	--	sys.id:sys.role:cmd.cmd_file

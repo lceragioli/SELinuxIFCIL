@@ -1,0 +1,56 @@
+MODULE main
+
+
+     DEFINE
+aa := (state = a) & ! (state = pozzo);
+bb := (state = b) & ! (state = pozzo);
+nonodeatall := FALSE;
+
+
+
+     VAR
+
+         state : { pozzo, a,
+              b,
+              c,
+              d  };
+
+
+
+
+     IVAR
+
+         operation : { getattr,
+              open,
+              read,
+              write  };
+
+
+
+    TRANS
+(state = a -> ( (operation = write & next(state = c)) | (operation = write & next(bb)) |  next(state = pozzo) )) &
+(state = b -> (  next(state = pozzo) )) &
+(state = c -> (  next(state = pozzo) )) &
+(state = d -> ( (operation = write & next(aa)) |  next(state = pozzo) )) &
+(state = pozzo -> next(state = pozzo))
+
+
+--  (f1) .IFL-requirement  ( #.d,  -[any-mod]> , #.aa ) 
+ 
+LTLSPEC !(state = d &  X ( F aa))
+--  (f2) .IFL-requirement  ( #.aa,  -[any-mod]> , #.c ) 
+ 
+LTLSPEC !(aa &  X ( F state = c))
+--  (f3) .IFL-requirement  ( #.a,  -[any-mod]> , #.c ) 
+ 
+LTLSPEC !(state = a &  X ( F state = c))
+--  (f4) .IFL-requirement  ( #.aa,  -[any-mod]> , #.bb ) 
+ 
+LTLSPEC !(aa &  X ( F bb))
+--  (f5) .IFL-requirement  ( #.a,  -[any-mod]> , #.bb ) 
+ 
+LTLSPEC !(state = a &  X ( F bb))
+--  (f6) .IFL-requirement  ( #.a,  -[any-mod]> , #.b ) 
+ 
+LTLSPEC !(state = a &  X ( F state = b))
+

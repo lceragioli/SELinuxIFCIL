@@ -1,0 +1,34 @@
+(block A
+    (type a)
+    (blockinherit F)
+)
+
+(block E
+    (type e)
+    (blockinherit G)
+)
+
+(block F
+    (type f)
+    (block C
+        (type c)
+        (blockinherit G.B))
+)
+
+(block G
+    (type g)
+    (block B
+        (type b)
+        (blockinherit H))
+
+    (block D
+        (type d)
+        (blockinherit J)
+    )
+)
+
+(block H
+    (type h))
+
+(block J
+    (type j))

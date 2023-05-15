@@ -1,0 +1,30 @@
+MODULE main
+
+
+     DEFINE
+nonodeatall := FALSE;
+
+
+
+     VAR
+
+         state : { pozzo, A#B#C#c  };
+
+
+
+
+     IVAR
+
+         operation : { getattr,
+              open,
+              read,
+              write  };
+
+
+
+    TRANS
+(state = A#B#C#c -> ( (operation = read & next(state = A#B#C#c)) |  next(state = pozzo) )) &
+(state = pozzo -> next(state = pozzo))
+
+
+

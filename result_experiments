@@ -1,0 +1,252 @@
+experiment: cilbase - compiling
+phase 1
+phase 2
+phase 31
+phase 31 -- 3,4,5
+phase 3
+phase 4
+phase 5
+phase 31
+phase 31 -- 3,4,5
+phase 3
+phase 4
+phase 5
+phase 31
+phase 31 -- 3,4,5
+phase 3
+phase 4
+phase 5
+phase 31
+phase 31 -- 3,4,5
+phase 3
+phase 4
+phase 5
+phase 31
+phase 6
+normalization completed
+typesreal computed
+typenodes computed
+attrnodes computed
+attributesreal computed
+attributes computed
+requirements computed
+generating NuSMV configuration
+NuSMV generated
+++++ (wrapping6) .IFL-requirement  ( any-node,  [any-mod]> , #.loop_control.dev )  :  ( #.devtmpfs.fs,  [any-mod]> , any-node )-------- is violated!
+
+++++ (wrapping5) .IFL-requirement  ( #.devtmpfs.fs,  [any-mod]> , any-node )  :  ( any-node,  [any-mod]> , #.loop_control.dev )-------- is violated!
+
+++++ (wrapping4) .IFL-requirement  ( any-node,  [any-mod]> , #.devtmpfs.fs )  :  ( #.sys.subj,  [any-mod]> , any-node )-------- is violated!
+
+++++ (wrapping3) .IFL-requirement  ( #.sys.subj,  [any-mod]> , any-node )  :  ( any-node,  [any-mod]> , #.devtmpfs.fs )-------- is violated!
+
+++++ (wrapping2) .IFL-requirement  ( any-node,  [any-mod]> , #.sys.subj )  :  ( #.sysfs.fs,  [any-mod]> , any-node )-------- is violated!
+
+++++ (wrapping1) .IFL-requirement  ( #.sysfs.fs,  [any-mod]> , any-node )  :  ( any-node,  [any-mod]> , #.sys.subj )-------- is violated!
+
+++++ (pipeline4) .IFL-requirement  ( #.sysfs.fs,  -[any-mod]> , #.sys.subj )  :  ( #.sysfs.fs,  -[any-mod]> , #.sys.subj )  ( #.sys.subj,  -[any-mod]> , #.devtmpfs.fs )  ( #.devtmpfs.fs,  -[any-mod]> , #.sys.subj )  ( #.sys.subj,  -[any-mod]> , #.devtmpfs.fs )  ( #.devtmpfs.fs,  -[any-mod]> , #.sys.subj )-------- is violated!
+
+++++ (pipeline3) .IFL-requirement  ( #.sysfs.fs,  -[any-mod]> , #.devtmpfs.fs )  :  ( #.sysfs.fs,  -[any-mod]> , #.sys.subj )  ( #.sys.subj,  -[any-mod]> , #.devtmpfs.fs )  ( #.devtmpfs.fs,  -[any-mod]> , #.sys.subj )  ( #.sys.subj,  -[any-mod]> , #.devtmpfs.fs )-------- is violated!
+
+++++ (pipeline2) .IFL-requirement  ( #.sysfs.fs,  -[any-mod]> , #.sys.subj )  :  ( #.sysfs.fs,  -[any-mod]> , #.sys.subj )  ( #.sys.subj,  -[any-mod]> , #.devtmpfs.fs )  ( #.devtmpfs.fs,  -[any-mod]> , #.sys.subj )-------- is violated!
+
+++++ (pipeline1) .IFL-requirement  ( #.sysfs.fs,  -[any-mod]> , #.devtmpfs.fs )  :  ( #.sysfs.fs,  -[any-mod]> , #.sys.subj )  ( #.sys.subj,  -[any-mod]> , #.devtmpfs.fs )-------- is violated!
+
+++++ (fromTCB) .IFL-requirement  ( any-node,  -[any-mod]> , #.TCB )  ( #.TCB,  -[any-mod]> , any-node )-------- is satisfied!
+
+++++ (augment2) .IFL-requirement  ( #.sys.subj,  -[any-mod]> , #.securityfs.fs )  :  ( #.sys.subj,  -[append]> , #.securityfs.fs )-------- is violated!
+
+++++ (augment1) .IFL-requirement  ( #.sys.subj,  -[any-mod]> , #.sys.subj )  :  ( #.sys.subj,  -[append]> , #.sys.subj )-------- is violated!
+
+++++ (TCBintegrity) .IFL-requirement  ( any-node,  -[any-mod]> , #.TCB )  :  ( #.Harmless,  -[any-mod]> , #.TCB )-------- is violated!
+
+++++ (TCB) .IFL-requirement  ( any-node,  -[any-mod]> , #.Harmless )  ( #.Harmless,  -[any-mod]> , #.TCB )-------- is satisfied!
+
+++++ Warning! There is an unexpected flow because of the arc: aio#fs > fs_obj_type
+
+++++ Warning! There is an unexpected flow because of the arc: anon_inodefs#fs > fs_obj_type
+
+++++ Warning! There is an unexpected flow because of the arc: apm#dev > devtmpfs#fs
+
+++++ Warning! There is an unexpected flow because of the arc: autofs_dev#dev > devtmpfs#fs
+
+++++ Warning! There is an unexpected flow because of the arc: autofs_fs#fs > fs_obj_type
+
+++++ Warning! There is an unexpected flow because of the arc: bdev#fs > fs_obj_type
+
+++++ Warning! There is an unexpected flow because of the arc: binfmt_misc#fs > fs_obj_type
+
+++++ Warning! There is an unexpected flow because of the arc: boot#boot_file > fs#fs
+
+++++ Warning! There is an unexpected flow because of the arc: cgroup#fs > fs_obj_type
+
+++++ Warning! There is an unexpected flow because of the arc: cifs#fs > fs_obj_type
+
+++++ Warning! There is an unexpected flow because of the arc: clock#dev > devtmpfs#fs
+
+++++ Warning! There is an unexpected flow because of the arc: cmd#cmd_file > fs#fs
+
+++++ Warning! There is an unexpected flow because of the arc: cmd#cmd_file > subj_common_type
+
+++++ Warning! There is an unexpected flow because of the arc: config#config_file > fs#fs
+
+++++ Warning! There is an unexpected flow because of the arc: configfs#fs > fs_obj_type
+
+++++ Warning! There is an unexpected flow because of the arc: console#dev > devtmpfs#fs
+
+++++ Warning! There is an unexpected flow because of the arc: cpu#dev > devtmpfs#fs
+
+++++ Warning! There is an unexpected flow because of the arc: data#data_file > fs#fs
+
+++++ Warning! There is an unexpected flow because of the arc: data#data_file > sys#subj
+
+++++ Warning! There is an unexpected flow because of the arc: data#data_file > subj_common_type
+
+++++ Warning! There is an unexpected flow because of the arc: debugfs#fs > sys#subj
+
+++++ Warning! There is an unexpected flow because of the arc: debugfs#fs > fs_obj_type
+
+++++ Warning! There is an unexpected flow because of the arc: debugfs#fs > fs_trace_client_subj_type
+
+++++ Warning! There is an unexpected flow because of the arc: dev_except_storage_obj_type > sys#subj
+
+++++ Warning! There is an unexpected flow because of the arc: dev_except_storage_obj_type > dev_unconfined_subj_type
+
+++++ Warning! There is an unexpected flow because of the arc: dev_unconfined_subj_type > dev_unconfined_subj_type
+
+++++ Warning! There is an unexpected flow because of the arc: devpts#fs > fs_obj_type
+
+++++ Warning! There is an unexpected flow because of the arc: devpts#fs > term_pty_obj_type
+
+++++ Warning! There is an unexpected flow because of the arc: devtmpfs#fs > fs#fs
+
+++++ Warning! There is an unexpected flow because of the arc: devtmpfs#fs > sys#subj
+
+++++ Warning! There is an unexpected flow because of the arc: devtmpfs#fs > unlabeled#isid
+
+++++ Warning! There is an unexpected flow because of the arc: devtmpfs#fs > fs_obj_type
+
+++++ Warning! There is an unexpected flow because of the arc: devtmpfs#fs > subj_common_type
+
+++++ Warning! There is an unexpected flow because of the arc: devtmpfs#fs > dev_obj_type
+
+experiment: dssp5 - compiling
+phase 1
+phase 2
+phase 31
+phase 31 -- 3,4,5
+phase 3
+phase 4
+phase 5
+phase 31
+phase 31 -- 3,4,5
+phase 3
+phase 4
+phase 5
+phase 31
+phase 31 -- 3,4,5
+phase 3
+phase 4
+phase 5
+phase 31
+phase 6
+normalization completed
+typesreal computed
+typenodes computed
+attrnodes computed
+attributesreal computed
+attributes computed
+requirements computed
+generating NuSMV configuration
+NuSMV generated
+++++ (wrapping8) .IFL-requirement  ( any-node,  [any-mod]> , #.xattr.fs )  :  ( #.lostfound.file,  [any-mod]> , any-node )-------- is violated!
+
+++++ (wrapping7) .IFL-requirement  ( #.lostfound.file,  [any-mod]> , any-node )  :  ( any-node,  [any-mod]> , #.xattr.fs )-------- is satisfied!
+
+++++ (wrapping6) .IFL-requirement  ( any-node,  [any-mod]> , #.lostfound.file )  :  ( #.mqueue.fs,  [any-mod]> , any-node )-------- is violated!
+
+++++ (wrapping5) .IFL-requirement  ( #.mqueue.fs,  [any-mod]> , any-node )  :  ( any-node,  [any-mod]> , #.lostfound.file )-------- is violated!
+
+++++ (wrapping4) .IFL-requirement  ( any-node,  [any-mod]> , #.mqueue.fs )  :  ( #.sys.subj,  [any-mod]> , any-node )-------- is violated!
+
+++++ (wrapping3) .IFL-requirement  ( #.sys.subj,  [any-mod]> , any-node )  :  ( any-node,  [any-mod]> , #.mqueue.fs )-------- is violated!
+
+++++ (wrapping2) .IFL-requirement  ( any-node,  [any-mod]> , #.sys.subj )  :  ( #.selinux,  [any-mod]> , any-node )-------- is violated!
+
+++++ (wrapping1) .IFL-requirement  ( #.selinux,  [any-mod]> , any-node )  :  ( any-node,  [any-mod]> , #.sys.subj )-------- is satisfied!
+
+++++ (pipeline4) .IFL-requirement  ( #.xattr.fs,  -[any-mod]> , #.sys.subj )  :  ( #.xattr.fs,  -[any-mod]> , #.boot.file )  ( #.boot.file,  -[any-mod]> , #.sys.subj )-------- is violated!
+
+++++ (pipeline3) .IFL-requirement  ( #.boot.file,  -[any-mod]> , #.sys.subj )  :  ( #.boot.file,  -[any-mod]> , #.hugetlb.fs )  ( #.hugetlb.fs,  -[any-mod]> , #.sys.subj )-------- is violated!
+
+++++ (pipeline2) .IFL-requirement  ( #.selinux,  -[any-mod]> , #.hugetlb.fs )  :  ( #.selinux,  -[any-mod]> , #.sys.subj )  ( #.sys.subj,  -[any-mod]> , #.hugetlb.fs )-------- is satisfied!
+
+++++ (pipeline1) .IFL-requirement  ( #.selinux,  -[any-mod]> , #.lostfound.file )  :  ( #.selinux,  -[any-mod]> , #.sys.subj )  ( #.sys.subj,  -[any-mod]> , #.mqueue.fs )  ( #.mqueue.fs,  -[any-mod]> , #.lostfound.file )-------- is violated!
+
+++++ (fromTCB) .IFL-requirement  ( any-node,  -[any-mod]> , #.TCB )  ( #.TCB,  -[any-mod]> , any-node )-------- is satisfied!
+
+++++ (TCBintegrity) .IFL-requirement  ( any-node,  -[any-mod]> , #.TCB )  :  ( #.Harmless,  -[any-mod]> , #.TCB )-------- is satisfied!
+
+++++ (TCB) .IFL-requirement  ( any-node,  -[any-mod]> , #.Harmless )  ( #.Harmless,  -[any-mod]> , #.TCB )-------- is satisfied!
+
+++++ Warning! There is an unexpected flow because of the arc: acm#serialtermdev > devtmp#fs
+
+++++ Warning! There is an unexpected flow because of the arc: acm#serialtermdev > tmp#fs
+
+++++ Warning! There is an unexpected flow because of the arc: aio#fs > noseclabelfs#typeattr
+
+++++ Warning! There is an unexpected flow because of the arc: anoninode#fs > noseclabelfs#typeattr
+
+++++ Warning! There is an unexpected flow because of the arc: apm#nodedev > devtmp#fs
+
+++++ Warning! There is an unexpected flow because of the arc: apm#nodedev > tmp#fs
+
+++++ Warning! There is an unexpected flow because of the arc: auto#fs > noseclabelfs#typeattr
+
+++++ Warning! There is an unexpected flow because of the arc: autofs#nodedev > devtmp#fs
+
+++++ Warning! There is an unexpected flow because of the arc: autofs#nodedev > tmp#fs
+
+++++ Warning! There is an unexpected flow because of the arc: bdev#fs > noseclabelfs#typeattr
+
+++++ Warning! There is an unexpected flow because of the arc: binfmtmisc#fs > noseclabelfs#typeattr
+
+++++ Warning! There is an unexpected flow because of the arc: block#sysfile > sys#fs
+
+++++ Warning! There is an unexpected flow because of the arc: booleanfile#typeattr > booleanfile#unconfined#typeattr
+
+++++ Warning! There is an unexpected flow because of the arc: boot#file > xattr#fs
+
+++++ Warning! There is an unexpected flow because of the arc: boot#file > fs#unconfined#typeattr
+
+experiment: openWRT - compiling
+phase 1
+phase 2
+phase 31
+phase 31 -- 3,4,5
+phase 3
+phase 4
+phase 5
+class: allfiles in #.sandbox -- nooo
+class: allfiles in #.sandbox -- nooo
+phase 31
+phase 31 -- 3,4,5
+phase 3
+phase 4
+phase 5
+phase 31
+phase 31 -- 3,4,5
+phase 3
+phase 4
+phase 5
+phase 31
+phase 6
+normalization completed
+typesreal computed
+typenodes computed
+attrnodes computed
+attributesreal computed
+attributes computed
+requirements computed
+generating NuSMV configuration
+NuSMV generated

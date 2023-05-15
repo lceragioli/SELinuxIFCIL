@@ -1,0 +1,1040 @@
+MODULE main
+
+
+     DEFINE
+nonodeatall := FALSE;
+unlabeled#unconfined#typeattr := (unconfined#typeattr) & ! (state = pozzo);
+unconfined#typeattr := (state = sys#subj) & ! (state = pozzo);
+tracefile#unconfined#typeattr := (sys#unconfined#typeattr) & ! (state = pozzo);
+tracefile#typeattr := FALSE;
+termdev#unconfined#typeattr := FALSE;
+termdev#typeattr := (( serialtermdev#typeattr | ptytermdev#typeattr)) & ! (state = pozzo);
+sysfile#unconfined#typeattr := (sys#unconfined#typeattr) & ! (state = pozzo);
+sysfile#power#typeattr := (state = power#sysfile) & ! (state = pozzo);
+sysfile#module#typeattr := (state = module#sysfile) & ! (state = pozzo);
+sysfile#kernel#typeattr := (( state = ksm#sysfile | state = kernel#sysfile)) & ! (state = pozzo);
+sysfile#hypervisor#typeattr := (state = hypervisor#sysfile) & ! (state = pozzo);
+sysfile#fs#typeattr := (( ( ( ( state = fuse#sysfile | state = fs#sysfile) | state = f2fs#sysfile) | state = ext4#sysfile) | state = btrfs#sysfile)) & ! (state = pozzo);
+sysfile#firmware#typeattr := (state = firmware#sysfile) & ! (state = pozzo);
+sysfile#devices#typeattr := (( ( ( ( state = zram#sysfile | state = node#sysfile) | state = memory#sysfile) | state = devices#sysfile) | state = cpu#sysfile)) & ! (state = pozzo);
+sysfile#dev#typeattr := (state = dev#sysfile) & ! (state = pozzo);
+sysfile#class#typeattr := (( state = zramcontrol#sysfile | state = class#sysfile)) & ! (state = pozzo);
+sysfile#bus#typeattr := (state = bus#sysfile) & ! (state = pozzo);
+sysfile#block#typeattr := (state = block#sysfile) & ! (state = pozzo);
+sysfile#typeattr := (( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( state = zramcontrol#sysfile | state = zram#sysfile) | sysfile#power#typeattr) | sysfile#module#typeattr) | sysfile#kernel#typeattr) | sysfile#hypervisor#typeattr) | sysfile#fs#typeattr) | sysfile#firmware#typeattr) | sysfile#devices#typeattr) | sysfile#dev#typeattr) | sysfile#class#typeattr) | sysfile#bus#typeattr) | sysfile#block#typeattr) | state = power#sysfile) | state = node#sysfile) | state = module#sysfile) | state = memory#sysfile) | state = ksm#sysfile) | state = kernel#sysfile) | state = hypervisor#sysfile) | state = fuse#sysfile) | state = fs#sysfile) | state = firmware#sysfile) | state = f2fs#sysfile) | state = ext4#sysfile) | state = devices#sysfile) | state = dev#sysfile) | state = cpu#sysfile) | state = class#sysfile) | state = bus#sysfile) | state = btrfs#sysfile) | state = block#sysfile)) & ! (state = pozzo);
+sysctlfile#vm#typeattr := (( state = vm#sysctlfile | state = overcommitmemory#sysctlfile)) & ! (state = pozzo);
+sysctlfile#user#typeattr := (state = user#sysctlfile) & ! (state = pozzo);
+sysctlfile#unconfined#typeattr := FALSE;
+sysctlfile#sunrpc#typeattr := (state = sunrpc#sysctlfile) & ! (state = pozzo);
+sysctlfile#net#typeattr := (( ( ( ( ( ( state = unix#sysctlfile | state = netfilter#sysctlfile) | state = net#sysctlfile) | state = mptcp#sysctlfile) | state = ipv6#sysctlfile) | state = ipv4#sysctlfile) | state = core#sysctlfile)) & ! (state = pozzo);
+sysctlfile#kernel#typeattr := (( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( state = yama#sysctlfile | state = usermodehelper#sysctlfile) | state = threadsmax#sysctlfile) | state = seccomp#sysctlfile) | state = random#sysctlfile) | state = pty#sysctlfile) | state = poweroffcmd#sysctlfile) | state = pidmax#sysctlfile) | state = overflowuid#sysctlfile) | state = osrelease#sysctlfile) | state = nslastpid#sysctlfile) | state = modprobe#sysctlfile) | state = keys#sysctlfile) | state = kernel#sysctlfile) | state = hostname#sysctlfile) | state = firmwareconfig#sysctlfile) | state = corepipelimit#sysctlfile) | state = corepattern#sysctlfile) | state = caplastcap#sysctlfile)) & ! (state = pozzo);
+sysctlfile#fs#typeattr := (state = fs#sysctlfile) & ! (state = pozzo);
+sysctlfile#dev#typeattr := (state = dev#sysctlfile) & ! (state = pozzo);
+sysctlfile#debug#typeattr := (state = debug#sysctlfile) & ! (state = pozzo);
+sysctlfile#crypto#typeattr := (state = crypto#sysctlfile) & ! (state = pozzo);
+sysctlfile#abi#typeattr := (state = abi#sysctlfile) & ! (state = pozzo);
+sysctlfile#typeattr := (( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( state = yama#sysctlfile | state = vm#sysctlfile) | state = usermodehelper#sysctlfile) | state = user#sysctlfile) | state = unix#sysctlfile) | state = threadsmax#sysctlfile) | sysctlfile#vm#typeattr) | sysctlfile#user#typeattr) | sysctlfile#sunrpc#typeattr) | sysctlfile#net#typeattr) | sysctlfile#kernel#typeattr) | sysctlfile#fs#typeattr) | sysctlfile#dev#typeattr) | sysctlfile#debug#typeattr) | sysctlfile#crypto#typeattr) | sysctlfile#abi#typeattr) | state = sunrpc#sysctlfile) | state = seccomp#sysctlfile) | state = random#sysctlfile) | state = pty#sysctlfile) | state = poweroffcmd#sysctlfile) | state = pidmax#sysctlfile) | state = overflowuid#sysctlfile) | state = overcommitmemory#sysctlfile) | state = osrelease#sysctlfile) | state = nslastpid#sysctlfile) | state = netfilter#sysctlfile) | state = net#sysctlfile) | state = mptcp#sysctlfile) | state = modprobe#sysctlfile) | state = keys#sysctlfile) | state = kernel#sysctlfile) | state = ipv6#sysctlfile) | state = ipv4#sysctlfile) | state = hostname#sysctlfile) | state = fs#sysctlfile) | state = firmwareconfig#sysctlfile) | state = dev#sysctlfile) | state = debug#sysctlfile) | state = crypto#sysctlfile) | state = corepipelimit#sysctlfile) | state = corepattern#sysctlfile) | state = core#sysctlfile) | state = caplastcap#sysctlfile) | state = abi#sysctlfile)) & ! (state = pozzo);
+sys#unconfined#typeattr := (unconfined#typeattr) & ! (state = pozzo);
+sys#moduleload#typeattr := (sys#unconfined#typeattr) & ! (state = pozzo);
+sys#moduleload#not_typeattr := (! ( sys#moduleload#typeattr)) & ! (state = pozzo);
+subj#useinteractivefd#typeattr := FALSE;
+subj#unconfined#typeattr := (unconfined#typeattr) & ! (state = pozzo);
+subj#mmapzero#typeattr := (subj#unconfined#typeattr) & ! (state = pozzo);
+subj#mmapzero#not_typeattr := (! ( subj#mmapzero#typeattr)) & ! (state = pozzo);
+subj#interactivefd#typeattr := FALSE;
+subj#execstack#typeattr := (subj#unconfined#typeattr) & ! (state = pozzo);
+subj#execstack#not_typeattr := (! ( subj#execstack#typeattr)) & ! (state = pozzo);
+subj#execheap#typeattr := (subj#unconfined#typeattr) & ! (state = pozzo);
+subj#execheap#not_typeattr := (! ( subj#execheap#typeattr)) & ! (state = pozzo);
+subj#entry#typeattr := (file#exec#typeattr) & ! (state = pozzo);
+subj#entry#not_typeattr := (! ( subj#entry#typeattr)) & ! (state = pozzo);
+subj#typeattr := (state = sys#subj) & ! (state = pozzo);
+subj#not_typeattr := (! ( subj#typeattr)) & ! (state = pozzo);
+stordev#write#typeattr := (stordev#readwrite#typeattr) & ! (state = pozzo);
+stordev#write#not_typeattr := (! ( stordev#write#typeattr)) & ! (state = pozzo);
+stordev#unconfined#typeattr := FALSE;
+stordev#readwrite#typeattr := (( stordev#unconfined#typeattr | dev#unconfined#typeattr)) & ! (state = pozzo);
+stordev#read#typeattr := (stordev#readwrite#typeattr) & ! (state = pozzo);
+stordev#read#not_typeattr := (! ( stordev#read#typeattr)) & ! (state = pozzo);
+stordev#typeattr := (( ( ( ( ( ( ( ( ( ( ( ( ( state = zram#stordev | state = xd#stordev) | state = vd#stordev) | state = sg#stordev) | state = sd#stordev) | state = removable#stordev) | state = raw#stordev) | state = nvme#stordev) | state = mtd#stordev) | state = md#stordev) | state = loop#stordev) | state = hd#stordev) | state = fuse#stordev) | state = dm#stordev)) & ! (state = pozzo);
+serialtermdev#unconfined#typeattr := FALSE;
+serialtermdev#typeattr := (( ( ( ( ( ( ( ( state = vport#serialtermdev | state = vcs#serialtermdev) | state = usb#serialtermdev) | state = tty#serialtermdev) | state = sys#serialtermdev) | state = msm#serialtermdev) | loginserialtermdev#typeattr) | state = console#serialtermdev) | state = acm#serialtermdev)) & ! (state = pozzo);
+selinux#unconfined#typeattr := (unconfined#typeattr) & ! (state = pozzo);
+selinux#setsecparam#typeattr := (selinux#unconfined#typeattr) & ! (state = pozzo);
+selinux#setsecparam#not_typeattr := (! ( selinux#setsecparam#typeattr)) & ! (state = pozzo);
+selinux#setenforce#typeattr := (selinux#unconfined#typeattr) & ! (state = pozzo);
+selinux#setenforce#not_typeattr := (! ( selinux#setenforce#typeattr)) & ! (state = pozzo);
+selinux#loadpolicy#typeattr := (selinux#unconfined#typeattr) & ! (state = pozzo);
+selinux#loadpolicy#not_typeattr := (! ( selinux#loadpolicy#typeattr)) & ! (state = pozzo);
+seclabelfs#typeattr := (( ( ( ( ( ( ( ( ( ( ( ( ( ( state = xattr#fs | state = trace#fs) | state = tmp#fs) | state = sys#fs) | state = sock#fs) | state = root#fs) | state = pstore#fs) | state = pipe#fs) | state = mqueue#fs) | state = hugetlb#fs) | state = eventpoll#fs) | state = devtmp#fs) | state = devpts#fs) | state = debug#fs) | state = cgroup#fs)) & ! (state = pozzo);
+rbacsep#usefdtarget#typeattr := FALSE;
+rbacsep#usefdsource#typeattr := FALSE;
+rbacsep#readstatetarget#typeattr := FALSE;
+rbacsep#readstatesource#typeattr := FALSE;
+rbacsep#exempttarget#typeattr := FALSE;
+rbacsep#exemptsource#typeattr := FALSE;
+rbacsep#exempt#subj#typeattr := (subj#unconfined#typeattr) & ! (state = pozzo);
+rbacsep#exempt#obj#typeattr := (( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( state = zero#nodedev | state = v4l#nodedev) | state = tuntap#nodedev) | state = tty#nodedev) | state = snd#nodedev) | state = selinux#fs) | state = random#nodedev) | state = ptmx#nodedev) | state = null#nodedev) | state = nfs#fs) | state = kvm#nodedev) | state = fuse#stordev) | state = fuse#fs) | state = event#nodedev) | state = dri#nodedev) | state = dos#fs) | state = ci#fs) | state = cgroup#fs)) & ! (state = pozzo);
+rbacsep#constrained#typeattr := FALSE;
+rbacsep#typeattr := (obj#typeattr) & ! (state = pozzo);
+rbac#subjchangetarget#typeattr := FALSE;
+rbac#subjchangesys#typeattr := (rbac#changesys#typeattr) & ! (state = pozzo);
+rbac#subjchange#typeattr := (rbac#change#typeattr) & ! (state = pozzo);
+rbac#objchangesys#typeattr := (rbac#changesys#typeattr) & ! (state = pozzo);
+rbac#objchange#typeattr := (rbac#change#typeattr) & ! (state = pozzo);
+rbac#exempt#typeattr := (subj#unconfined#typeattr) & ! (state = pozzo);
+rbac#changesys#typeattr := FALSE;
+rbac#change#typeattr := FALSE;
+ptytermdev#unconfined#typeattr := FALSE;
+ptytermdev#typeattr := (( state = sys#ptytermdev | loginptytermdev#typeattr)) & ! (state = pozzo);
+procfile#unconfined#typeattr := (sys#unconfined#typeattr) & ! (state = pozzo);
+procfile#exception#typeattr := (state = kcore#procfile) & ! (state = pozzo);
+procfile#except#typeattr := (( procfile#typeattr & ! ( procfile#exception#typeattr))) & ! (state = pozzo);
+procfile#typeattr := (( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( state = zoneinfo#procfile | state = vmstat#procfile) | state = vmallocinfo#procfile) | state = version#procfile) | state = uptime#procfile) | state = tty#procfile) | state = timerlist#procfile) | state = sysvipc#procfile) | state = sysrqtrigger#procfile) | sysctlfile#typeattr) | state = sysctl#procfile) | state = swaps#procfile) | state = stat#procfile) | state = softirqs#procfile) | state = slabinfo#procfile) | state = scsi#procfile) | state = schedstat#procfile) | state = scheddebug#procfile) | procfile#exception#typeattr) | state = pressure#procfile) | state = partitions#procfile) | state = pagetypeinfo#procfile) | state = net#procfile) | state = mtrr#procfile) | state = mtd#procfile) | state = mpt#procfile) | state = modules#procfile) | state = misc#procfile) | state = meminfo#procfile) | state = mdstat#procfile) | state = lockstat#procfile) | state = locks#procfile) | state = lockdepstats#procfile) | state = lockdepchains#procfile) | state = lockdep#procfile) | state = loadavg#procfile) | state = latencystats#procfile) | state = kpageflags#procfile) | state = kpagecount#procfile) | state = kpagecgroup#procfile) | state = kmsg#procfile) | state = keyusers#procfile) | state = keys#procfile) | state = kcore#procfile) | state = kallsyms#procfile) | state = jffs2bbc#procfile) | state = irq#procfile) | state = ioports#procfile) | state = iomem#procfile) | state = interrupts#procfile) | state = fs#procfile) | state = filesystems#procfile) | state = fb#procfile) | state = execdomains#procfile) | state = dynamicdebug#procfile) | state = driver#procfile) | state = dma#procfile) | state = diskstats#procfile) | state = devices#procfile) | state = crypto#procfile) | state = cpuinfo#procfile) | state = cpu#procfile) | state = consoles#procfile) | state = cmdline#procfile) | state = cgroups#procfile) | state = bus#procfile) | state = buddyinfo#procfile) | state = bootconfig#procfile) | state = asound#procfile) | state = acpi#procfile)) & ! (state = pozzo);
+obj#typeattr := (( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( tracefile#typeattr | sysfile#typeattr) | procfile#typeattr) | net#spd#typeattr) | net#port#typeattr) | net#peer#typeattr) | net#packet#typeattr) | net#netnode#typeattr) | net#netif#typeattr) | net#ib#pkey#typeattr) | net#ib#endport#typeattr) | fs#typeattr) | file#typeattr) | dev#typeattr) | debugfile#typeattr) | cgroupfile#typeattr) | booleanfile#typeattr)) & ! (state = pozzo);
+noseclabelfs#typeattr := (( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( state = selinux#fs | state = security#fs) | state = rpcpipe#fs) | state = removable#fs) | state = proc#fs) | state = ns#fs) | state = nfsd#fs) | state = nfs#fs) | state = iso9660#fs) | state = fuse#fs) | state = efivar#fs) | state = drm#fs) | state = dos#fs) | state = cpuset#fs) | state = config#fs) | state = ci#fs) | state = bpf#fs) | state = binfmtmisc#fs) | state = bdev#fs) | state = auto#fs) | state = anoninode#fs) | state = aio#fs)) & ! (state = pozzo);
+nodedev#unconfined#typeattr := FALSE;
+nodedev#exception#typeattr := (state = mem#nodedev) & ! (state = pozzo);
+nodedev#except#typeattr := (( nodedev#typeattr & ! ( nodedev#exception#typeattr))) & ! (state = pozzo);
+nodedev#typeattr := (( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( state = zero#nodedev | state = watchdog#nodedev) | state = vmci#nodedev) | state = vhost#nodedev) | state = vgaarbiter#nodedev) | state = vfio#nodedev) | state = v4l#nodedev) | state = usbmon#nodedev) | state = usb#nodedev) | state = uio#nodedev) | state = uinput#nodedev) | state = uhid#nodedev) | state = udmabuf#nodedev) | state = tuntap#nodedev) | state = tty#nodedev) | state = tpm#nodedev) | state = snd#nodedev) | state = rfkill#nodedev) | state = random#nodedev) | state = qos#nodedev) | state = ptmx#nodedev) | state = printer#nodedev) | state = ppp#nodedev) | state = pmu#nodedev) | state = nvram#nodedev) | state = null#nodedev) | nodedev#exception#typeattr) | state = ndctl#nodedev) | state = modem#nodedev) | state = mem#nodedev) | state = mei#nodedev) | state = mcelog#nodedev) | state = loopcontrol#nodedev) | state = lirc#nodedev) | state = kvm#nodedev) | state = ksm#nodedev) | state = kmsg#nodedev) | state = kfd#nodedev) | state = ipmi#nodedev) | state = input#nodedev) | state = infiniband#nodedev) | state = iio#nodedev) | state = i2c#nodedev) | state = hwrng#nodedev) | state = hidraw#nodedev) | state = hiddev#nodedev) | state = gpio#nodedev) | state = fb#nodedev) | state = event#nodedev) | state = drmdpaux#nodedev) | state = dri#nodedev) | state = dmcontrol#nodedev) | state = dmaheap#nodedev) | state = cuse#nodedev) | state = crash#nodedev) | state = cpu#nodedev) | state = clock#nodedev) | state = cdcwdm#nodedev) | state = cachefiles#nodedev) | state = btrfscontrol#nodedev) | state = autofs#nodedev) | state = apm#nodedev)) & ! (state = pozzo);
+net#unconfined#typeattr := (unconfined#typeattr) & ! (state = pozzo);
+net#spd#unconfined#typeattr := (net#unconfined#typeattr) & ! (state = pozzo);
+net#spd#typeattr := (state = net#spd) & ! (state = pozzo);
+net#port#unreserved#typeattr := (state = unreserved#port) & ! (state = pozzo);
+net#port#unconfined#typeattr := (net#unconfined#typeattr) & ! (state = pozzo);
+net#port#reserved#typeattr := (state = reserved#port) & ! (state = pozzo);
+net#port#ephemeral#typeattr := (state = ephemeral#port) & ! (state = pozzo);
+net#port#typeattr := (( ( ( ( ( ( state = unreserved#port | state = reserved#port) | net#port#unreserved#typeattr) | net#port#reserved#typeattr) | net#port#ephemeral#typeattr) | state = net#port) | state = ephemeral#port)) & ! (state = pozzo);
+net#peer#unconfined#typeattr := (net#unconfined#typeattr) & ! (state = pozzo);
+net#peer#typeattr := (state = net#peer) & ! (state = pozzo);
+net#packet#unconfined#typeattr := (net#unconfined#typeattr) & ! (state = pozzo);
+net#packet#typeattr := (state = net#packet) & ! (state = pozzo);
+net#netnode#unconfined#typeattr := (net#unconfined#typeattr) & ! (state = pozzo);
+net#netnode#typeattr := (state = net#netnode) & ! (state = pozzo);
+net#netif#unconfined#typeattr := (net#unconfined#typeattr) & ! (state = pozzo);
+net#netif#typeattr := (state = net#netif) & ! (state = pozzo);
+net#ib#unconfined#typeattr := (net#unconfined#typeattr) & ! (state = pozzo);
+net#ib#pkey#unconfined#typeattr := (net#ib#unconfined#typeattr) & ! (state = pozzo);
+net#ib#pkey#typeattr := (state = net#ib#pkey) & ! (state = pozzo);
+net#ib#endport#unconfined#typeattr := (net#ib#unconfined#typeattr) & ! (state = pozzo);
+net#ib#endport#typeattr := (state = net#ib#endport) & ! (state = pozzo);
+mem#write#typeattr := (mem#readwrite#typeattr) & ! (state = pozzo);
+mem#write#not_typeattr := (! ( mem#write#typeattr)) & ! (state = pozzo);
+mem#readwrite#typeattr := (( nodedev#unconfined#typeattr | dev#unconfined#typeattr)) & ! (state = pozzo);
+mem#read#typeattr := (mem#readwrite#typeattr) & ! (state = pozzo);
+mem#read#not_typeattr := (! ( mem#read#typeattr)) & ! (state = pozzo);
+mcs#constrained#typeattr := FALSE;
+loginserialtermdev#typeattr := (state = tty#serialtermdev) & ! (state = pozzo);
+loginptytermdev#typeattr := (state = sys#ptytermdev) & ! (state = pozzo);
+kcore#write#typeattr := (kcore#readwrite#typeattr) & ! (state = pozzo);
+kcore#write#not_typeattr := (! ( kcore#write#typeattr)) & ! (state = pozzo);
+kcore#readwrite#typeattr := (procfile#unconfined#typeattr) & ! (state = pozzo);
+kcore#read#typeattr := (kcore#readwrite#typeattr) & ! (state = pozzo);
+kcore#read#not_typeattr := (! ( kcore#read#typeattr)) & ! (state = pozzo);
+invalidpeers#exception#typeattr := FALSE;
+invalidpeers#except#typeattr := (( invalidpeers#typeattr & ! ( invalidpeers#exception#typeattr))) & ! (state = pozzo);
+invalidpeers#typeattr := FALSE;
+invalidpackets#exception#typeattr := FALSE;
+invalidpackets#except#typeattr := (( invalidpackets#typeattr & ! ( invalidpackets#exception#typeattr))) & ! (state = pozzo);
+invalidpackets#typeattr := FALSE;
+invalidassociations#exception#typeattr := FALSE;
+invalidassociations#except#typeattr := (( invalidassociations#typeattr & ! ( invalidassociations#exception#typeattr))) & ! (state = pozzo);
+invalidassociations#typeattr := FALSE;
+invalid#unconfined#typeattr := (unconfined#typeattr) & ! (state = pozzo);
+ibac#subjchangetarget#typeattr := FALSE;
+ibac#subjchangesys#typeattr := (ibac#changesys#typeattr) & ! (state = pozzo);
+ibac#subjchange#typeattr := (ibac#change#typeattr) & ! (state = pozzo);
+ibac#objchangesys#typeattr := (ibac#changesys#typeattr) & ! (state = pozzo);
+ibac#objchange#typeattr := (ibac#change#typeattr) & ! (state = pozzo);
+ibac#exempt#typeattr := (subj#unconfined#typeattr) & ! (state = pozzo);
+ibac#changesys#typeattr := FALSE;
+ibac#change#typeattr := FALSE;
+fs#unconfined#typeattr := (unconfined#typeattr) & ! (state = pozzo);
+fs#typeattr := (( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( state = xattr#fs | state = trace#fs) | state = tmp#fs) | state = sys#fs) | state = sock#fs) | state = selinux#fs) | state = security#fs) | seclabelfs#typeattr) | state = rpcpipe#fs) | state = root#fs) | state = removable#fs) | state = pstore#fs) | state = proc#fs) | state = pipe#fs) | state = ns#fs) | noseclabelfs#typeattr) | state = nfsd#fs) | state = nfs#fs) | state = mqueue#fs) | state = iso9660#fs) | state = hugetlb#fs) | state = fuse#fs) | state = eventpoll#fs) | state = efivar#fs) | state = drm#fs) | state = dos#fs) | state = devtmp#fs) | state = devpts#fs) | state = debug#fs) | state = cpuset#fs) | state = config#fs) | state = ci#fs) | state = cgroup#fs) | state = bpf#fs) | state = binfmtmisc#fs) | state = bdev#fs) | state = auto#fs) | state = anoninode#fs) | state = aio#fs)) & ! (state = pozzo);
+file#var#typeattr := (( ( ( ( ( ( ( ( ( ( ( state = var#file | state = state#file) | state = spool#file) | state = mail#file) | state = log#file) | file#state#typeattr) | file#spool#typeattr) | file#log#typeattr) | file#db#typeattr) | file#cache#typeattr) | state = db#file) | state = cache#file)) & ! (state = pozzo);
+file#unconfined#typeattr := (unconfined#typeattr) & ! (state = pozzo);
+file#tmpfs#typeattr := (state = sys#tmpfs#file) & ! (state = pozzo);
+file#tmp#typeattr := (( state = tmp#file | state = sys#tmp#file)) & ! (state = pozzo);
+file#state#typeattr := (state = state#file) & ! (state = pozzo);
+file#spool#typeattr := (( ( state = spool#file | state = mail#file) | file#mail#typeattr)) & ! (state = pozzo);
+file#sec#write#typeattr := (file#unconfined#typeattr) & ! (state = pozzo);
+file#sec#write#not_typeattr := (! ( file#sec#write#typeattr)) & ! (state = pozzo);
+file#sec#relabelto#typeattr := (file#unconfined#typeattr) & ! (state = pozzo);
+file#sec#relabelto#not_typeattr := (! ( file#sec#relabelto#typeattr)) & ! (state = pozzo);
+file#sec#typeattr := FALSE;
+file#runuser#typeattr := (state = runuser#file) & ! (state = pozzo);
+file#runlock#typeattr := (state = runlock#file) & ! (state = pozzo);
+file#run#typeattr := (( ( ( ( state = runuser#file | state = runlock#file) | state = run#file) | file#runuser#typeattr) | file#runlock#typeattr)) & ! (state = pozzo);
+file#mqueuefs#typeattr := (state = sys#mqueuefs#file) & ! (state = pozzo);
+file#mod#typeattr := (state = mod#file) & ! (state = pozzo);
+file#mail#typeattr := (state = mail#file) & ! (state = pozzo);
+file#log#typeattr := (state = log#file) & ! (state = pozzo);
+file#lib#typeattr := FALSE;
+file#hugetlbfs#typeattr := (state = sys#hugetlbfs#file) & ! (state = pozzo);
+file#home#typeattr := (( state = sys#home#file | state = home#file)) & ! (state = pozzo);
+file#exec#typeattr := (state = exec#file) & ! (state = pozzo);
+file#exception#typeattr := (( file#sec#typeattr | file#auth#typeattr)) & ! (state = pozzo);
+file#except#typeattr := (( file#typeattr & ! ( file#exception#typeattr))) & ! (state = pozzo);
+file#dev#typeattr := (state = dev#file) & ! (state = pozzo);
+file#db#typeattr := (state = db#file) & ! (state = pozzo);
+file#data#typeattr := (( ( ( ( ( ( state = textrel#file | state = src#file) | state = lib#file) | file#mod#typeattr) | file#lib#typeattr) | file#exec#typeattr) | state = data#file)) & ! (state = pozzo);
+file#conf#typeattr := (state = conf#file) & ! (state = pozzo);
+file#cert#typeattr := (state = cert#file) & ! (state = pozzo);
+file#cache#typeattr := (state = cache#file) & ! (state = pozzo);
+file#bootflag#typeattr := FALSE;
+file#boot#typeattr := (state = boot#file) & ! (state = pozzo);
+file#auth#write#typeattr := (file#unconfined#typeattr) & ! (state = pozzo);
+file#auth#write#not_typeattr := (! ( file#auth#write#typeattr)) & ! (state = pozzo);
+file#auth#relabelto#typeattr := (file#unconfined#typeattr) & ! (state = pozzo);
+file#auth#relabelto#not_typeattr := (! ( file#auth#relabelto#typeattr)) & ! (state = pozzo);
+file#auth#typeattr := FALSE;
+file#typeattr := (( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( state = var#file | state = unknown#file) | state = tmp#file) | state = textrel#file) | state = sys#tmpfs#file) | state = sys#tmp#file) | state = sys#mqueuefs#file) | state = sys#hugetlbfs#file) | state = sys#home#file) | state = state#file) | state = src#file) | state = spool#file) | state = runuser#file) | state = runlock#file) | state = run#file) | state = root#file) | state = mod#file) | state = media#file) | state = mail#file) | state = lostfound#file) | state = log#file) | state = lib#file) | state = home#file) | file#var#typeattr) | file#tmpfs#typeattr) | file#tmp#typeattr) | file#run#typeattr) | file#mqueuefs#typeattr) | file#hugetlbfs#typeattr) | file#home#typeattr) | file#exception#typeattr) | file#dev#typeattr) | file#data#typeattr) | file#conf#typeattr) | file#cert#typeattr) | file#bootflag#typeattr) | file#boot#typeattr) | state = exec#file) | state = dev#file) | state = db#file) | state = data#file) | state = conf#file) | state = cert#file) | state = cache#file) | state = boot#file)) & ! (state = pozzo);
+dev#unconfined#typeattr := (unconfined#typeattr) & ! (state = pozzo);
+dev#exception#typeattr := (( stordev#typeattr | nodedev#exception#typeattr)) & ! (state = pozzo);
+dev#except#typeattr := (( dev#typeattr & ! ( dev#exception#typeattr))) & ! (state = pozzo);
+dev#typeattr := (( ( termdev#typeattr | nodedev#typeattr) | dev#exception#typeattr)) & ! (state = pozzo);
+debugfile#unconfined#typeattr := (sys#unconfined#typeattr) & ! (state = pozzo);
+debugfile#typeattr := FALSE;
+cgroupfile#unconfined#typeattr := (sys#unconfined#typeattr) & ! (state = pozzo);
+cgroupfile#typeattr := FALSE;
+booleanfile#unconfined#typeattr := (selinux#unconfined#typeattr) & ! (state = pozzo);
+booleanfile#typeattr := (( ( state = invalid_peers#booleanfile | state = invalid_packets#booleanfile) | state = invalid_associations#booleanfile)) & ! (state = pozzo);
+TCB := (( state = selinux | state = kcore#procfile)) & ! (state = pozzo);
+Harmless := (( ! ( selinux#loadpolicy#not_typeattr) | ( TCB | ! ( Harm)))) & ! (state = pozzo);
+Harm := FALSE;
+
+
+
+     VAR
+
+         state : { pozzo, abi#sysctlfile,
+              acm#serialtermdev,
+              acpi#procfile,
+              aio#fs,
+              anoninode#fs,
+              apm#nodedev,
+              asound#procfile,
+              auto#fs,
+              autofs#nodedev,
+              bdev#fs,
+              binfmtmisc#fs,
+              block#sysfile,
+              boot#file,
+              bootconfig#procfile,
+              bpf#fs,
+              btrfs#sysfile,
+              btrfscontrol#nodedev,
+              buddyinfo#procfile,
+              bus#procfile,
+              bus#sysfile,
+              cache#file,
+              cachefiles#nodedev,
+              caplastcap#sysctlfile,
+              cdcwdm#nodedev,
+              cert#file,
+              cgroup#fs,
+              cgroups#procfile,
+              ci#fs,
+              class#sysfile,
+              clock#nodedev,
+              cmdline#procfile,
+              conf#file,
+              config#fs,
+              console#serialtermdev,
+              consoles#procfile,
+              core#sysctlfile,
+              corepattern#sysctlfile,
+              corepipelimit#sysctlfile,
+              cpu#nodedev,
+              cpu#procfile,
+              cpu#sysfile,
+              cpuinfo#procfile,
+              cpuset#fs,
+              crash#nodedev,
+              crypto#procfile,
+              crypto#sysctlfile,
+              cuse#nodedev,
+              data#file,
+              db#file,
+              debug#fs,
+              debug#sysctlfile,
+              dev#file,
+              dev#sysctlfile,
+              dev#sysfile,
+              devices#procfile,
+              devices#sysfile,
+              devpts#fs,
+              devtmp#fs,
+              diskstats#procfile,
+              dm#stordev,
+              dma#procfile,
+              dmaheap#nodedev,
+              dmcontrol#nodedev,
+              dos#fs,
+              dri#nodedev,
+              driver#procfile,
+              drm#fs,
+              drmdpaux#nodedev,
+              dynamicdebug#procfile,
+              efivar#fs,
+              ephemeral#port,
+              event#nodedev,
+              eventpoll#fs,
+              exec#file,
+              execdomains#procfile,
+              ext4#sysfile,
+              f2fs#sysfile,
+              fb#nodedev,
+              fb#procfile,
+              filesystems#procfile,
+              firmware#sysfile,
+              firmwareconfig#sysctlfile,
+              fs#procfile,
+              fs#sysctlfile,
+              fs#sysfile,
+              fuse#fs,
+              fuse#stordev,
+              fuse#sysfile,
+              gpio#nodedev,
+              hd#stordev,
+              hiddev#nodedev,
+              hidraw#nodedev,
+              home#file,
+              hostname#sysctlfile,
+              hugetlb#fs,
+              hwrng#nodedev,
+              hypervisor#sysfile,
+              i2c#nodedev,
+              iio#nodedev,
+              infiniband#nodedev,
+              input#nodedev,
+              interrupts#procfile,
+              invalid,
+              invalid_associations#booleanfile,
+              invalid_packets#booleanfile,
+              invalid_peers#booleanfile,
+              iomem#procfile,
+              ioports#procfile,
+              ipmi#nodedev,
+              ipv4#sysctlfile,
+              ipv6#sysctlfile,
+              irq#procfile,
+              iso9660#fs,
+              jffs2bbc#procfile,
+              kallsyms#procfile,
+              kcore#procfile,
+              kernel#sysctlfile,
+              kernel#sysfile,
+              keys#procfile,
+              keys#sysctlfile,
+              keyusers#procfile,
+              kfd#nodedev,
+              kmsg#nodedev,
+              kmsg#procfile,
+              kpagecgroup#procfile,
+              kpagecount#procfile,
+              kpageflags#procfile,
+              ksm#nodedev,
+              ksm#sysfile,
+              kvm#nodedev,
+              latencystats#procfile,
+              lib#file,
+              lirc#nodedev,
+              loadavg#procfile,
+              lockdep#procfile,
+              lockdepchains#procfile,
+              lockdepstats#procfile,
+              locks#procfile,
+              lockstat#procfile,
+              log#file,
+              loop#stordev,
+              loopcontrol#nodedev,
+              lostfound#file,
+              mail#file,
+              mcelog#nodedev,
+              md#stordev,
+              mdstat#procfile,
+              media#file,
+              mei#nodedev,
+              mem#nodedev,
+              meminfo#procfile,
+              memory#sysfile,
+              misc#procfile,
+              mod#file,
+              modem#nodedev,
+              modprobe#sysctlfile,
+              module#sysfile,
+              modules#procfile,
+              mpt#procfile,
+              mptcp#sysctlfile,
+              mqueue#fs,
+              msm#serialtermdev,
+              mtd#procfile,
+              mtd#stordev,
+              mtrr#procfile,
+              ndctl#nodedev,
+              net#ib#endport,
+              net#ib#pkey,
+              net#netif,
+              net#netnode,
+              net#packet,
+              net#peer,
+              net#port,
+              net#procfile,
+              net#spd,
+              net#sysctlfile,
+              netfilter#sysctlfile,
+              nfs#fs,
+              nfsd#fs,
+              node#sysfile,
+              ns#fs,
+              nslastpid#sysctlfile,
+              null#nodedev,
+              nvme#stordev,
+              nvram#nodedev,
+              osrelease#sysctlfile,
+              overcommitmemory#sysctlfile,
+              overflowuid#sysctlfile,
+              pagetypeinfo#procfile,
+              partitions#procfile,
+              pidmax#sysctlfile,
+              pipe#fs,
+              pmu#nodedev,
+              power#sysfile,
+              poweroffcmd#sysctlfile,
+              ppp#nodedev,
+              pressure#procfile,
+              printer#nodedev,
+              proc#fs,
+              pstore#fs,
+              ptmx#nodedev,
+              pty#sysctlfile,
+              qos#nodedev,
+              random#nodedev,
+              random#sysctlfile,
+              raw#stordev,
+              removable#fs,
+              removable#stordev,
+              reserved#port,
+              rfkill#nodedev,
+              root#file,
+              root#fs,
+              rpcpipe#fs,
+              run#file,
+              runlock#file,
+              runuser#file,
+              scheddebug#procfile,
+              schedstat#procfile,
+              scsi#procfile,
+              sd#stordev,
+              seccomp#sysctlfile,
+              security#fs,
+              selinux,
+              selinux#fs,
+              sg#stordev,
+              slabinfo#procfile,
+              snd#nodedev,
+              sock#fs,
+              softirqs#procfile,
+              spool#file,
+              src#file,
+              stat#procfile,
+              state#file,
+              sunrpc#sysctlfile,
+              swaps#procfile,
+              sys#fs,
+              sys#home#file,
+              sys#hugetlbfs#file,
+              sys#mqueuefs#file,
+              sys#ptytermdev,
+              sys#serialtermdev,
+              sys#subj,
+              sys#tmp#file,
+              sys#tmpfs#file,
+              sysctl#procfile,
+              sysrqtrigger#procfile,
+              sysvipc#procfile,
+              textrel#file,
+              threadsmax#sysctlfile,
+              timerlist#procfile,
+              tmp#file,
+              tmp#fs,
+              tpm#nodedev,
+              trace#fs,
+              tty#nodedev,
+              tty#procfile,
+              tty#serialtermdev,
+              tuntap#nodedev,
+              udmabuf#nodedev,
+              uhid#nodedev,
+              uinput#nodedev,
+              uio#nodedev,
+              unix#sysctlfile,
+              unknown#file,
+              unlabeled,
+              unreserved#port,
+              uptime#procfile,
+              usb#nodedev,
+              usb#serialtermdev,
+              usbmon#nodedev,
+              user#sysctlfile,
+              usermodehelper#sysctlfile,
+              v4l#nodedev,
+              var#file,
+              vcs#serialtermdev,
+              vd#stordev,
+              version#procfile,
+              vfio#nodedev,
+              vgaarbiter#nodedev,
+              vhost#nodedev,
+              vm#sysctlfile,
+              vmallocinfo#procfile,
+              vmci#nodedev,
+              vmstat#procfile,
+              vport#serialtermdev,
+              watchdog#nodedev,
+              xattr#fs,
+              xd#stordev,
+              yama#sysctlfile,
+              zero#nodedev,
+              zoneinfo#procfile,
+              zram#stordev,
+              zram#sysfile,
+              zramcontrol#sysfile  };
+
+
+
+
+     IVAR
+
+         operation : { accept,
+              access,
+              add_name,
+              append,
+              associate,
+              association,
+              attach_queue,
+              audit_access,
+              audit_control,
+              audit_read,
+              audit_write,
+              bind,
+              block_suspend,
+              bpf,
+              call,
+              check_context,
+              checkpoint_restore,
+              chown,
+              compute_av,
+              compute_create,
+              compute_member,
+              compute_relabel,
+              compute_user,
+              confidentiality,
+              connect,
+              connectto,
+              cpu,
+              create,
+              create_files_as,
+              dac_override,
+              dac_read_search,
+              destroy,
+              dyntransition,
+              egress,
+              enqueue,
+              entrypoint,
+              execheap,
+              execmem,
+              execmod,
+              execstack,
+              execute,
+              execute_no_trans,
+              fork,
+              forward_in,
+              forward_out,
+              fowner,
+              fsetid,
+              getattr,
+              getcap,
+              getopt,
+              getpgid,
+              getrlimit,
+              getsched,
+              getsession,
+              halt,
+              impersonate,
+              ingress,
+              integrity,
+              ioctl,
+              ipc_info,
+              ipc_lock,
+              ipc_owner,
+              kernel,
+              kill,
+              lease,
+              link,
+              linux_immutable,
+              listen,
+              load_policy,
+              lock,
+              mac_admin,
+              mac_override,
+              manage_subnet,
+              map,
+              map_create,
+              map_read,
+              map_write,
+              mknod,
+              mmap_zero,
+              module_load,
+              module_request,
+              mount,
+              mounton,
+              name_bind,
+              name_connect,
+              net_admin,
+              net_bind_service,
+              net_broadcast,
+              net_raw,
+              nlmsg_read,
+              nlmsg_readpriv,
+              nlmsg_relay,
+              nlmsg_tty_audit,
+              nlmsg_write,
+              nnp_transition,
+              noatsecure,
+              node_bind,
+              nosuid_transition,
+              open,
+              perfmon,
+              polmatch,
+              prog_load,
+              prog_run,
+              ptrace,
+              quotaget,
+              quotamod,
+              quotaon,
+              read,
+              read_policy,
+              reboot,
+              receive,
+              recv,
+              recvfrom,
+              relabelfrom,
+              relabelto,
+              reload,
+              remount,
+              remove_name,
+              rename,
+              reparent,
+              rlimitinh,
+              rmdir,
+              search,
+              send,
+              sendto,
+              set_context_mgr,
+              setattr,
+              setbool,
+              setcap,
+              setcheckreqprot,
+              setcontext,
+              setcurrent,
+              setenforce,
+              setexec,
+              setfcap,
+              setfscreate,
+              setgid,
+              setkeycreate,
+              setopt,
+              setpcap,
+              setpgid,
+              setrlimit,
+              setsched,
+              setsecparam,
+              setsockcreate,
+              setuid,
+              share,
+              shutdown,
+              sigchld,
+              siginh,
+              sigkill,
+              signal,
+              signull,
+              sigstop,
+              start,
+              status,
+              stop,
+              sys_admin,
+              sys_boot,
+              sys_chroot,
+              sys_module,
+              sys_nice,
+              sys_pacct,
+              sys_ptrace,
+              sys_rawio,
+              sys_resource,
+              sys_time,
+              sys_tty_config,
+              syslog,
+              syslog_console,
+              syslog_mod,
+              syslog_read,
+              tracepoint,
+              transfer,
+              transition,
+              unix_read,
+              unix_write,
+              unlink,
+              unmount,
+              use,
+              use_as_override,
+              validate_trans,
+              view,
+              wake_alarm,
+              watch,
+              watch_mount,
+              watch_reads,
+              watch_sb,
+              watch_with_perm,
+              write  };
+
+
+
+    TRANS
+(state = abi#sysctlfile -> (  next(state = pozzo) )) &
+(state = acm#serialtermdev -> (  next(state = pozzo) )) &
+(state = acpi#procfile -> (  next(state = pozzo) )) &
+(state = aio#fs -> (  next(state = pozzo) )) &
+(state = anoninode#fs -> (  next(state = pozzo) )) &
+(state = apm#nodedev -> (  next(state = pozzo) )) &
+(state = asound#procfile -> (  next(state = pozzo) )) &
+(state = auto#fs -> (  next(state = pozzo) )) &
+(state = autofs#nodedev -> (  next(state = pozzo) )) &
+(state = bdev#fs -> (  next(state = pozzo) )) &
+(state = binfmtmisc#fs -> (  next(state = pozzo) )) &
+(state = block#sysfile -> (  next(state = pozzo) )) &
+(state = boot#file -> ( (operation = getattr & next(fs#unconfined#typeattr)) | (operation = ioctl & next(fs#unconfined#typeattr)) | (operation = lock & next(fs#unconfined#typeattr)) | (operation = open & next(fs#unconfined#typeattr)) | (operation = read & next(fs#unconfined#typeattr)) | (operation = search & next(fs#unconfined#typeattr)) | (operation = search & next(file#unconfined#typeattr)) | (operation = read & next(file#unconfined#typeattr)) | (operation = open & next(file#unconfined#typeattr)) | (operation = lock & next(file#unconfined#typeattr)) | (operation = ioctl & next(file#unconfined#typeattr)) | (operation = getattr & next(file#unconfined#typeattr)) |  next(state = pozzo) )) &
+(state = bootconfig#procfile -> (  next(state = pozzo) )) &
+(state = bpf#fs -> (  next(state = pozzo) )) &
+(state = btrfs#sysfile -> (  next(state = pozzo) )) &
+(state = btrfscontrol#nodedev -> (  next(state = pozzo) )) &
+(state = buddyinfo#procfile -> (  next(state = pozzo) )) &
+(state = bus#procfile -> (  next(state = pozzo) )) &
+(state = bus#sysfile -> (  next(state = pozzo) )) &
+(state = cache#file -> ( (operation = associate & next(state = root#fs)) | (operation = getattr & next(file#unconfined#typeattr)) | (operation = ioctl & next(file#unconfined#typeattr)) | (operation = lock & next(file#unconfined#typeattr)) | (operation = open & next(file#unconfined#typeattr)) | (operation = read & next(file#unconfined#typeattr)) | (operation = search & next(file#unconfined#typeattr)) |  next(state = pozzo) )) &
+(state = cachefiles#nodedev -> (  next(state = pozzo) )) &
+(state = caplastcap#sysctlfile -> (  next(state = pozzo) )) &
+(state = cdcwdm#nodedev -> (  next(state = pozzo) )) &
+(state = cert#file -> (  next(state = pozzo) )) &
+(state = cgroup#fs -> ( (operation = associate & next(state = cgroup#fs)) | (operation = associate & next(state = cgroup#fs)) | (operation = associate & next(cgroupfile#typeattr)) |  next(state = pozzo) )) &
+(state = cgroups#procfile -> (  next(state = pozzo) )) &
+(state = ci#fs -> (  next(state = pozzo) )) &
+(state = class#sysfile -> (  next(state = pozzo) )) &
+(state = clock#nodedev -> (  next(state = pozzo) )) &
+(state = cmdline#procfile -> (  next(state = pozzo) )) &
+(state = conf#file -> ( (operation = search & next(file#unconfined#typeattr)) | (operation = read & next(file#unconfined#typeattr)) | (operation = open & next(file#unconfined#typeattr)) | (operation = lock & next(file#unconfined#typeattr)) | (operation = ioctl & next(file#unconfined#typeattr)) | (operation = getattr & next(file#unconfined#typeattr)) |  next(state = pozzo) )) &
+(state = config#fs -> (  next(state = pozzo) )) &
+(state = console#serialtermdev -> (  next(state = pozzo) )) &
+(state = consoles#procfile -> (  next(state = pozzo) )) &
+(state = core#sysctlfile -> (  next(state = pozzo) )) &
+(state = corepattern#sysctlfile -> (  next(state = pozzo) )) &
+(state = corepipelimit#sysctlfile -> (  next(state = pozzo) )) &
+(state = cpu#nodedev -> (  next(state = pozzo) )) &
+(state = cpu#procfile -> (  next(state = pozzo) )) &
+(state = cpu#sysfile -> (  next(state = pozzo) )) &
+(state = cpuinfo#procfile -> (  next(state = pozzo) )) &
+(state = cpuset#fs -> (  next(state = pozzo) )) &
+(state = crash#nodedev -> (  next(state = pozzo) )) &
+(state = crypto#procfile -> (  next(state = pozzo) )) &
+(state = crypto#sysctlfile -> (  next(state = pozzo) )) &
+(state = cuse#nodedev -> (  next(state = pozzo) )) &
+(state = data#file -> ( (operation = search & next(file#unconfined#typeattr)) | (operation = read & next(file#unconfined#typeattr)) | (operation = open & next(file#unconfined#typeattr)) | (operation = lock & next(file#unconfined#typeattr)) | (operation = ioctl & next(file#unconfined#typeattr)) | (operation = getattr & next(file#unconfined#typeattr)) |  next(state = pozzo) )) &
+(state = db#file -> ( (operation = search & next(file#unconfined#typeattr)) | (operation = read & next(file#unconfined#typeattr)) | (operation = open & next(file#unconfined#typeattr)) | (operation = lock & next(file#unconfined#typeattr)) | (operation = ioctl & next(file#unconfined#typeattr)) | (operation = getattr & next(file#unconfined#typeattr)) |  next(state = pozzo) )) &
+(state = debug#fs -> ( (operation = associate & next(debugfile#typeattr)) |  next(state = pozzo) )) &
+(state = debug#sysctlfile -> (  next(state = pozzo) )) &
+(state = dev#file -> ( (operation = associate & next(state = xattr#fs)) | (operation = associate & next(state = tmp#fs)) |  next(state = pozzo) )) &
+(state = dev#sysctlfile -> (  next(state = pozzo) )) &
+(state = dev#sysfile -> (  next(state = pozzo) )) &
+(state = devices#procfile -> (  next(state = pozzo) )) &
+(state = devices#sysfile -> (  next(state = pozzo) )) &
+(state = devpts#fs -> ( (operation = getattr & next(state = sys#subj)) | (operation = ioctl & next(state = sys#subj)) | (operation = lock & next(state = sys#subj)) | (operation = open & next(state = sys#subj)) | (operation = read & next(state = sys#subj)) | (operation = search & next(state = sys#subj)) | (operation = associate & next(ptytermdev#typeattr)) |  next(state = pozzo) )) &
+(state = devtmp#fs -> ( (operation = associate & next(state = tmp#fs)) | (operation = associate & next(state = devtmp#fs)) | (operation = associate & next(state = devtmp#fs)) | (operation = associate & next(file#dev#typeattr)) | (operation = associate & next(dev#typeattr)) |  next(state = pozzo) )) &
+(state = diskstats#procfile -> (  next(state = pozzo) )) &
+(state = dm#stordev -> (  next(state = pozzo) )) &
+(state = dma#procfile -> (  next(state = pozzo) )) &
+(state = dmaheap#nodedev -> (  next(state = pozzo) )) &
+(state = dmcontrol#nodedev -> (  next(state = pozzo) )) &
+(state = dos#fs -> ( (operation = associate & next(state = xattr#fs)) |  next(state = pozzo) )) &
+(state = dri#nodedev -> (  next(state = pozzo) )) &
+(state = driver#procfile -> (  next(state = pozzo) )) &
+(state = drm#fs -> (  next(state = pozzo) )) &
+(state = drmdpaux#nodedev -> (  next(state = pozzo) )) &
+(state = dynamicdebug#procfile -> (  next(state = pozzo) )) &
+(state = efivar#fs -> (  next(state = pozzo) )) &
+(state = ephemeral#port -> (  next(state = pozzo) )) &
+(state = event#nodedev -> (  next(state = pozzo) )) &
+(state = eventpoll#fs -> (  next(state = pozzo) )) &
+(state = exec#file -> (  next(state = pozzo) )) &
+(state = execdomains#procfile -> (  next(state = pozzo) )) &
+(state = ext4#sysfile -> (  next(state = pozzo) )) &
+(state = f2fs#sysfile -> (  next(state = pozzo) )) &
+(state = fb#nodedev -> (  next(state = pozzo) )) &
+(state = fb#procfile -> (  next(state = pozzo) )) &
+(state = filesystems#procfile -> (  next(state = pozzo) )) &
+(state = firmware#sysfile -> (  next(state = pozzo) )) &
+(state = firmwareconfig#sysctlfile -> (  next(state = pozzo) )) &
+(state = fs#procfile -> (  next(state = pozzo) )) &
+(state = fs#sysctlfile -> (  next(state = pozzo) )) &
+(state = fs#sysfile -> (  next(state = pozzo) )) &
+(state = fuse#fs -> (  next(state = pozzo) )) &
+(state = fuse#stordev -> (  next(state = pozzo) )) &
+(state = fuse#sysfile -> (  next(state = pozzo) )) &
+(state = gpio#nodedev -> (  next(state = pozzo) )) &
+(state = hd#stordev -> (  next(state = pozzo) )) &
+(state = hiddev#nodedev -> (  next(state = pozzo) )) &
+(state = hidraw#nodedev -> (  next(state = pozzo) )) &
+(state = home#file -> ( (operation = search & next(file#unconfined#typeattr)) | (operation = read & next(file#unconfined#typeattr)) | (operation = open & next(file#unconfined#typeattr)) | (operation = lock & next(file#unconfined#typeattr)) | (operation = ioctl & next(file#unconfined#typeattr)) | (operation = getattr & next(file#unconfined#typeattr)) |  next(state = pozzo) )) &
+(state = hostname#sysctlfile -> (  next(state = pozzo) )) &
+(state = hugetlb#fs -> ( (operation = getattr & next(state = sys#subj)) | (operation = ioctl & next(state = sys#subj)) | (operation = lock & next(state = sys#subj)) | (operation = open & next(state = sys#subj)) | (operation = read & next(state = sys#subj)) | (operation = search & next(state = sys#subj)) | (operation = associate & next(state = hugetlb#fs)) | (operation = associate & next(state = hugetlb#fs)) | (operation = associate & next(file#hugetlbfs#typeattr)) |  next(state = pozzo) )) &
+(state = hwrng#nodedev -> (  next(state = pozzo) )) &
+(state = hypervisor#sysfile -> (  next(state = pozzo) )) &
+(state = i2c#nodedev -> (  next(state = pozzo) )) &
+(state = iio#nodedev -> (  next(state = pozzo) )) &
+(state = infiniband#nodedev -> (  next(state = pozzo) )) &
+(state = input#nodedev -> (  next(state = pozzo) )) &
+(state = interrupts#procfile -> (  next(state = pozzo) )) &
+(state = invalid -> ( (operation = associate & next(state = invalid)) | (operation = associate & next(state = invalid)) | (operation = accept & next(invalid#unconfined#typeattr)) | (operation = connectto & next(invalid#unconfined#typeattr)) | (operation = listen & next(invalid#unconfined#typeattr)) | (operation = node_bind & next(invalid#unconfined#typeattr)) | (operation = attach_queue & next(invalid#unconfined#typeattr)) | (operation = accept & next(invalid#unconfined#typeattr)) | (operation = listen & next(invalid#unconfined#typeattr)) | (operation = node_bind & next(invalid#unconfined#typeattr)) | (operation = bind & next(invalid#unconfined#typeattr)) | (operation = connect & next(invalid#unconfined#typeattr)) | (operation = getattr & next(invalid#unconfined#typeattr)) | (operation = getopt & next(invalid#unconfined#typeattr)) | (operation = ioctl & next(invalid#unconfined#typeattr)) | (operation = lock & next(invalid#unconfined#typeattr)) | (operation = read & next(invalid#unconfined#typeattr)) | (operation = audit_access & next(invalid#unconfined#typeattr)) | (operation = execute & next(invalid#unconfined#typeattr)) | (operation = getattr & next(invalid#unconfined#typeattr)) | (operation = ioctl & next(invalid#unconfined#typeattr)) | (operation = link & next(invalid#unconfined#typeattr)) | (operation = lock & next(invalid#unconfined#typeattr)) | (operation = open & next(invalid#unconfined#typeattr)) | (operation = quotaon & next(invalid#unconfined#typeattr)) | (operation = read & next(invalid#unconfined#typeattr)) | (operation = unlink & next(invalid#unconfined#typeattr)) | (operation = watch & next(invalid#unconfined#typeattr)) | (operation = watch_mount & next(invalid#unconfined#typeattr)) | (operation = watch_reads & next(invalid#unconfined#typeattr)) | (operation = watch_sb & next(invalid#unconfined#typeattr)) | (operation = watch_with_perm & next(invalid#unconfined#typeattr)) | (operation = associate & next(invalid#unconfined#typeattr)) | (operation = getattr & next(invalid#unconfined#typeattr)) | (operation = lock & next(invalid#unconfined#typeattr)) | (operation = read & next(invalid#unconfined#typeattr)) | (operation = unix_read & next(invalid#unconfined#typeattr)) | (operation = associate & next(invalid#unconfined#typeattr)) | (operation = getattr & next(invalid#unconfined#typeattr)) | (operation = read & next(invalid#unconfined#typeattr)) | (operation = unix_read & next(invalid#unconfined#typeattr)) | (operation = accept & next(invalid#unconfined#typeattr)) | (operation = association & next(invalid#unconfined#typeattr)) | (operation = listen & next(invalid#unconfined#typeattr)) | (operation = node_bind & next(invalid#unconfined#typeattr)) | (operation = node_bind & next(invalid#unconfined#typeattr)) | (operation = execmem & next(invalid#unconfined#typeattr)) | (operation = fork & next(invalid#unconfined#typeattr)) | (operation = getattr & next(invalid#unconfined#typeattr)) | (operation = getcap & next(invalid#unconfined#typeattr)) | (operation = getpgid & next(invalid#unconfined#typeattr)) | (operation = getrlimit & next(invalid#unconfined#typeattr)) | (operation = getsched & next(invalid#unconfined#typeattr)) | (operation = getsession & next(invalid#unconfined#typeattr)) | (operation = noatsecure & next(invalid#unconfined#typeattr)) | (operation = ptrace & next(invalid#unconfined#typeattr)) | (operation = rlimitinh & next(invalid#unconfined#typeattr)) | (operation = share & next(invalid#unconfined#typeattr)) | (operation = sigchld & next(invalid#unconfined#typeattr)) | (operation = siginh & next(invalid#unconfined#typeattr)) | (operation = sigkill & next(invalid#unconfined#typeattr)) | (operation = signal & next(invalid#unconfined#typeattr)) | (operation = signull & next(invalid#unconfined#typeattr)) | (operation = sigstop & next(invalid#unconfined#typeattr)) | (operation = read & next(invalid#unconfined#typeattr)) | (operation = recv & next(invalid#unconfined#typeattr)) | (operation = forward_in & next(invalid#unconfined#typeattr)) | (operation = forward_out & next(invalid#unconfined#typeattr)) | (operation = recv & next(invalid#unconfined#typeattr)) | (operation = recvfrom & next(invalid#unconfined#typeattr)) | (operation = egress & next(invalid#unconfined#typeattr)) | (operation = ingress & next(invalid#unconfined#typeattr)) | (operation = associate & next(invalid#unconfined#typeattr)) | (operation = enqueue & next(invalid#unconfined#typeattr)) | (operation = getattr & next(invalid#unconfined#typeattr)) | (operation = read & next(invalid#unconfined#typeattr)) | (operation = unix_read & next(invalid#unconfined#typeattr)) | (operation = receive & next(invalid#unconfined#typeattr)) | (operation = audit_access & next(invalid#unconfined#typeattr)) | (operation = execute & next(invalid#unconfined#typeattr)) | (operation = getattr & next(invalid#unconfined#typeattr)) | (operation = ioctl & next(invalid#unconfined#typeattr)) | (operation = link & next(invalid#unconfined#typeattr)) | (operation = lock & next(invalid#unconfined#typeattr)) | (operation = open & next(invalid#unconfined#typeattr)) | (operation = quotaon & next(invalid#unconfined#typeattr)) | (operation = read & next(invalid#unconfined#typeattr)) | (operation = unlink & next(invalid#unconfined#typeattr)) | (operation = watch & next(invalid#unconfined#typeattr)) | (operation = watch_mount & next(invalid#unconfined#typeattr)) | (operation = watch_reads & next(invalid#unconfined#typeattr)) | (operation = watch_sb & next(invalid#unconfined#typeattr)) | (operation = watch_with_perm & next(invalid#unconfined#typeattr)) | (operation = link & next(invalid#unconfined#typeattr)) | (operation = read & next(invalid#unconfined#typeattr)) | (operation = search & next(invalid#unconfined#typeattr)) | (operation = view & next(invalid#unconfined#typeattr)) | (operation = use_as_override & next(invalid#unconfined#typeattr)) | (operation = associate & next(invalid#unconfined#typeattr)) | (operation = getattr & next(invalid#unconfined#typeattr)) | (operation = read & next(invalid#unconfined#typeattr)) | (operation = unix_read & next(invalid#unconfined#typeattr)) | (operation = access & next(invalid#unconfined#typeattr)) | (operation = manage_subnet & next(invalid#unconfined#typeattr)) | (operation = node_bind & next(invalid#unconfined#typeattr)) | (operation = getattr & next(invalid#unconfined#typeattr)) | (operation = quotaget & next(invalid#unconfined#typeattr)) | (operation = quotamod & next(invalid#unconfined#typeattr)) | (operation = unmount & next(invalid#unconfined#typeattr)) | (operation = watch & next(invalid#unconfined#typeattr)) | (operation = audit_access & next(invalid#unconfined#typeattr)) | (operation = execute & next(invalid#unconfined#typeattr)) | (operation = execute_no_trans & next(invalid#unconfined#typeattr)) | (operation = getattr & next(invalid#unconfined#typeattr)) | (operation = ioctl & next(invalid#unconfined#typeattr)) | (operation = link & next(invalid#unconfined#typeattr)) | (operation = lock & next(invalid#unconfined#typeattr)) | (operation = map & next(invalid#unconfined#typeattr)) | (operation = mounton & next(invalid#unconfined#typeattr)) | (operation = open & next(invalid#unconfined#typeattr)) | (operation = quotaon & next(invalid#unconfined#typeattr)) | (operation = read & next(invalid#unconfined#typeattr)) | (operation = unlink & next(invalid#unconfined#typeattr)) | (operation = watch & next(invalid#unconfined#typeattr)) | (operation = watch_mount & next(invalid#unconfined#typeattr)) | (operation = watch_reads & next(invalid#unconfined#typeattr)) | (operation = watch_sb & next(invalid#unconfined#typeattr)) | (operation = watch_with_perm & next(invalid#unconfined#typeattr)) | (operation = audit_access & next(invalid#unconfined#typeattr)) | (operation = execute & next(invalid#unconfined#typeattr)) | (operation = getattr & next(invalid#unconfined#typeattr)) | (operation = ioctl & next(invalid#unconfined#typeattr)) | (operation = link & next(invalid#unconfined#typeattr)) | (operation = lock & next(invalid#unconfined#typeattr)) | (operation = open & next(invalid#unconfined#typeattr)) | (operation = quotaon & next(invalid#unconfined#typeattr)) | (operation = read & next(invalid#unconfined#typeattr)) | (operation = unlink & next(invalid#unconfined#typeattr)) | (operation = watch & next(invalid#unconfined#typeattr)) | (operation = watch_mount & next(invalid#unconfined#typeattr)) | (operation = watch_reads & next(invalid#unconfined#typeattr)) | (operation = watch_sb & next(invalid#unconfined#typeattr)) | (operation = watch_with_perm & next(invalid#unconfined#typeattr)) | (operation = use & next(invalid#unconfined#typeattr)) | (operation = audit_access & next(invalid#unconfined#typeattr)) | (operation = execute & next(invalid#unconfined#typeattr)) | (operation = getattr & next(invalid#unconfined#typeattr)) | (operation = ioctl & next(invalid#unconfined#typeattr)) | (operation = link & next(invalid#unconfined#typeattr)) | (operation = lock & next(invalid#unconfined#typeattr)) | (operation = map & next(invalid#unconfined#typeattr)) | (operation = mounton & next(invalid#unconfined#typeattr)) | (operation = open & next(invalid#unconfined#typeattr)) | (operation = quotaon & next(invalid#unconfined#typeattr)) | (operation = read & next(invalid#unconfined#typeattr)) | (operation = search & next(invalid#unconfined#typeattr)) | (operation = unlink & next(invalid#unconfined#typeattr)) | (operation = watch & next(invalid#unconfined#typeattr)) | (operation = watch_mount & next(invalid#unconfined#typeattr)) | (operation = watch_reads & next(invalid#unconfined#typeattr)) | (operation = watch_sb & next(invalid#unconfined#typeattr)) | (operation = watch_with_perm & next(invalid#unconfined#typeattr)) | (operation = accept & next(invalid#unconfined#typeattr)) | (operation = listen & next(invalid#unconfined#typeattr)) | (operation = node_bind & next(invalid#unconfined#typeattr)) | (operation = audit_access & next(invalid#unconfined#typeattr)) | (operation = execute & next(invalid#unconfined#typeattr)) | (operation = getattr & next(invalid#unconfined#typeattr)) | (operation = ioctl & next(invalid#unconfined#typeattr)) | (operation = link & next(invalid#unconfined#typeattr)) | (operation = lock & next(invalid#unconfined#typeattr)) | (operation = map & next(invalid#unconfined#typeattr)) | (operation = open & next(invalid#unconfined#typeattr)) | (operation = quotaon & next(invalid#unconfined#typeattr)) | (operation = read & next(invalid#unconfined#typeattr)) | (operation = unlink & next(invalid#unconfined#typeattr)) | (operation = watch & next(invalid#unconfined#typeattr)) | (operation = watch_mount & next(invalid#unconfined#typeattr)) | (operation = watch_reads & next(invalid#unconfined#typeattr)) | (operation = watch_sb & next(invalid#unconfined#typeattr)) | (operation = watch_with_perm & next(invalid#unconfined#typeattr)) | (operation = map_read & next(invalid#unconfined#typeattr)) | (operation = map_write & next(invalid#unconfined#typeattr)) | (operation = prog_run & next(invalid#unconfined#typeattr)) | (operation = accept & next(invalid#unconfined#typeattr)) | (operation = listen & next(invalid#unconfined#typeattr)) | (operation = audit_access & next(invalid#unconfined#typeattr)) | (operation = execute & next(invalid#unconfined#typeattr)) | (operation = getattr & next(invalid#unconfined#typeattr)) | (operation = ioctl & next(invalid#unconfined#typeattr)) | (operation = link & next(invalid#unconfined#typeattr)) | (operation = lock & next(invalid#unconfined#typeattr)) | (operation = open & next(invalid#unconfined#typeattr)) | (operation = quotaon & next(invalid#unconfined#typeattr)) | (operation = read & next(invalid#unconfined#typeattr)) | (operation = unlink & next(invalid#unconfined#typeattr)) | (operation = watch & next(invalid#unconfined#typeattr)) | (operation = watch_mount & next(invalid#unconfined#typeattr)) | (operation = watch_reads & next(invalid#unconfined#typeattr)) | (operation = watch_sb & next(invalid#unconfined#typeattr)) | (operation = watch_with_perm & next(invalid#unconfined#typeattr)) | (operation = polmatch & next(invalid#unconfined#typeattr)) | (operation = recvfrom & next(invalid#unconfined#typeattr)) | (operation = accept & next(invalid#unconfined#typeattr)) | (operation = listen & next(invalid#unconfined#typeattr)) | (operation = getattr & next(invalid#unconfined#typeattr)) | (operation = ioctl & next(invalid#unconfined#typeattr)) | (operation = read & next(invalid#unconfined#typeattr)) |  next(state = pozzo) )) &
+(state = invalid_associations#booleanfile -> (  next(state = pozzo) )) &
+(state = invalid_packets#booleanfile -> (  next(state = pozzo) )) &
+(state = invalid_peers#booleanfile -> (  next(state = pozzo) )) &
+(state = iomem#procfile -> (  next(state = pozzo) )) &
+(state = ioports#procfile -> (  next(state = pozzo) )) &
+(state = ipmi#nodedev -> (  next(state = pozzo) )) &
+(state = ipv4#sysctlfile -> (  next(state = pozzo) )) &
+(state = ipv6#sysctlfile -> (  next(state = pozzo) )) &
+(state = irq#procfile -> (  next(state = pozzo) )) &
+(state = iso9660#fs -> (  next(state = pozzo) )) &
+(state = jffs2bbc#procfile -> (  next(state = pozzo) )) &
+(state = kallsyms#procfile -> (  next(state = pozzo) )) &
+(state = kcore#procfile -> (  next(state = pozzo) )) &
+(state = kernel#sysctlfile -> (  next(state = pozzo) )) &
+(state = kernel#sysfile -> (  next(state = pozzo) )) &
+(state = keys#procfile -> (  next(state = pozzo) )) &
+(state = keys#sysctlfile -> (  next(state = pozzo) )) &
+(state = keyusers#procfile -> (  next(state = pozzo) )) &
+(state = kfd#nodedev -> (  next(state = pozzo) )) &
+(state = kmsg#nodedev -> ( (operation = getattr & next(nodedev#unconfined#typeattr)) | (operation = mounton & next(nodedev#unconfined#typeattr)) | (operation = mounton & next(dev#unconfined#typeattr)) | (operation = getattr & next(dev#unconfined#typeattr)) |  next(state = pozzo) )) &
+(state = kmsg#procfile -> (  next(state = pozzo) )) &
+(state = kpagecgroup#procfile -> (  next(state = pozzo) )) &
+(state = kpagecount#procfile -> (  next(state = pozzo) )) &
+(state = kpageflags#procfile -> (  next(state = pozzo) )) &
+(state = ksm#nodedev -> (  next(state = pozzo) )) &
+(state = ksm#sysfile -> (  next(state = pozzo) )) &
+(state = kvm#nodedev -> (  next(state = pozzo) )) &
+(state = latencystats#procfile -> (  next(state = pozzo) )) &
+(state = lib#file -> ( (operation = search & next(file#unconfined#typeattr)) | (operation = read & next(file#unconfined#typeattr)) | (operation = open & next(file#unconfined#typeattr)) | (operation = lock & next(file#unconfined#typeattr)) | (operation = ioctl & next(file#unconfined#typeattr)) | (operation = getattr & next(file#unconfined#typeattr)) |  next(state = pozzo) )) &
+(state = lirc#nodedev -> (  next(state = pozzo) )) &
+(state = loadavg#procfile -> (  next(state = pozzo) )) &
+(state = lockdep#procfile -> (  next(state = pozzo) )) &
+(state = lockdepchains#procfile -> (  next(state = pozzo) )) &
+(state = lockdepstats#procfile -> (  next(state = pozzo) )) &
+(state = locks#procfile -> (  next(state = pozzo) )) &
+(state = lockstat#procfile -> (  next(state = pozzo) )) &
+(state = log#file -> ( (operation = associate & next(state = tmp#fs)) | (operation = search & next(file#unconfined#typeattr)) | (operation = read & next(file#unconfined#typeattr)) | (operation = open & next(file#unconfined#typeattr)) | (operation = lock & next(file#unconfined#typeattr)) | (operation = ioctl & next(file#unconfined#typeattr)) | (operation = getattr & next(file#unconfined#typeattr)) |  next(state = pozzo) )) &
+(state = loop#stordev -> (  next(state = pozzo) )) &
+(state = loopcontrol#nodedev -> (  next(state = pozzo) )) &
+(state = lostfound#file -> ( (operation = associate & next(state = xattr#fs)) |  next(state = pozzo) )) &
+(state = mail#file -> (  next(state = pozzo) )) &
+(state = mcelog#nodedev -> (  next(state = pozzo) )) &
+(state = md#stordev -> (  next(state = pozzo) )) &
+(state = mdstat#procfile -> (  next(state = pozzo) )) &
+(state = media#file -> ( (operation = associate & next(state = xattr#fs)) | (operation = associate & next(state = tmp#fs)) |  next(state = pozzo) )) &
+(state = mei#nodedev -> (  next(state = pozzo) )) &
+(state = mem#nodedev -> (  next(state = pozzo) )) &
+(state = meminfo#procfile -> (  next(state = pozzo) )) &
+(state = memory#sysfile -> (  next(state = pozzo) )) &
+(state = misc#procfile -> (  next(state = pozzo) )) &
+(state = mod#file -> (  next(state = pozzo) )) &
+(state = modem#nodedev -> (  next(state = pozzo) )) &
+(state = modprobe#sysctlfile -> (  next(state = pozzo) )) &
+(state = module#sysfile -> (  next(state = pozzo) )) &
+(state = modules#procfile -> (  next(state = pozzo) )) &
+(state = mpt#procfile -> (  next(state = pozzo) )) &
+(state = mptcp#sysctlfile -> (  next(state = pozzo) )) &
+(state = mqueue#fs -> ( (operation = getattr & next(state = sys#subj)) | (operation = ioctl & next(state = sys#subj)) | (operation = lock & next(state = sys#subj)) | (operation = open & next(state = sys#subj)) | (operation = read & next(state = sys#subj)) | (operation = search & next(state = sys#subj)) | (operation = associate & next(state = mqueue#fs)) | (operation = associate & next(state = mqueue#fs)) | (operation = associate & next(file#mqueuefs#typeattr)) |  next(state = pozzo) )) &
+(state = msm#serialtermdev -> (  next(state = pozzo) )) &
+(state = mtd#procfile -> (  next(state = pozzo) )) &
+(state = mtd#stordev -> (  next(state = pozzo) )) &
+(state = mtrr#procfile -> (  next(state = pozzo) )) &
+(state = ndctl#nodedev -> (  next(state = pozzo) )) &
+(state = net#ib#endport -> (  next(state = pozzo) )) &
+(state = net#ib#pkey -> (  next(state = pozzo) )) &
+(state = net#netif -> (  next(state = pozzo) )) &
+(state = net#netnode -> (  next(state = pozzo) )) &
+(state = net#packet -> (  next(state = pozzo) )) &
+(state = net#peer -> (  next(state = pozzo) )) &
+(state = net#port -> (  next(state = pozzo) )) &
+(state = net#procfile -> (  next(state = pozzo) )) &
+(state = net#spd -> (  next(state = pozzo) )) &
+(state = net#sysctlfile -> (  next(state = pozzo) )) &
+(state = netfilter#sysctlfile -> (  next(state = pozzo) )) &
+(state = nfs#fs -> (  next(state = pozzo) )) &
+(state = nfsd#fs -> (  next(state = pozzo) )) &
+(state = node#sysfile -> (  next(state = pozzo) )) &
+(state = ns#fs -> (  next(state = pozzo) )) &
+(state = nslastpid#sysctlfile -> (  next(state = pozzo) )) &
+(state = null#nodedev -> (  next(state = pozzo) )) &
+(state = nvme#stordev -> (  next(state = pozzo) )) &
+(state = nvram#nodedev -> (  next(state = pozzo) )) &
+(state = osrelease#sysctlfile -> (  next(state = pozzo) )) &
+(state = overcommitmemory#sysctlfile -> (  next(state = pozzo) )) &
+(state = overflowuid#sysctlfile -> (  next(state = pozzo) )) &
+(state = pagetypeinfo#procfile -> (  next(state = pozzo) )) &
+(state = partitions#procfile -> (  next(state = pozzo) )) &
+(state = pidmax#sysctlfile -> (  next(state = pozzo) )) &
+(state = pipe#fs -> (  next(state = pozzo) )) &
+(state = pmu#nodedev -> (  next(state = pozzo) )) &
+(state = power#sysfile -> (  next(state = pozzo) )) &
+(state = poweroffcmd#sysctlfile -> (  next(state = pozzo) )) &
+(state = ppp#nodedev -> (  next(state = pozzo) )) &
+(state = pressure#procfile -> (  next(state = pozzo) )) &
+(state = printer#nodedev -> (  next(state = pozzo) )) &
+(state = proc#fs -> ( (operation = associate & next(state = xattr#fs)) |  next(state = pozzo) )) &
+(state = pstore#fs -> ( (operation = associate & next(state = pstore#fs)) | (operation = associate & next(state = pstore#fs)) |  next(state = pozzo) )) &
+(state = ptmx#nodedev -> (  next(state = pozzo) )) &
+(state = pty#sysctlfile -> (  next(state = pozzo) )) &
+(state = qos#nodedev -> (  next(state = pozzo) )) &
+(state = random#nodedev -> (  next(state = pozzo) )) &
+(state = random#sysctlfile -> (  next(state = pozzo) )) &
+(state = raw#stordev -> (  next(state = pozzo) )) &
+(state = removable#fs -> (  next(state = pozzo) )) &
+(state = removable#stordev -> (  next(state = pozzo) )) &
+(state = reserved#port -> (  next(state = pozzo) )) &
+(state = rfkill#nodedev -> (  next(state = pozzo) )) &
+(state = root#file -> ( (operation = associate & next(state = xattr#fs)) | (operation = search & next(file#unconfined#typeattr)) | (operation = read & next(file#unconfined#typeattr)) | (operation = open & next(file#unconfined#typeattr)) | (operation = lock & next(file#unconfined#typeattr)) | (operation = ioctl & next(file#unconfined#typeattr)) | (operation = getattr & next(file#unconfined#typeattr)) |  next(state = pozzo) )) &
+(state = root#fs -> ( (operation = associate & next(state = state#file)) | (operation = associate & next(state = run#file)) | (operation = associate & next(state = root#fs)) | (operation = associate & next(state = root#fs)) | (operation = associate & next(state = cache#file)) | (operation = getattr & next(file#unconfined#typeattr)) | (operation = ioctl & next(file#unconfined#typeattr)) | (operation = lock & next(file#unconfined#typeattr)) | (operation = open & next(file#unconfined#typeattr)) | (operation = read & next(file#unconfined#typeattr)) | (operation = search & next(file#unconfined#typeattr)) |  next(state = pozzo) )) &
+(state = rpcpipe#fs -> (  next(state = pozzo) )) &
+(state = run#file -> ( (operation = associate & next(state = root#fs)) | (operation = search & next(file#unconfined#typeattr)) | (operation = read & next(file#unconfined#typeattr)) | (operation = open & next(file#unconfined#typeattr)) | (operation = lock & next(file#unconfined#typeattr)) | (operation = ioctl & next(file#unconfined#typeattr)) | (operation = getattr & next(file#unconfined#typeattr)) |  next(state = pozzo) )) &
+(state = runlock#file -> (  next(state = pozzo) )) &
+(state = runuser#file -> (  next(state = pozzo) )) &
+(state = scheddebug#procfile -> (  next(state = pozzo) )) &
+(state = schedstat#procfile -> (  next(state = pozzo) )) &
+(state = scsi#procfile -> (  next(state = pozzo) )) &
+(state = sd#stordev -> (  next(state = pozzo) )) &
+(state = seccomp#sysctlfile -> (  next(state = pozzo) )) &
+(state = security#fs -> (  next(state = pozzo) )) &
+(state = selinux -> ( (operation = validate_trans & next(selinux#unconfined#typeattr)) | (operation = read_policy & next(selinux#unconfined#typeattr)) | (operation = load_policy & next(selinux#unconfined#typeattr)) | (operation = compute_user & next(selinux#unconfined#typeattr)) | (operation = compute_relabel & next(selinux#unconfined#typeattr)) | (operation = compute_member & next(selinux#unconfined#typeattr)) | (operation = compute_create & next(selinux#unconfined#typeattr)) | (operation = compute_av & next(selinux#unconfined#typeattr)) | (operation = check_context & next(selinux#unconfined#typeattr)) |  next(state = pozzo) )) &
+(state = selinux#fs -> (  next(state = pozzo) )) &
+(state = sg#stordev -> (  next(state = pozzo) )) &
+(state = slabinfo#procfile -> (  next(state = pozzo) )) &
+(state = snd#nodedev -> (  next(state = pozzo) )) &
+(state = sock#fs -> (  next(state = pozzo) )) &
+(state = softirqs#procfile -> (  next(state = pozzo) )) &
+(state = spool#file -> ( (operation = search & next(file#unconfined#typeattr)) | (operation = read & next(file#unconfined#typeattr)) | (operation = open & next(file#unconfined#typeattr)) | (operation = lock & next(file#unconfined#typeattr)) | (operation = ioctl & next(file#unconfined#typeattr)) | (operation = getattr & next(file#unconfined#typeattr)) |  next(state = pozzo) )) &
+(state = src#file -> ( (operation = associate & next(state = xattr#fs)) |  next(state = pozzo) )) &
+(state = stat#procfile -> (  next(state = pozzo) )) &
+(state = state#file -> ( (operation = associate & next(state = root#fs)) | (operation = search & next(file#unconfined#typeattr)) | (operation = read & next(file#unconfined#typeattr)) | (operation = open & next(file#unconfined#typeattr)) | (operation = lock & next(file#unconfined#typeattr)) | (operation = ioctl & next(file#unconfined#typeattr)) | (operation = getattr & next(file#unconfined#typeattr)) |  next(state = pozzo) )) &
+(state = sunrpc#sysctlfile -> (  next(state = pozzo) )) &
+(state = swaps#procfile -> (  next(state = pozzo) )) &
+(state = sys#fs -> ( (operation = associate & next(state = sys#fs)) | (operation = associate & next(state = sys#fs)) | (operation = associate & next(state = xattr#fs)) | (operation = associate & next(sysfile#typeattr)) |  next(state = pozzo) )) &
+(state = sys#home#file -> (  next(state = pozzo) )) &
+(state = sys#hugetlbfs#file -> (  next(state = pozzo) )) &
+(state = sys#mqueuefs#file -> (  next(state = pozzo) )) &
+(state = sys#ptytermdev -> (  next(state = pozzo) )) &
+(state = sys#serialtermdev -> (  next(state = pozzo) )) &
+(state = sys#subj -> ( (operation = add_name & next(state = tmp#fs)) | (operation = ioctl & next(state = tmp#fs)) | (operation = lock & next(state = tmp#fs)) | (operation = open & next(state = tmp#fs)) | (operation = write & next(state = tmp#fs)) | (operation = add_name & next(state = tmp#file)) | (operation = ioctl & next(state = tmp#file)) | (operation = lock & next(state = tmp#file)) | (operation = open & next(state = tmp#file)) | (operation = write & next(state = tmp#file)) | (operation = add_name & next(state = sys#tmp#file)) | (operation = ioctl & next(state = sys#tmp#file)) | (operation = lock & next(state = sys#tmp#file)) | (operation = open & next(state = sys#tmp#file)) | (operation = write & next(state = sys#tmp#file)) | (operation = add_name & next(state = mqueue#fs)) | (operation = ioctl & next(state = mqueue#fs)) | (operation = lock & next(state = mqueue#fs)) | (operation = open & next(state = mqueue#fs)) | (operation = write & next(state = mqueue#fs)) | (operation = add_name & next(state = hugetlb#fs)) | (operation = ioctl & next(state = hugetlb#fs)) | (operation = lock & next(state = hugetlb#fs)) | (operation = open & next(state = hugetlb#fs)) | (operation = write & next(state = hugetlb#fs)) | (operation = write & next(state = devpts#fs)) | (operation = open & next(state = devpts#fs)) | (operation = lock & next(state = devpts#fs)) | (operation = ioctl & next(state = devpts#fs)) | (operation = add_name & next(state = devpts#fs)) | (operation = reboot & next(sys#unconfined#typeattr)) | (operation = reload & next(sys#unconfined#typeattr)) | (operation = start & next(sys#unconfined#typeattr)) | (operation = status & next(sys#unconfined#typeattr)) | (operation = stop & next(sys#unconfined#typeattr)) | (operation = ipc_info & next(sys#unconfined#typeattr)) | (operation = module_request & next(sys#unconfined#typeattr)) | (operation = syslog_console & next(sys#unconfined#typeattr)) | (operation = syslog_mod & next(sys#unconfined#typeattr)) | (operation = syslog_read & next(sys#unconfined#typeattr)) |  next(state = pozzo) )) &
+(state = sys#tmp#file -> ( (operation = search & next(state = sys#subj)) | (operation = read & next(state = sys#subj)) | (operation = open & next(state = sys#subj)) | (operation = lock & next(state = sys#subj)) | (operation = ioctl & next(state = sys#subj)) | (operation = getattr & next(state = sys#subj)) |  next(state = pozzo) )) &
+(state = sys#tmpfs#file -> (  next(state = pozzo) )) &
+(state = sysctl#procfile -> (  next(state = pozzo) )) &
+(state = sysrqtrigger#procfile -> (  next(state = pozzo) )) &
+(state = sysvipc#procfile -> (  next(state = pozzo) )) &
+(state = textrel#file -> (  next(state = pozzo) )) &
+(state = threadsmax#sysctlfile -> (  next(state = pozzo) )) &
+(state = timerlist#procfile -> (  next(state = pozzo) )) &
+(state = tmp#file -> ( (operation = getattr & next(state = sys#subj)) | (operation = ioctl & next(state = sys#subj)) | (operation = lock & next(state = sys#subj)) | (operation = open & next(state = sys#subj)) | (operation = read & next(state = sys#subj)) | (operation = search & next(state = sys#subj)) | (operation = search & next(file#unconfined#typeattr)) | (operation = read & next(file#unconfined#typeattr)) | (operation = open & next(file#unconfined#typeattr)) | (operation = lock & next(file#unconfined#typeattr)) | (operation = ioctl & next(file#unconfined#typeattr)) | (operation = getattr & next(file#unconfined#typeattr)) |  next(state = pozzo) )) &
+(state = tmp#fs -> ( (operation = associate & next(state = tmp#fs)) | (operation = associate & next(state = tmp#fs)) | (operation = associate & next(state = devtmp#fs)) | (operation = getattr & next(state = sys#subj)) | (operation = ioctl & next(state = sys#subj)) | (operation = lock & next(state = sys#subj)) | (operation = open & next(state = sys#subj)) | (operation = read & next(state = sys#subj)) | (operation = search & next(state = sys#subj)) | (operation = associate & next(state = media#file)) | (operation = associate & next(state = log#file)) | (operation = associate & next(state = dev#file)) | (operation = associate & next(file#tmpfs#typeattr)) | (operation = associate & next(file#tmp#typeattr)) | (operation = associate & next(file#run#typeattr)) | (operation = associate & next(dev#typeattr)) |  next(state = pozzo) )) &
+(state = tpm#nodedev -> (  next(state = pozzo) )) &
+(state = trace#fs -> ( (operation = associate & next(tracefile#typeattr)) |  next(state = pozzo) )) &
+(state = tty#nodedev -> (  next(state = pozzo) )) &
+(state = tty#procfile -> (  next(state = pozzo) )) &
+(state = tty#serialtermdev -> (  next(state = pozzo) )) &
+(state = tuntap#nodedev -> (  next(state = pozzo) )) &
+(state = udmabuf#nodedev -> (  next(state = pozzo) )) &
+(state = uhid#nodedev -> (  next(state = pozzo) )) &
+(state = uinput#nodedev -> (  next(state = pozzo) )) &
+(state = uio#nodedev -> (  next(state = pozzo) )) &
+(state = unix#sysctlfile -> (  next(state = pozzo) )) &
+(state = unknown#file -> ( (operation = associate & next(state = xattr#fs)) |  next(state = pozzo) )) &
+(state = unlabeled -> ( (operation = audit_access & next(unlabeled#unconfined#typeattr)) | (operation = execute & next(unlabeled#unconfined#typeattr)) | (operation = getattr & next(unlabeled#unconfined#typeattr)) | (operation = ioctl & next(unlabeled#unconfined#typeattr)) | (operation = link & next(unlabeled#unconfined#typeattr)) | (operation = lock & next(unlabeled#unconfined#typeattr)) | (operation = open & next(unlabeled#unconfined#typeattr)) | (operation = quotaon & next(unlabeled#unconfined#typeattr)) | (operation = read & next(unlabeled#unconfined#typeattr)) | (operation = unlink & next(unlabeled#unconfined#typeattr)) | (operation = watch & next(unlabeled#unconfined#typeattr)) | (operation = watch_mount & next(unlabeled#unconfined#typeattr)) | (operation = watch_reads & next(unlabeled#unconfined#typeattr)) | (operation = watch_sb & next(unlabeled#unconfined#typeattr)) | (operation = watch_with_perm & next(unlabeled#unconfined#typeattr)) | (operation = audit_access & next(unlabeled#unconfined#typeattr)) | (operation = execute & next(unlabeled#unconfined#typeattr)) | (operation = getattr & next(unlabeled#unconfined#typeattr)) | (operation = ioctl & next(unlabeled#unconfined#typeattr)) | (operation = link & next(unlabeled#unconfined#typeattr)) | (operation = lock & next(unlabeled#unconfined#typeattr)) | (operation = open & next(unlabeled#unconfined#typeattr)) | (operation = quotaon & next(unlabeled#unconfined#typeattr)) | (operation = read & next(unlabeled#unconfined#typeattr)) | (operation = unlink & next(unlabeled#unconfined#typeattr)) | (operation = watch & next(unlabeled#unconfined#typeattr)) | (operation = watch_mount & next(unlabeled#unconfined#typeattr)) | (operation = watch_reads & next(unlabeled#unconfined#typeattr)) | (operation = watch_sb & next(unlabeled#unconfined#typeattr)) | (operation = watch_with_perm & next(unlabeled#unconfined#typeattr)) | (operation = audit_access & next(unlabeled#unconfined#typeattr)) | (operation = execute & next(unlabeled#unconfined#typeattr)) | (operation = execute_no_trans & next(unlabeled#unconfined#typeattr)) | (operation = getattr & next(unlabeled#unconfined#typeattr)) | (operation = ioctl & next(unlabeled#unconfined#typeattr)) | (operation = link & next(unlabeled#unconfined#typeattr)) | (operation = lock & next(unlabeled#unconfined#typeattr)) | (operation = map & next(unlabeled#unconfined#typeattr)) | (operation = mounton & next(unlabeled#unconfined#typeattr)) | (operation = open & next(unlabeled#unconfined#typeattr)) | (operation = quotaon & next(unlabeled#unconfined#typeattr)) | (operation = read & next(unlabeled#unconfined#typeattr)) | (operation = unlink & next(unlabeled#unconfined#typeattr)) | (operation = watch & next(unlabeled#unconfined#typeattr)) | (operation = watch_mount & next(unlabeled#unconfined#typeattr)) | (operation = watch_reads & next(unlabeled#unconfined#typeattr)) | (operation = watch_sb & next(unlabeled#unconfined#typeattr)) | (operation = watch_with_perm & next(unlabeled#unconfined#typeattr)) | (operation = audit_access & next(unlabeled#unconfined#typeattr)) | (operation = execute & next(unlabeled#unconfined#typeattr)) | (operation = getattr & next(unlabeled#unconfined#typeattr)) | (operation = ioctl & next(unlabeled#unconfined#typeattr)) | (operation = link & next(unlabeled#unconfined#typeattr)) | (operation = lock & next(unlabeled#unconfined#typeattr)) | (operation = open & next(unlabeled#unconfined#typeattr)) | (operation = quotaon & next(unlabeled#unconfined#typeattr)) | (operation = read & next(unlabeled#unconfined#typeattr)) | (operation = unlink & next(unlabeled#unconfined#typeattr)) | (operation = watch & next(unlabeled#unconfined#typeattr)) | (operation = watch_mount & next(unlabeled#unconfined#typeattr)) | (operation = watch_reads & next(unlabeled#unconfined#typeattr)) | (operation = watch_sb & next(unlabeled#unconfined#typeattr)) | (operation = watch_with_perm & next(unlabeled#unconfined#typeattr)) | (operation = audit_access & next(unlabeled#unconfined#typeattr)) | (operation = execute & next(unlabeled#unconfined#typeattr)) | (operation = getattr & next(unlabeled#unconfined#typeattr)) | (operation = ioctl & next(unlabeled#unconfined#typeattr)) | (operation = link & next(unlabeled#unconfined#typeattr)) | (operation = lock & next(unlabeled#unconfined#typeattr)) | (operation = map & next(unlabeled#unconfined#typeattr)) | (operation = mounton & next(unlabeled#unconfined#typeattr)) | (operation = open & next(unlabeled#unconfined#typeattr)) | (operation = quotaon & next(unlabeled#unconfined#typeattr)) | (operation = read & next(unlabeled#unconfined#typeattr)) | (operation = search & next(unlabeled#unconfined#typeattr)) | (operation = unlink & next(unlabeled#unconfined#typeattr)) | (operation = watch & next(unlabeled#unconfined#typeattr)) | (operation = watch_mount & next(unlabeled#unconfined#typeattr)) | (operation = watch_reads & next(unlabeled#unconfined#typeattr)) | (operation = watch_sb & next(unlabeled#unconfined#typeattr)) | (operation = watch_with_perm & next(unlabeled#unconfined#typeattr)) | (operation = audit_access & next(unlabeled#unconfined#typeattr)) | (operation = execute & next(unlabeled#unconfined#typeattr)) | (operation = getattr & next(unlabeled#unconfined#typeattr)) | (operation = ioctl & next(unlabeled#unconfined#typeattr)) | (operation = link & next(unlabeled#unconfined#typeattr)) | (operation = lock & next(unlabeled#unconfined#typeattr)) | (operation = map & next(unlabeled#unconfined#typeattr)) | (operation = open & next(unlabeled#unconfined#typeattr)) | (operation = quotaon & next(unlabeled#unconfined#typeattr)) | (operation = read & next(unlabeled#unconfined#typeattr)) | (operation = unlink & next(unlabeled#unconfined#typeattr)) | (operation = watch & next(unlabeled#unconfined#typeattr)) | (operation = watch_mount & next(unlabeled#unconfined#typeattr)) | (operation = watch_reads & next(unlabeled#unconfined#typeattr)) | (operation = watch_sb & next(unlabeled#unconfined#typeattr)) | (operation = watch_with_perm & next(unlabeled#unconfined#typeattr)) | (operation = watch_with_perm & next(unlabeled#unconfined#typeattr)) | (operation = watch_sb & next(unlabeled#unconfined#typeattr)) | (operation = watch_reads & next(unlabeled#unconfined#typeattr)) | (operation = watch_mount & next(unlabeled#unconfined#typeattr)) | (operation = watch & next(unlabeled#unconfined#typeattr)) | (operation = unlink & next(unlabeled#unconfined#typeattr)) | (operation = read & next(unlabeled#unconfined#typeattr)) | (operation = quotaon & next(unlabeled#unconfined#typeattr)) | (operation = open & next(unlabeled#unconfined#typeattr)) | (operation = lock & next(unlabeled#unconfined#typeattr)) | (operation = link & next(unlabeled#unconfined#typeattr)) | (operation = ioctl & next(unlabeled#unconfined#typeattr)) | (operation = getattr & next(unlabeled#unconfined#typeattr)) | (operation = execute & next(unlabeled#unconfined#typeattr)) | (operation = audit_access & next(unlabeled#unconfined#typeattr)) |  next(state = pozzo) )) &
+(state = unreserved#port -> (  next(state = pozzo) )) &
+(state = uptime#procfile -> (  next(state = pozzo) )) &
+(state = usb#nodedev -> (  next(state = pozzo) )) &
+(state = usb#serialtermdev -> (  next(state = pozzo) )) &
+(state = usbmon#nodedev -> (  next(state = pozzo) )) &
+(state = user#sysctlfile -> (  next(state = pozzo) )) &
+(state = usermodehelper#sysctlfile -> (  next(state = pozzo) )) &
+(state = v4l#nodedev -> (  next(state = pozzo) )) &
+(state = var#file -> ( (operation = search & next(file#unconfined#typeattr)) | (operation = read & next(file#unconfined#typeattr)) | (operation = open & next(file#unconfined#typeattr)) | (operation = lock & next(file#unconfined#typeattr)) | (operation = ioctl & next(file#unconfined#typeattr)) | (operation = getattr & next(file#unconfined#typeattr)) |  next(state = pozzo) )) &
+(state = vcs#serialtermdev -> (  next(state = pozzo) )) &
+(state = vd#stordev -> (  next(state = pozzo) )) &
+(state = version#procfile -> (  next(state = pozzo) )) &
+(state = vfio#nodedev -> (  next(state = pozzo) )) &
+(state = vgaarbiter#nodedev -> (  next(state = pozzo) )) &
+(state = vhost#nodedev -> (  next(state = pozzo) )) &
+(state = vm#sysctlfile -> (  next(state = pozzo) )) &
+(state = vmallocinfo#procfile -> (  next(state = pozzo) )) &
+(state = vmci#nodedev -> (  next(state = pozzo) )) &
+(state = vmstat#procfile -> (  next(state = pozzo) )) &
+(state = vport#serialtermdev -> (  next(state = pozzo) )) &
+(state = watchdog#nodedev -> (  next(state = pozzo) )) &
+(state = xattr#fs -> ( (operation = associate & next(state = unknown#file)) | (operation = associate & next(state = sys#fs)) | (operation = associate & next(state = src#file)) | (operation = associate & next(state = root#file)) | (operation = associate & next(state = proc#fs)) | (operation = associate & next(state = media#file)) | (operation = associate & next(state = lostfound#file)) | (operation = associate & next(state = dos#fs)) | (operation = associate & next(state = dev#file)) | (operation = associate & next(file#var#typeattr)) | (operation = associate & next(file#tmp#typeattr)) | (operation = associate & next(file#sec#typeattr)) | (operation = associate & next(file#run#typeattr)) | (operation = associate & next(file#home#typeattr)) | (operation = associate & next(file#data#typeattr)) | (operation = associate & next(file#conf#typeattr)) | (operation = associate & next(file#cert#typeattr)) | (operation = associate & next(file#bootflag#typeattr)) | (operation = associate & next(file#boot#typeattr)) | (operation = associate & next(file#auth#typeattr)) |  next(state = pozzo) )) &
+(state = xd#stordev -> (  next(state = pozzo) )) &
+(state = yama#sysctlfile -> (  next(state = pozzo) )) &
+(state = zero#nodedev -> (  next(state = pozzo) )) &
+(state = zoneinfo#procfile -> (  next(state = pozzo) )) &
+(state = zram#stordev -> (  next(state = pozzo) )) &
+(state = zram#sysfile -> (  next(state = pozzo) )) &
+(state = zramcontrol#sysfile -> (  next(state = pozzo) )) &
+(state = pozzo -> next(state = pozzo))
+
+
+--  (wrapping8) .IFL-requirement:  ( any-node,  [any-mod]> , #.xattr.fs )  :  ( #.lostfound.file,  [any-mod]> , any-node ) 
+ 
+LTLSPEC (!((! (state = pozzo)) &  X state = xattr#fs) | (state = lostfound#file &  X state = xattr#fs))
+--  (wrapping7) .IFL-requirement:  ( #.lostfound.file,  [any-mod]> , any-node )  :  ( any-node,  [any-mod]> , #.xattr.fs ) 
+ 
+LTLSPEC (!(state = lostfound#file &  X (! (state = pozzo))) | (state = lostfound#file &  X state = xattr#fs))
+--  (wrapping6) .IFL-requirement:  ( any-node,  [any-mod]> , #.lostfound.file )  :  ( #.mqueue.fs,  [any-mod]> , any-node ) 
+ 
+LTLSPEC (!((! (state = pozzo)) &  X state = lostfound#file) | (state = mqueue#fs &  X state = lostfound#file))
+--  (wrapping5) .IFL-requirement:  ( #.mqueue.fs,  [any-mod]> , any-node )  :  ( any-node,  [any-mod]> , #.lostfound.file ) 
+ 
+LTLSPEC (!(state = mqueue#fs &  X (! (state = pozzo))) | (state = mqueue#fs &  X state = lostfound#file))
+--  (wrapping4) .IFL-requirement:  ( any-node,  [any-mod]> , #.mqueue.fs )  :  ( #.sys.subj,  [any-mod]> , any-node ) 
+ 
+LTLSPEC (!((! (state = pozzo)) &  X state = mqueue#fs) | (state = sys#subj &  X state = mqueue#fs))
+--  (wrapping3) .IFL-requirement:  ( #.sys.subj,  [any-mod]> , any-node )  :  ( any-node,  [any-mod]> , #.mqueue.fs ) 
+ 
+LTLSPEC (!(state = sys#subj &  X (! (state = pozzo))) | (state = sys#subj &  X state = mqueue#fs))
+--  (wrapping2) .IFL-requirement:  ( any-node,  [any-mod]> , #.sys.subj )  :  ( #.selinux,  [any-mod]> , any-node ) 
+ 
+LTLSPEC (!((! (state = pozzo)) &  X state = sys#subj) | (state = selinux &  X state = sys#subj))
+--  (wrapping1) .IFL-requirement:  ( #.selinux,  [any-mod]> , any-node )  :  ( any-node,  [any-mod]> , #.sys.subj ) 
+ 
+LTLSPEC (!(state = selinux &  X (! (state = pozzo))) | (state = selinux &  X state = sys#subj))
+--  (pipeline4) .IFL-requirement:  ( #.xattr.fs,  -[any-mod]> , #.sys.subj )  :  ( #.xattr.fs,  -[any-mod]> , #.boot.file )  ( #.boot.file,  -[any-mod]> , #.sys.subj ) 
+ 
+LTLSPEC (!(state = xattr#fs &  X ( F state = sys#subj)) | (state = xattr#fs &  X ( F (state = boot#file &  X ( F state = sys#subj)))))
+--  (pipeline3) .IFL-requirement:  ( #.boot.file,  -[any-mod]> , #.sys.subj )  :  ( #.boot.file,  -[any-mod]> , #.hugetlb.fs )  ( #.hugetlb.fs,  -[any-mod]> , #.sys.subj ) 
+ 
+LTLSPEC (!(state = boot#file &  X ( F state = sys#subj)) | (state = boot#file &  X ( F (state = hugetlb#fs &  X ( F state = sys#subj)))))
+--  (pipeline2) .IFL-requirement:  ( #.selinux,  -[any-mod]> , #.hugetlb.fs )  :  ( #.selinux,  -[any-mod]> , #.sys.subj )  ( #.sys.subj,  -[any-mod]> , #.hugetlb.fs ) 
+ 
+LTLSPEC (!(state = selinux &  X ( F state = hugetlb#fs)) | (state = selinux &  X ( F (state = sys#subj &  X ( F state = hugetlb#fs)))))
+--  (pipeline1) .IFL-requirement:  ( #.selinux,  -[any-mod]> , #.lostfound.file )  :  ( #.selinux,  -[any-mod]> , #.sys.subj )  ( #.sys.subj,  -[any-mod]> , #.mqueue.fs )  ( #.mqueue.fs,  -[any-mod]> , #.lostfound.file ) 
+ 
+LTLSPEC (!(state = selinux &  X ( F state = lostfound#file)) | (state = selinux &  X ( F (state = sys#subj &  X ( F (state = mqueue#fs &  X ( F state = lostfound#file)))))))
+--  (TCBintegrity) .IFL-requirement:  ( any-node,  -[any-mod]> , #.TCB )  :  ( #.Harmless,  -[any-mod]> , #.TCB ) 
+ 
+LTLSPEC (!((! (state = pozzo)) &  X ( F TCB)) | (Harmless &  X ( F TCB)))
+

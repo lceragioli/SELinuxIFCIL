@@ -1,4 +1,4 @@
-(class file (read write))
+(class file (read search watch write append rename))
 
 (macro in_out ((type a) (type b))
     ;IFL; (F1) a +> b ;IFL;
@@ -26,9 +26,10 @@
 (call anonymize (DB net)
     ;IFL; (S1R:S1) DB +> net : DB [read]> anon +> net ;IFL;)
 
-(allow http anon (file (read)))
-(allow http DB (file (write)))
-(allow http other (file (read)))
-(allow http net (file (read write)))
+(allow http anon (file (read search watch)))
+(allow http DB (file (write append rename)))
+(allow http other (file (read search watch)))
+(allow http net (file (read search watch write append rename)))
 
 ;IFL; (S2) ~DB +> other ;IFL;
+;IFL; (Fsus) other [read]> http ;IFL;

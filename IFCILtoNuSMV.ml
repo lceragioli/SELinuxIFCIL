@@ -181,6 +181,8 @@ let rec types_of expr typesreal attributesreal =
   List.filter (f_types_of expr []) typesreal
 
 let name node = String.concat "#" (List.tl node)
+let rev_name name = 
+  "#" :: (String.split_on_char '#' name)
 
 let rec kind_to_LTL k type_nodes =
   let print_o o =
@@ -241,7 +243,7 @@ let attr_to_smv ex type_nodes =
 
 let get_functional_reqs rqs = 
   List.filter_map
-  (fun rqr -> match rqr with
+  (fun (lbl, rqr) -> match rqr with
     | MUST path -> Some path
     | _ -> None)
   rqs
@@ -252,9 +254,43 @@ let print_expected_if frqs type_nodes =
     "TRUE"
     frqs
 
+let pass_trough_LTL a o b type_nodes =
+  (* let print_o o =
+    let os = List.map (fun oi -> "operation = " ^ oi) o in
+    if List.length os > 1 then "(" ^ String.concat " | " os ^ ")"
+    else String.concat " | " os *)
+  let print_type_or_attr node =
+    if SS.mem node type_nodes then "state = " ^ node
+    else node
+  in
+  "F(" ^ (print_type_or_attr a) ^ " & X " ^ (print_type_or_attr b) ^ ")"
+  (* match k with
+  | [] -> "TRUE"
+  | [ (n1, ([ "any-mod" ], SHORTARROW), n2) ] ->
+      print_type n1 ^ " &  X " ^ print_type n2
+  | [ (n1, (o, SHORTARROW), n2) ] ->
+      print_type n1 ^ " &  " ^ print_o o ^ " & X " ^ print_type n2
+  | [ (n1, ([ "any-mod" ], LONGARROW), n2) ] ->
+      print_type n1 ^ " &  X ( F " ^ print_type n2 ^ ")"
+  | [ (n1, (o, LONGARROW), n2) ] ->
+      print_type n1 ^ " &  " ^ print_o o ^ " & X (" ^ print_o o ^ " U "
+      ^ print_type n2 ^ ")"
+  | (n1, ([ "any-mod" ], SHORTARROW), n2) :: ks ->
+      print_type n1 ^ " &  X (" ^ kind_to_LTL ks type_nodes ^ ")"
+  | (n1, (o, SHORTARROW), n2) :: ks ->
+      print_type n1 ^ " & " ^ print_o o ^ " &  X (" ^ kind_to_LTL ks type_nodes
+      ^ ")"
+  | (n1, ([ "any-mod" ], LONGARROW), n2) :: ks ->
+      print_type n1 ^ " &  X ( F (" ^ kind_to_LTL ks type_nodes ^ "))"
+  | (n1, (o, LONGARROW), n2) :: ks ->
+      print_type n1 ^ " & " ^ print_o o ^ " &  X ( " ^ print_o o ^ " U ("
+      ^ kind_to_LTL ks type_nodes ^ "))" *)
+  (* let pre = kind_to_LTL([(["any-node"], (["any-mod"], LONGARROW), a); (a, ([o], SHORTARROW), b); (b, (["any-mod"], LONGARROW), ["any-node"])]) type_nodes *)
+
 let print_unexpected_flow a o b rqs_post type_nodes =
-  let pre = kind_to_LTL([(["any-node"], (["any-mod"], LONGARROW), a); (a, ([o], SHORTARROW), b); (b, (["any-mod"], LONGARROW), ["any-node"])]) type_nodes
-in "(" ^ pre  ^ ") -> (" ^ rqs_post ^ ")"
+  let pre = pass_trough_LTL a o b type_nodes
+(* in "(" ^ pre  ^ ") -> (" ^ rqs_post ^ ")" *)
+in "(" ^ pre  ^ ")"
 
 let print_NuSMV fstmntls oc =
   (* List of full names of types *)
@@ -404,12 +440,14 @@ let print_NuSMV fstmntls oc =
         (UndefinedReference
            (String.concat "." dst ^ "is not a type nor an attribute"))
   in
-  let att_arcs, type_arcs, operationset =
+  let type_arcs, operationset =
     List.fold_left
-      (fun (da, dt, oset) fstmt ->
+      (fun (dt, oset) fstmt ->
         match fstmt with
         | pos, FLATALLOW (src, dst, clsper) ->
             if pos = [ "#" ] || is_block pos fstmntls then
+              (
+              (* print_string ((name src) ^ " considered \n"); *)
               let ops = operations clsper fstmntls in
               let oset' =
                 List.fold_left
@@ -426,21 +464,49 @@ let print_NuSMV fstmntls oc =
                   (fun (a, b) -> b)
                   (List.filter (fun (cs, os) -> is_read cs os) ops)
               in
-              let da', dt' =
+              let dt' =
                 if is_type src fstmntls then
-                  (da, add_dst src dst write_os pos dt)
-                else 
-                  List.fold_right
-                  (fun t (da'', dt'') ->
-                    (da'', add_dst t dst write_os pos dt'')
+                  (
+                    (* print_string ((name src) ^ " is a type\n"); *)
+                    (add_dst src dst write_os pos dt)
                   )
-                  (find_attributetypes src)
-                  (da, dt)
+                else 
+                  (
+                    (* print_string ((name src) ^ " is attribute\n"); *)
+                    List.fold_right
+                    (fun t (dt''') ->
+                      (* print_string
+                        (name t); *)
+                      (add_dst t dst write_os pos dt''')
+                    )
+                    (find_attributetypes src)
+                    dt
+                  )
               in
-                (da', add_dst dst src read_os pos dt', oset')
-            else (da, dt, oset)
-        | _, _ -> (da, dt, oset))
-      (Dict.empty, Dict.empty, SS.empty)
+              let dt'' =
+                if is_type dst fstmntls then
+                  (
+                    (* print_string ((name dst) ^ " is a type\n"); *)
+                    (add_dst dst src read_os pos dt')
+                  )
+                else 
+                  (
+                    (* print_string ((name dst) ^ " is attribute\n"); *)
+                    List.fold_right
+                    (fun t (dt''') ->
+                      (* print_string
+                        (name t); *)
+                      (add_dst t src read_os pos dt''')
+                    )
+                    (find_attributetypes dst)
+                    dt'
+                  )
+              in
+                (dt'', oset')
+              )
+            else (dt, oset)
+        | _, _ -> (dt, oset))
+      (Dict.empty, SS.empty)
       fstmntls
   in
   let operationset = all_defined_operations fstmntls in
@@ -486,6 +552,33 @@ let print_NuSMV fstmntls oc =
       Printf.fprintf oc "--  (%s) %s \n" name (print_IFL_requirement rqr);
       Printf.fprintf oc "LTLSPEC %s\n" (ifl_to_LTL rqr type_nodes))
     labeledrequirements;
+
+  (* let rqs_post = print_expected_if 
+      (get_functional_reqs labeledrequirements) 
+      type_nodes
+  in
+    Printf.fprintf oc "--  (Unexpected) %s > %s\n" "TRUE" "TRUE";
+    Printf.fprintf oc "LTLSPEC %s\n" (print_unexpected_flow "TRUE" "" "TRUE" rqs_post type_nodes); *)
+
+  (* Prit an unexpected check for any pair (a, o, b) such that there is an arc (a, o, b) -- too expensive *)
+  (* let rqs_post = print_expected_if 
+      (get_functional_reqs labeledrequirements) 
+      type_nodes
+  in
+  Dict.iter
+    (fun st (ta, aa) ->
+      let visited = ref SS.empty in
+      List.iter
+        (fun (dt, o) ->
+          if not (SS.mem dt !visited) then
+            (
+              visited := SS.add dt !visited;
+              Printf.fprintf oc "--  (Unexpected) %s > %s\n" st dt;
+              Printf.fprintf oc "LTLSPEC %s\n" (print_unexpected_flow st o dt rqs_post type_nodes))
+            )
+        (List.rev_append ta aa))
+    type_arcs; *)
+
   Printf.fprintf oc "\n";
   close_out oc;
   print_string "NuSMV generated\n";

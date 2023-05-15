@@ -1,0 +1,13 @@
+(classorder (file))
+(class file (read write open getattr))
+
+(block A
+	(type a)
+	(block B
+		(type a)
+		; (typeattributeset a b)
+		(allow a a (file (read)))
+	)
+)
+
+(type b)

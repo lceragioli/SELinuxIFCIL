@@ -1,0 +1,12 @@
+(classorder (file))
+(class file (read write open getattr))
+
+(type a)
+
+(block A
+    (call m (a))
+    (macro m ((type x))
+	(allow x x (file (read)))
+        (type a)
+    )
+)

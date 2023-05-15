@@ -1,0 +1,65 @@
+MODULE main
+
+
+     DEFINE
+nonodeatall := FALSE;
+other := (! ( ( state = DB | ( state = http | ( state = anon | state = net))))) & ! (state = pozzo);
+
+
+
+     VAR
+
+         state : { pozzo, DB,
+              anon,
+              home,
+              http,
+              net  };
+
+
+
+
+     IVAR
+
+         operation : { append,
+              read,
+              rename,
+              search,
+              watch,
+              write  };
+
+
+
+    TRANS
+(state = DB -> ( (operation = read & next(state = anon)) |  next(state = pozzo) )) &
+(state = anon -> ( (operation = read & next(state = http)) | (operation = search & next(state = http)) | (operation = watch & next(state = http)) |  next(state = pozzo) )) &
+(state = home -> ( (operation = watch & next(state = http)) | (operation = search & next(state = http)) | (operation = read & next(state = http)) |  next(state = pozzo) )) &
+(state = http -> ( (operation = append & next(state = net)) | (operation = rename & next(state = net)) | (operation = write & next(state = net)) | (operation = write & next(state = DB)) | (operation = rename & next(state = DB)) | (operation = append & next(state = DB)) |  next(state = pozzo) )) &
+(state = net -> ( (operation = watch & next(state = http)) | (operation = search & next(state = http)) | (operation = read & next(state = http)) |  next(state = pozzo) )) &
+(state = pozzo -> next(state = pozzo))
+
+
+--  (S2) .IFL-requirement ~  ( #.DB,  -[any-mod]> , #.other ) 
+ 
+LTLSPEC !(state = DB &  X ( F other))
+--  (S1R) .IFL-requirement  ( #.DB,  -[any-mod]> , #.net )  :  ( #.DB,  [read]> , #.anon )  ( #.anon,  -[any-mod]> , #.net ) 
+ 
+LTLSPEC (!(state = DB &  X ( F state = net)) | (state = DB & operation = read &  X (state = anon &  X ( F state = net))))
+--  (Fsus) .IFL-requirement  ( #.other,  [read]> , #.http ) 
+ 
+LTLSPEC !(other &  operation = read & X state = http)
+--  (F2R) .IFL-requirement  ( #.DB,  -[any-mod]> , #.http )  ( #.http,  -[any-mod]> , #.net ) 
+ 
+LTLSPEC !(state = DB &  X ( F (state = http &  X ( F state = net))))
+--  (F2) .IFL-requirement  ( #.http,  -[any-mod]> , #.net ) 
+ 
+LTLSPEC !(state = http &  X ( F state = net))
+--  (F1R) .IFL-requirement  ( #.net,  -[any-mod]> , #.http )  ( #.http,  -[any-mod]> , #.DB ) 
+ 
+LTLSPEC !(state = net &  X ( F (state = http &  X ( F state = DB))))
+--  (F1) .IFL-requirement  ( #.net,  -[any-mod]> , #.http ) 
+ 
+LTLSPEC !(state = net &  X ( F state = http))
+--  (Unexpected) home > http
+
+LTLSPEC (F(state = home & operation = search & X (state = http))) -> (TRUE & !(other &  operation = read & X state = http) & !(state = DB &  X ( F (state = http &  X ( F state = net)))) & !(state = http &  X ( F state = net)) & !(state = net &  X ( F (state = http &  X ( F state = DB)))) & !(state = net &  X ( F state = http)))
+

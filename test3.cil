@@ -1,0 +1,14 @@
+(classorder (file))
+(class file (read write open getattr))
+
+(block A
+	(allow B.b B.b (file (read)))
+
+	(block B
+		(typealias b)
+		(typealiasactual b C.c)		
+		(block C
+			(type c)
+		)
+	)
+)

@@ -1,0 +1,22 @@
+(classorder (file))
+(class file (read write open getattr))
+
+(type a)
+(type b)
+(type c)
+(type d)
+(typeattribute aa)
+(typeattributeset aa (a))
+(typeattribute bb)
+(typeattributeset bb (b))
+
+(allow d aa (file (write)))
+(allow aa c (file (write)))
+(allow aa bb (file (write)))
+
+;IFL; (f1) d +> aa ;IFL;
+;IFL; (f2) aa +> c ;IFL;
+;IFL; (f3) a +> c ;IFL;
+;IFL; (f4) aa +> bb ;IFL;
+;IFL; (f5) a +> bb ;IFL;
+;IFL; (f6) a +> b ;IFL;

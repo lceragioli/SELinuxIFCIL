@@ -1,0 +1,5 @@
+TODO SELinux IFCIL
+
+- verificare per nuova semantica compilatore
+- parsare output e restituire i flussi per bene
+- mettere opzione per tutti gli unexpected

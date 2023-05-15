@@ -1,0 +1,1428 @@
+++++ (wrapping6) .IFL-requirement  ( any-node,  [any-mod]> , #.loop_control.dev )  :  ( #.devtmpfs.fs,  [any-mod]> , any-node )-------- is satisfied!
+
+++++ (wrapping5) .IFL-requirement  ( #.devtmpfs.fs,  [any-mod]> , any-node )  :  ( any-node,  [any-mod]> , #.loop_control.dev )-------- is satisfied!
+
+++++ (wrapping4) .IFL-requirement  ( any-node,  [any-mod]> , #.devtmpfs.fs )  :  ( #.sys.subj,  [any-mod]> , any-node )-------- is satisfied!
+
+++++ (wrapping3) .IFL-requirement  ( #.sys.subj,  [any-mod]> , any-node )  :  ( any-node,  [any-mod]> , #.devtmpfs.fs )-------- is satisfied!
+
+++++ (wrapping2) .IFL-requirement  ( any-node,  [any-mod]> , #.sys.subj )  :  ( #.sysfs.fs,  [any-mod]> , any-node )-------- is satisfied!
+
+++++ (wrapping1) .IFL-requirement  ( #.sysfs.fs,  [any-mod]> , any-node )  :  ( any-node,  [any-mod]> , #.sys.subj )-------- is satisfied!
+
+++++ (pipeline4) .IFL-requirement  ( #.sysfs.fs,  -[any-mod]> , #.sys.subj )  :  ( #.sysfs.fs,  -[any-mod]> , #.sys.subj )  ( #.sys.subj,  -[any-mod]> , #.devtmpfs.fs )  ( #.devtmpfs.fs,  -[any-mod]> , #.sys.subj )  ( #.sys.subj,  -[any-mod]> , #.devtmpfs.fs )  ( #.devtmpfs.fs,  -[any-mod]> , #.sys.subj )-------- is satisfied!
+
+++++ (pipeline3) .IFL-requirement  ( #.sysfs.fs,  -[any-mod]> , #.devtmpfs.fs )  :  ( #.sysfs.fs,  -[any-mod]> , #.sys.subj )  ( #.sys.subj,  -[any-mod]> , #.devtmpfs.fs )  ( #.devtmpfs.fs,  -[any-mod]> , #.sys.subj )  ( #.sys.subj,  -[any-mod]> , #.devtmpfs.fs )-------- is satisfied!
+
+++++ (pipeline2) .IFL-requirement  ( #.sysfs.fs,  -[any-mod]> , #.sys.subj )  :  ( #.sysfs.fs,  -[any-mod]> , #.sys.subj )  ( #.sys.subj,  -[any-mod]> , #.devtmpfs.fs )  ( #.devtmpfs.fs,  -[any-mod]> , #.sys.subj )-------- is satisfied!
+
+++++ (pipeline1) .IFL-requirement  ( #.sysfs.fs,  -[any-mod]> , #.devtmpfs.fs )  :  ( #.sysfs.fs,  -[any-mod]> , #.sys.subj )  ( #.sys.subj,  -[any-mod]> , #.devtmpfs.fs )-------- is satisfied!
+
+++++ (augment2) .IFL-requirement  ( #.sys.subj,  -[any-mod]> , #.securityfs.fs )  :  ( #.sys.subj,  -[append]> , #.securityfs.fs )-------- is satisfied!
+
+++++ (augment1) .IFL-requirement  ( #.sys.subj,  -[any-mod]> , #.sys.subj )  :  ( #.sys.subj,  -[append]> , #.sys.subj )-------- is satisfied!
+
+++++ (TCBintegrity) .IFL-requirement  ( any-node,  -[any-mod]> , #.TCB )  :  ( #.Harmless,  -[any-mod]> , #.TCB )-------- is satisfied!
+
+++++ (Unexpected) aio#fs > fs_obj_type-------- is violated!
+
+++++ (Unexpected) anon_inodefs#fs > fs_obj_type-------- is violated!
+
+++++ (Unexpected) apm#dev > devtmpfs#fs-------- is violated!
+
+++++ (Unexpected) autofs_dev#dev > devtmpfs#fs-------- is violated!
+
+++++ (Unexpected) autofs_fs#fs > fs_obj_type-------- is violated!
+
+++++ (Unexpected) bdev#fs > fs_obj_type-------- is violated!
+
+++++ (Unexpected) binfmt_misc#fs > fs_obj_type-------- is violated!
+
+++++ (Unexpected) boot#boot_file > fs#fs-------- is violated!
+
+++++ (Unexpected) cgroup#fs > fs_obj_type-------- is violated!
+
+++++ (Unexpected) cifs#fs > fs_obj_type-------- is violated!
+
+++++ (Unexpected) clock#dev > devtmpfs#fs-------- is violated!
+
+++++ (Unexpected) cmd#cmd_file > fs#fs-------- is violated!
+
+++++ (Unexpected) cmd#cmd_file > subj_common_type-------- is violated!
+
+++++ (Unexpected) cmd#cmd_file > subj_common_type-------- is violated!
+
+++++ (Unexpected) cmd#cmd_file > subj_common_type-------- is violated!
+
+++++ (Unexpected) cmd#cmd_file > subj_common_type-------- is violated!
+
+++++ (Unexpected) cmd#cmd_file > subj_common_type-------- is violated!
+
+++++ (Unexpected) config#config_file > fs#fs-------- is violated!
+
+++++ (Unexpected) configfs#fs > fs_obj_type-------- is violated!
+
+++++ (Unexpected) console#dev > devtmpfs#fs-------- is violated!
+
+++++ (Unexpected) cpu#dev > devtmpfs#fs-------- is violated!
+
+++++ (Unexpected) data#data_file > fs#fs-------- is violated!
+
+++++ (Unexpected) data#data_file > sys#subj-------- is violated!
+
+++++ (Unexpected) data#data_file > sys#subj-------- is violated!
+
+++++ (Unexpected) data#data_file > sys#subj-------- is violated!
+
+++++ (Unexpected) data#data_file > sys#subj-------- is violated!
+
+++++ (Unexpected) data#data_file > sys#subj-------- is violated!
+
+++++ (Unexpected) data#data_file > sys#subj-------- is violated!
+
+++++ (Unexpected) data#data_file > sys#subj-------- is violated!
+
+++++ (Unexpected) data#data_file > sys#subj-------- is violated!
+
+++++ (Unexpected) data#data_file > subj_common_type-------- is violated!
+
+++++ (Unexpected) data#data_file > subj_common_type-------- is violated!
+
+++++ (Unexpected) data#data_file > subj_common_type-------- is violated!
+
+++++ (Unexpected) debugfs#fs > sys#subj-------- is violated!
+
+++++ (Unexpected) debugfs#fs > sys#subj-------- is violated!
+
+++++ (Unexpected) debugfs#fs > sys#subj-------- is violated!
+
+++++ (Unexpected) debugfs#fs > sys#subj-------- is satisfied!
+
+++++ (Unexpected) debugfs#fs > sys#subj-------- is violated!
+
+++++ (Unexpected) debugfs#fs > sys#subj-------- is violated!
+
+++++ (Unexpected) debugfs#fs > sys#subj-------- is violated!
+
+++++ (Unexpected) debugfs#fs > sys#subj-------- is violated!
+
+++++ (Unexpected) debugfs#fs > sys#subj-------- is violated!
+
+++++ (Unexpected) debugfs#fs > sys#subj-------- is violated!
+
+++++ (Unexpected) debugfs#fs > sys#subj-------- is violated!
+
+++++ (Unexpected) debugfs#fs > sys#subj-------- is violated!
+
+++++ (Unexpected) debugfs#fs > sys#subj-------- is violated!
+
+++++ (Unexpected) debugfs#fs > fs_obj_type-------- is satisfied!
+
+++++ (Unexpected) debugfs#fs > fs_trace_client_subj_type-------- is violated!
+
+++++ (Unexpected) debugfs#fs > fs_trace_client_subj_type-------- is violated!
+
+++++ (Unexpected) debugfs#fs > fs_trace_client_subj_type-------- is violated!
+
+++++ (Unexpected) debugfs#fs > fs_trace_client_subj_type-------- is violated!
+
+++++ (Unexpected) debugfs#fs > fs_trace_client_subj_type-------- is violated!
+
+++++ (Unexpected) debugfs#fs > fs_trace_client_subj_type-------- is violated!
+
+++++ (Unexpected) debugfs#fs > fs_trace_client_subj_type-------- is violated!
+
+++++ (Unexpected) debugfs#fs > fs_trace_client_subj_type-------- is violated!
+
+++++ (Unexpected) debugfs#fs > fs_trace_client_subj_type-------- is violated!
+
+++++ (Unexpected) debugfs#fs > fs_trace_client_subj_type-------- is violated!
+
+++++ (Unexpected) debugfs#fs > fs_trace_client_subj_type-------- is violated!
+
+++++ (Unexpected) debugfs#fs > fs_trace_client_subj_type-------- is violated!
+
+++++ (Unexpected) debugfs#fs > fs_trace_client_subj_type-------- is violated!
+
+++++ (Unexpected) debugfs#fs > fs_trace_client_subj_type-------- is violated!
+
+++++ (Unexpected) debugfs#fs > fs_trace_client_subj_type-------- is violated!
+
+++++ (Unexpected) debugfs#fs > fs_trace_client_subj_type-------- is violated!
+
+++++ (Unexpected) debugfs#fs > fs_trace_client_subj_type-------- is violated!
+
+++++ (Unexpected) dev_except_storage_obj_type > sys#subj-------- is violated!
+
+++++ (Unexpected) dev_except_storage_obj_type > sys#subj-------- is violated!
+
+++++ (Unexpected) dev_except_storage_obj_type > sys#subj-------- is violated!
+
+++++ (Unexpected) dev_except_storage_obj_type > sys#subj-------- is violated!
+
+++++ (Unexpected) dev_except_storage_obj_type > sys#subj-------- is violated!
+
+++++ (Unexpected) dev_except_storage_obj_type > sys#subj-------- is violated!
+
+++++ (Unexpected) dev_except_storage_obj_type > sys#subj-------- is violated!
+
+++++ (Unexpected) dev_except_storage_obj_type > dev_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) dev_except_storage_obj_type > dev_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) dev_except_storage_obj_type > dev_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) dev_except_storage_obj_type > dev_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) dev_except_storage_obj_type > dev_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) dev_except_storage_obj_type > dev_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) dev_except_storage_obj_type > dev_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) dev_except_storage_obj_type > dev_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) dev_except_storage_obj_type > dev_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) dev_except_storage_obj_type > dev_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) dev_unconfined_subj_type > dev_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) devpts#fs > fs_obj_type-------- is violated!
+
+++++ (Unexpected) devpts#fs > term_pty_obj_type-------- is violated!
+
+++++ (Unexpected) devtmpfs#fs > fs#fs-------- is violated!
+
+++++ (Unexpected) devtmpfs#fs > sys#subj-------- is violated!
+
+++++ (Unexpected) devtmpfs#fs > sys#subj-------- is violated!
+
+++++ (Unexpected) devtmpfs#fs > sys#subj-------- is violated!
+
+++++ (Unexpected) devtmpfs#fs > sys#subj-------- is violated!
+
+++++ (Unexpected) devtmpfs#fs > sys#subj-------- is violated!
+
+++++ (Unexpected) devtmpfs#fs > sys#subj-------- is violated!
+
+++++ (Unexpected) devtmpfs#fs > sys#subj-------- is violated!
+
+++++ (Unexpected) devtmpfs#fs > sys#subj-------- is violated!
+
+++++ (Unexpected) devtmpfs#fs > sys#subj-------- is violated!
+
+++++ (Unexpected) devtmpfs#fs > sys#subj-------- is violated!
+
+++++ (Unexpected) devtmpfs#fs > sys#subj-------- is violated!
+
+++++ (Unexpected) devtmpfs#fs > sys#subj-------- is violated!
+
+++++ (Unexpected) devtmpfs#fs > sys#subj-------- is violated!
+
+++++ (Unexpected) devtmpfs#fs > sys#subj-------- is violated!
+
+++++ (Unexpected) devtmpfs#fs > sys#subj-------- is violated!
+
+++++ (Unexpected) devtmpfs#fs > sys#subj-------- is violated!
+
+++++ (Unexpected) devtmpfs#fs > sys#subj-------- is violated!
+
+++++ (Unexpected) devtmpfs#fs > sys#subj-------- is violated!
+
+++++ (Unexpected) devtmpfs#fs > sys#subj-------- is violated!
+
+++++ (Unexpected) devtmpfs#fs > sys#subj-------- is violated!
+
+++++ (Unexpected) devtmpfs#fs > sys#subj-------- is violated!
+
+++++ (Unexpected) devtmpfs#fs > sys#subj-------- is violated!
+
+++++ (Unexpected) devtmpfs#fs > sys#subj-------- is violated!
+
+++++ (Unexpected) devtmpfs#fs > sys#subj-------- is violated!
+
+++++ (Unexpected) devtmpfs#fs > sys#subj-------- is violated!
+
+++++ (Unexpected) devtmpfs#fs > sys#subj-------- is violated!
+
+++++ (Unexpected) devtmpfs#fs > sys#subj-------- is violated!
+
+++++ (Unexpected) devtmpfs#fs > sys#subj-------- is violated!
+
+++++ (Unexpected) devtmpfs#fs > sys#subj-------- is violated!
+
+++++ (Unexpected) devtmpfs#fs > unlabeled#isid-------- is violated!
+
+++++ (Unexpected) devtmpfs#fs > fs_obj_type-------- is violated!
+
+++++ (Unexpected) devtmpfs#fs > subj_common_type-------- is violated!
+
+++++ (Unexpected) devtmpfs#fs > subj_common_type-------- is violated!
+
+++++ (Unexpected) devtmpfs#fs > subj_common_type-------- is violated!
+
+++++ (Unexpected) devtmpfs#fs > dev_obj_type-------- is violated!
+
+++++ (Unexpected) devtty#dev > devtmpfs#fs-------- is violated!
+
+++++ (Unexpected) devtty#dev > tmpfs#fs-------- is violated!
+
+++++ (Unexpected) devtty#dev > subj_common_type-------- is violated!
+
+++++ (Unexpected) devtty#dev > subj_common_type-------- is violated!
+
+++++ (Unexpected) devtty#dev > subj_common_type-------- is violated!
+
+++++ (Unexpected) devtty#dev > subj_common_type-------- is violated!
+
+++++ (Unexpected) devtty#dev > subj_common_type-------- is violated!
+
+++++ (Unexpected) dosfs#fs > fs_obj_type-------- is violated!
+
+++++ (Unexpected) dri#dev > devtmpfs#fs-------- is violated!
+
+++++ (Unexpected) drm#fs > fs_obj_type-------- is violated!
+
+++++ (Unexpected) efivarfs#fs > fs_obj_type-------- is violated!
+
+++++ (Unexpected) event#dev > devtmpfs#fs-------- is violated!
+
+++++ (Unexpected) file_except_obj_type > file_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) file_except_obj_type > file_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) file_except_obj_type > file_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) file_except_obj_type > file_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) file_except_obj_type > file_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) file_except_obj_type > file_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) file_except_obj_type > file_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) file_except_obj_type > file_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) file_except_obj_type > file_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) file_except_obj_type > file_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) file_except_obj_type > file_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) file_except_obj_type > file_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) file_except_obj_type > file_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) file_except_obj_type > file_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) file_except_obj_type > file_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) file_except_obj_type > file_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) file_except_obj_type > file_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) file_except_obj_type > file_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) file_except_obj_type > file_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) file_except_obj_type > file_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) file_except_obj_type > file_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) file_except_obj_type > file_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) file_except_obj_type > file_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) file_except_obj_type > file_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) file_except_obj_type > file_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) file_except_obj_type > file_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) file_except_obj_type > file_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) file_except_obj_type > file_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) file_except_obj_type > file_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) file_except_obj_type > file_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) file_except_obj_type > file_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) file_except_obj_type > file_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) file_except_obj_type > file_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) file_except_obj_type > file_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) file_except_obj_type > file_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) file_except_obj_type > file_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) file_except_obj_type > file_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) file_except_obj_type > file_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) file_except_obj_type > file_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) file_except_obj_type > file_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) file_except_obj_type > file_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) file_except_obj_type > file_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) file_except_obj_type > file_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) file_except_obj_type > file_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) file_except_obj_type > file_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) file_except_obj_type > file_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) file_except_obj_type > file_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) file_except_obj_type > file_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) file_except_obj_type > file_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) file_except_obj_type > file_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) file_except_obj_type > file_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) file_except_obj_type > file_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) file_except_obj_type > file_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) file_except_obj_type > file_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) file_except_obj_type > file_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) file_except_obj_type > file_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) file_except_obj_type > file_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) file_except_obj_type > file_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) file_except_obj_type > file_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) file_except_obj_type > file_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) file_except_obj_type > file_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) file_except_obj_type > file_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) file_except_obj_type > file_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) file_except_obj_type > file_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) file_except_obj_type > file_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) file_except_obj_type > file_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) file_except_obj_type > file_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) file_except_obj_type > file_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) file_except_obj_type > file_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) file_except_obj_type > file_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) file_except_obj_type > file_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) file_except_obj_type > file_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fixed_disk#storage_dev > devtmpfs#fs-------- is violated!
+
+++++ (Unexpected) fixed_disk#storage_dev > storage_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fixed_disk#storage_dev > storage_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fixed_disk#storage_dev > storage_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fixed_disk#storage_dev > storage_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fixed_disk#storage_dev > storage_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fixed_disk#storage_dev > storage_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fixed_disk#storage_dev > storage_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fixed_disk#storage_dev > storage_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fixed_disk#storage_dev > storage_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fixed_disk#storage_dev > storage_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fixed_disk#storage_dev > storage_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fixed_disk#storage_dev > storage_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fixed_disk#storage_dev > storage_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fixed_disk#storage_dev > storage_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fixed_disk#storage_dev > storage_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fixed_disk#storage_dev > storage_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fixed_disk#storage_dev > storage_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fixed_disk#storage_dev > storage_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fixed_disk#storage_dev > storage_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fixed_disk#storage_dev > storage_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) framebuf#dev > devtmpfs#fs-------- is violated!
+
+++++ (Unexpected) fs#fs > devtmpfs#fs-------- is violated!
+
+++++ (Unexpected) fs#fs > invalid#isid-------- is violated!
+
+++++ (Unexpected) fs#fs > proc#fs-------- is violated!
+
+++++ (Unexpected) fs#fs > rootfs#fs-------- is violated!
+
+++++ (Unexpected) fs#fs > sysfs#fs-------- is violated!
+
+++++ (Unexpected) fs#fs > tmpfs#fs-------- is violated!
+
+++++ (Unexpected) fs#fs > unlabeled#isid-------- is violated!
+
+++++ (Unexpected) fs#fs > fs_obj_type-------- is violated!
+
+++++ (Unexpected) fs#fs > file_obj_type-------- is violated!
+
+++++ (Unexpected) fs_obj_type > fs_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fs_obj_type > fs_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fs_obj_type > fs_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fs_obj_type > fs_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fs_obj_type > fs_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fs_obj_type > fs_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fs_obj_type > fs_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fs_obj_type > fs_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fs_obj_type > fs_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fs_obj_type > fs_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fs_obj_type > fs_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fs_obj_type > fs_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fs_obj_type > fs_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fs_obj_type > fs_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fs_obj_type > fs_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fs_obj_type > fs_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fs_obj_type > fs_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fs_obj_type > fs_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fs_obj_type > fs_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fs_obj_type > fs_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fs_obj_type > fs_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fs_obj_type > fs_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fs_obj_type > fs_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fs_obj_type > fs_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fs_obj_type > fs_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fs_obj_type > fs_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fs_obj_type > fs_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fs_obj_type > fs_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fs_obj_type > fs_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fs_obj_type > fs_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fs_obj_type > fs_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fs_obj_type > fs_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fs_obj_type > fs_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fs_obj_type > fs_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fs_obj_type > fs_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fs_obj_type > fs_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fs_obj_type > fs_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fs_obj_type > fs_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fs_obj_type > fs_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fs_obj_type > fs_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fs_obj_type > fs_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fs_obj_type > fs_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fs_obj_type > fs_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fs_obj_type > fs_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fs_obj_type > fs_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fs_obj_type > fs_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fs_obj_type > fs_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fs_obj_type > fs_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fs_obj_type > fs_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fs_obj_type > fs_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fs_obj_type > fs_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fs_obj_type > fs_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fs_obj_type > fs_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fs_obj_type > fs_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fs_obj_type > fs_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fs_obj_type > fs_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fs_obj_type > fs_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fs_obj_type > fs_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fs_obj_type > fs_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fs_obj_type > fs_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fs_obj_type > fs_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fs_obj_type > fs_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fs_obj_type > fs_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fs_obj_type > fs_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fs_obj_type > fs_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fs_obj_type > fs_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fs_obj_type > fs_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fs_obj_type > fs_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fs_obj_type > fs_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fs_obj_type > fs_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fs_obj_type > fs_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fs_obj_type > fs_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fs_obj_type > fs_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fs_obj_type > fs_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fs_obj_type > fs_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fs_obj_type > fs_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fs_obj_type > fs_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fs_obj_type > fs_obj_type-------- is violated!
+
+++++ (Unexpected) fuse_fs#fs > fs_obj_type-------- is violated!
+
+++++ (Unexpected) fuse_storage#storage_dev > devtmpfs#fs-------- is violated!
+
+++++ (Unexpected) fuse_storage#storage_dev > storage_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fuse_storage#storage_dev > storage_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fuse_storage#storage_dev > storage_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fuse_storage#storage_dev > storage_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fuse_storage#storage_dev > storage_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fuse_storage#storage_dev > storage_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fuse_storage#storage_dev > storage_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fuse_storage#storage_dev > storage_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fuse_storage#storage_dev > storage_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) fuse_storage#storage_dev > storage_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) home#file > fs#fs-------- is violated!
+
+++++ (Unexpected) hugetlbfs#fs > fs_obj_type-------- is violated!
+
+++++ (Unexpected) invalid#isid > fs#fs-------- is violated!
+
+++++ (Unexpected) invalid#isid > proc#fs-------- is violated!
+
+++++ (Unexpected) invalid#isid > tmpfs#fs-------- is violated!
+
+++++ (Unexpected) invalid#isid > invalid#isid-------- is violated!
+
+++++ (Unexpected) invalid#isid > invalid#isid-------- is violated!
+
+++++ (Unexpected) invalid#isid > invalid#isid-------- is violated!
+
+++++ (Unexpected) invalid#isid > invalid#isid-------- is violated!
+
+++++ (Unexpected) invalid#isid > invalid#isid-------- is violated!
+
+++++ (Unexpected) invalid#isid > invalid#isid-------- is violated!
+
+++++ (Unexpected) invalid#isid > invalid#isid-------- is violated!
+
+++++ (Unexpected) invalid#isid > invalid#isid-------- is violated!
+
+++++ (Unexpected) invalid#isid > invalid#isid-------- is violated!
+
+++++ (Unexpected) invalid#isid > invalid#isid-------- is violated!
+
+++++ (Unexpected) invalid#isid > invalid#isid-------- is violated!
+
+++++ (Unexpected) invalid#isid > invalid#isid-------- is violated!
+
+++++ (Unexpected) invalid#isid > invalid#isid-------- is violated!
+
+++++ (Unexpected) invalid#isid > invalid#isid-------- is violated!
+
+++++ (Unexpected) invalid#isid > invalid#isid-------- is violated!
+
+++++ (Unexpected) invalid#isid > invalid#isid-------- is violated!
+
+++++ (Unexpected) invalid#isid > invalid#isid-------- is violated!
+
+++++ (Unexpected) invalid#isid > invalid#isid-------- is violated!
+
+++++ (Unexpected) invalid#isid > invalid#isid-------- is violated!
+
+++++ (Unexpected) invalid#isid > invalid#isid-------- is violated!
+
+++++ (Unexpected) invalid#isid > invalid#isid-------- is violated!
+
+++++ (Unexpected) invalid#isid > invalid#isid-------- is violated!
+
+++++ (Unexpected) invalid#isid > invalid#isid-------- is violated!
+
+++++ (Unexpected) invalid#isid > sys_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) invalid#isid > sys_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) invalid#isid > sys_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) invalid#isid > sys_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) invalid#isid > sys_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) invalid#isid > sys_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) invalid#isid > sys_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) invalid#isid > sys_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) invalid#isid > sys_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) invalid#isid > sys_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) invalid#isid > sys_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) invalid#isid > sys_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) invalid#isid > sys_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) invalid#isid > sys_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) invalid#isid > sys_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) invalid#isid > sys_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) invalid#isid > sys_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) invalid#isid > sys_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) invalid#isid > sys_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) invalid#isid > sys_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) invalid#isid > sys_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) invalid#isid > sys_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) invalid#isid > sys_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) invalid#isid > sys_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) invalid#isid > sys_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) invalid#isid > sys_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) invalid#isid > sys_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) invalid#isid > sys_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) invalid#isid > sys_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) invalid#isid > sys_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) invalid#isid > sys_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) invalid#isid > sys_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) invalid#isid > sys_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) invalid#isid > sys_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) invalid#isid > sys_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) invalid#isid > sys_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) invalid#isid > sys_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) invalid#isid > sys_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) invalid#isid > sys_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) invalid#isid > sys_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) invalid#isid > sys_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) invalid#isid > sys_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) invalid#isid > sys_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) invalid#isid > sys_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) invalid#isid > sys_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) invalid#isid > sys_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) invalid#isid > sys_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) invalid#isid > sys_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) invalid#isid > sys_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) invalid#isid > sys_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) invalid#isid > sys_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) invalid#isid > sys_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) invalid#isid > sys_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) invalid#isid > sys_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) invalid#isid > sys_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) invalid#isid > sys_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) invalid#isid > sys_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) invalid#isid > sys_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) invalid#isid > sys_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) invalid#isid > sys_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) invalid#isid > sys_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) invalid#isid > sys_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) invalid#isid > sys_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) invalid#isid > sys_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) invalid#isid > sys_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) invalid#isid > sys_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) invalid#isid > sys_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) invalid#isid > sys_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) invalid#isid > sys_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) invalid#isid > sys_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) invalid#isid > sys_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) invalid#isid > sys_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) invalid#isid > sys_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) invalid#isid > sys_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) invalid#isid > sys_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) invalid#isid > sys_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) invalid#isid > sys_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) invalid#isid > sys_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) invalid#isid > sys_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) invalid#isid > sys_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) invalid#isid > sys_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) invalid#isid > sys_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) invalid#isid > subj_common_type-------- is violated!
+
+++++ (Unexpected) invalid#isid > subj_common_type-------- is violated!
+
+++++ (Unexpected) invalid#isid > subj_common_type-------- is violated!
+
+++++ (Unexpected) iso9660#fs > fs_obj_type-------- is violated!
+
+++++ (Unexpected) kmsg_dev#dev > devtmpfs#fs-------- is violated!
+
+++++ (Unexpected) kvm#dev > devtmpfs#fs-------- is violated!
+
+++++ (Unexpected) ld_so#file > fs#fs-------- is violated!
+
+++++ (Unexpected) ld_so_cache#file > fs#fs-------- is violated!
+
+++++ (Unexpected) lib#lib_file > fs#fs-------- is violated!
+
+++++ (Unexpected) loop_control#dev > devtmpfs#fs-------- is violated!
+
+++++ (Unexpected) lost_found#file > fs#fs-------- is violated!
+
+++++ (Unexpected) lvm_control#dev > devtmpfs#fs-------- is violated!
+
+++++ (Unexpected) mei_misc#dev > devtmpfs#fs-------- is violated!
+
+++++ (Unexpected) memory#dev > devtmpfs#fs-------- is violated!
+
+++++ (Unexpected) mnt#file > fs#fs-------- is violated!
+
+++++ (Unexpected) mouse#dev > devtmpfs#fs-------- is violated!
+
+++++ (Unexpected) net_if_obj_type > net_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) net_if_obj_type > net_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) net_node_obj_type > net_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) net_node_obj_type > net_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) net_node_obj_type > net_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) net_node_obj_type > net_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) net_node_obj_type > net_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) net_packet_obj_type > net_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) net_packet_obj_type > net_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) net_packet_obj_type > net_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) nfs#fs > fs_obj_type-------- is violated!
+
+++++ (Unexpected) nfsd#fs > fs_obj_type-------- is violated!
+
+++++ (Unexpected) null#dev > devtmpfs#fs-------- is violated!
+
+++++ (Unexpected) null#dev > tmpfs#fs-------- is violated!
+
+++++ (Unexpected) null#dev > subj_common_type-------- is violated!
+
+++++ (Unexpected) null#dev > subj_common_type-------- is violated!
+
+++++ (Unexpected) null#dev > subj_common_type-------- is violated!
+
+++++ (Unexpected) null#dev > subj_common_type-------- is violated!
+
+++++ (Unexpected) null#dev > subj_common_type-------- is violated!
+
+++++ (Unexpected) nvram#dev > devtmpfs#fs-------- is violated!
+
+++++ (Unexpected) pm_qos_misc#dev > devtmpfs#fs-------- is violated!
+
+++++ (Unexpected) ppp#dev > devtmpfs#fs-------- is violated!
+
+++++ (Unexpected) printer#dev > devtmpfs#fs-------- is violated!
+
+++++ (Unexpected) proc#fs > invalid#isid-------- is violated!
+
+++++ (Unexpected) proc#fs > invalid#isid-------- is violated!
+
+++++ (Unexpected) proc#fs > invalid#isid-------- is violated!
+
+++++ (Unexpected) proc#fs > fs#fs-------- is violated!
+
+++++ (Unexpected) proc#fs > sys#subj-------- is violated!
+
+++++ (Unexpected) proc#fs > sys#subj-------- is violated!
+
+++++ (Unexpected) proc#fs > sys#subj-------- is violated!
+
+++++ (Unexpected) proc#fs > fs_obj_type-------- is violated!
+
+++++ (Unexpected) proc#fs > subj_common_type-------- is violated!
+
+++++ (Unexpected) proc#fs > subj_common_type-------- is violated!
+
+++++ (Unexpected) proc#fs > subj_common_type-------- is violated!
+
+++++ (Unexpected) proc#fs > subj_common_type-------- is violated!
+
+++++ (Unexpected) proc#fs > subj_common_type-------- is violated!
+
+++++ (Unexpected) proc#fs > subj_common_type-------- is violated!
+
+++++ (Unexpected) proc#fs > subj_common_type-------- is violated!
+
+++++ (Unexpected) proc#fs > subj_common_type-------- is violated!
+
+++++ (Unexpected) proc#fs > subj_common_type-------- is violated!
+
+++++ (Unexpected) proc#fs > subj_common_type-------- is violated!
+
+++++ (Unexpected) proc#fs > subj_common_type-------- is violated!
+
+++++ (Unexpected) proc#fs > subj_common_type-------- is violated!
+
+++++ (Unexpected) proc#fs > subj_common_type-------- is violated!
+
+++++ (Unexpected) proc#fs > subj_common_type-------- is violated!
+
+++++ (Unexpected) proc#fs > subj_common_type-------- is violated!
+
+++++ (Unexpected) proc#fs > subj_common_type-------- is violated!
+
+++++ (Unexpected) proc#fs > fs_trace_client_subj_type-------- is violated!
+
+++++ (Unexpected) proc#fs > fs_trace_client_subj_type-------- is violated!
+
+++++ (Unexpected) proc#fs > fs_trace_client_subj_type-------- is violated!
+
+++++ (Unexpected) pstore#fs > fs_obj_type-------- is violated!
+
+++++ (Unexpected) ptmx#dev > devtmpfs#fs-------- is violated!
+
+++++ (Unexpected) random#dev > devtmpfs#fs-------- is violated!
+
+++++ (Unexpected) random#dev > tmpfs#fs-------- is violated!
+
+++++ (Unexpected) removable_fs#fs > fs_obj_type-------- is violated!
+
+++++ (Unexpected) removable_storage#storage_dev > devtmpfs#fs-------- is violated!
+
+++++ (Unexpected) removable_storage#storage_dev > storage_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) removable_storage#storage_dev > storage_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) removable_storage#storage_dev > storage_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) removable_storage#storage_dev > storage_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) removable_storage#storage_dev > storage_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) removable_storage#storage_dev > storage_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) removable_storage#storage_dev > storage_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) removable_storage#storage_dev > storage_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) removable_storage#storage_dev > storage_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) removable_storage#storage_dev > storage_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) rootfs#fs > fs#fs-------- is violated!
+
+++++ (Unexpected) rootfs#fs > sys#subj-------- is violated!
+
+++++ (Unexpected) rootfs#fs > sys#subj-------- is violated!
+
+++++ (Unexpected) rootfs#fs > sys#subj-------- is violated!
+
+++++ (Unexpected) rootfs#fs > sys#subj-------- is violated!
+
+++++ (Unexpected) rootfs#fs > sys#subj-------- is violated!
+
+++++ (Unexpected) rootfs#fs > sys#subj-------- is violated!
+
+++++ (Unexpected) rootfs#fs > sys#subj-------- is violated!
+
+++++ (Unexpected) rootfs#fs > fs_obj_type-------- is violated!
+
+++++ (Unexpected) rootfs#fs > subj_type-------- is violated!
+
+++++ (Unexpected) rootfs#fs > subj_type-------- is violated!
+
+++++ (Unexpected) rootfs#fs > subj_type-------- is violated!
+
+++++ (Unexpected) rootfs#fs > file_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) rootfs#fs > file_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) rootfs#fs > file_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) rootfs#fs > file_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) rootfs#fs > file_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) rootfs#fs > file_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) rpc_pipefs#fs > fs_obj_type-------- is violated!
+
+++++ (Unexpected) runtime#runtime_file > fs#fs-------- is violated!
+
+++++ (Unexpected) runtime#runtime_file > tmpfs#fs-------- is violated!
+
+++++ (Unexpected) runtime_config#runtime_config_file > fs#fs-------- is violated!
+
+++++ (Unexpected) runtime_lock#runtime_lock_file > fs#fs-------- is violated!
+
+++++ (Unexpected) runtime_lock#runtime_lock_file > tmpfs#fs-------- is violated!
+
+++++ (Unexpected) runtime_user#runtime_file > fs#fs-------- is violated!
+
+++++ (Unexpected) runtime_user#runtime_file > tmpfs#fs-------- is violated!
+
+++++ (Unexpected) scsi_generic#storage_dev > devtmpfs#fs-------- is violated!
+
+++++ (Unexpected) scsi_generic#storage_dev > storage_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) scsi_generic#storage_dev > storage_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) scsi_generic#storage_dev > storage_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) scsi_generic#storage_dev > storage_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) scsi_generic#storage_dev > storage_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) scsi_generic#storage_dev > storage_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) scsi_generic#storage_dev > storage_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) scsi_generic#storage_dev > storage_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) scsi_generic#storage_dev > storage_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) scsi_generic#storage_dev > storage_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) sec_bool_obj_type > sec_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) sec_bool_obj_type > sec_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) sec_bool_obj_type > sec_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) sec_bool_obj_type > sec_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) sec_bool_obj_type > sec_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) securityfs#fs > sys#subj-------- is violated!
+
+++++ (Unexpected) securityfs#fs > sys#subj-------- is violated!
+
+++++ (Unexpected) securityfs#fs > sys#subj-------- is violated!
+
+++++ (Unexpected) securityfs#fs > sys#subj-------- is violated!
+
+++++ (Unexpected) securityfs#fs > sys#subj-------- is violated!
+
+++++ (Unexpected) securityfs#fs > sys#subj-------- is violated!
+
+++++ (Unexpected) securityfs#fs > sys#subj-------- is violated!
+
+++++ (Unexpected) securityfs#fs > sys#subj-------- is violated!
+
+++++ (Unexpected) securityfs#fs > sys#subj-------- is violated!
+
+++++ (Unexpected) securityfs#fs > sys#subj-------- is violated!
+
+++++ (Unexpected) securityfs#fs > sys#subj-------- is violated!
+
+++++ (Unexpected) securityfs#fs > sys#subj-------- is violated!
+
+++++ (Unexpected) securityfs#fs > sys#subj-------- is violated!
+
+++++ (Unexpected) securityfs#fs > sys#subj-------- is violated!
+
+++++ (Unexpected) securityfs#fs > sys#subj-------- is violated!
+
+++++ (Unexpected) securityfs#fs > sec_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) securityfs#fs > sec_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) securityfs#fs > sec_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) securityfs#fs > sec_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) securityfs#fs > sec_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) securityfs#fs > sec_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) securityfs#fs > sec_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) securityfs#fs > sec_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) securityfs#fs > sec_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) securityfs#fs > sec_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) securityfs#fs > sec_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) securityfs#fs > sec_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) securityfs#fs > sec_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) securityfs#fs > sec_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) securityfs#fs > sec_unconfined_subj_type-------- is violated!
+
+++++ (Unexpected) securityfs#fs > fs_obj_type-------- is violated!
+
+++++ (Unexpected) shell#cmd_file > fs#fs-------- is violated!
+
+++++ (Unexpected) sound#dev > devtmpfs#fs-------- is violated!
+
+++++ (Unexpected) subj_common_type > subj_common_type-------- is violated!
+
+++++ (Unexpected) subj_common_type > subj_common_type-------- is violated!
+
+++++ (Unexpected) subj_entry_obj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_interactive_fd_type > subj_use_interactive_fd_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+
+++++ (Unexpected) subj_type > subj_unconfined_type-------- is violated!
+

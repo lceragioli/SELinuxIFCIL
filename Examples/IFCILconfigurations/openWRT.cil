@@ -31,6 +31,8 @@
 ;IFL; (pipeline2) dnsmasq.subj +> nameservice.miscfile : dnsmasq.subj +> luci.subj +> nameservice.miscfile ;IFL;
 ;IFL; (pipeline3) luci.subj +> dnsmasq.subj : luci.subj +> nameservice.miscfile +> dnsmasq.subj ;IFL;
 
+;IFL; (fromTCB) +> TCB +> ;IFL;
+;IFL; (TCB) +> Harmless +> TCB ;IFL;
 
 (tunable
  recv_invalid_peers
