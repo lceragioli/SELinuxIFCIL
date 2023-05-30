@@ -1,5 +1,18 @@
 all: IFCILtoNuSMV IFCILverif
 
+cil:
+	ocamlc -c CIL/CILsyntax.mli
+	ocamlc -c -I CIL CIL/CILsyntax.ml
+	ocamllex parser/CILlexer.mll
+	ocamlyacc parser/CILparser.mly
+	ocamlc -c -I CIL parser/CILparser.mli
+	ocamlc -c -I CIL -I parser parser/CILlexer.ml
+	ocamlc -c -I CIL -I parser parser/CILparser.ml
+	ocamlc -c -I CIL CIL/CILenv.mli
+	ocamlc -c -I CIL CIL/CILenv.ml
+	ocamlc -c -I CIL -I parser tests/testingCIL.ml
+	ocamlc -I CIL -I parser -I tests str.cma -o testCIL CILenv.cmo CILparser.cmo CILlexer.cmo CILsyntax.cmo testingCIL.cmo
+
 ifcil:
 	ocamlc -c CILsyntax.ml
 	ocamllex CILlexer.mll

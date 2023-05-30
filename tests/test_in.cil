@@ -1,0 +1,45 @@
+(classorder (file))
+(class file (read write open getattr))
+
+(block unconfined
+
+       (macro type ((type ARG1))
+	      (typeattributeset typeattr ARG1))
+
+       (typeattribute typeattr))
+
+(in unconfined
+
+    (call .sys.unconfined.type (typeattr)))
+
+(in unconfined
+
+    (call .subj.unconfined.type (typeattr)))
+
+(in unconfined
+
+    (call .selinux.unconfined.type (typeattr)))
+
+(in unconfined
+
+    (call .fs.unconfined.type (typeattr)))
+
+(in unconfined
+
+    (call .dev.unconfined.type (typeattr)))
+
+(in unconfined
+
+    (call .file.unconfined.type (typeattr)))
+
+(in unconfined
+
+    (call .unlabeled.unconfined.type (typeattr)))
+
+(in unconfined
+
+    (call .net.unconfined.type (typeattr)))
+
+(in unconfined
+
+    (call .invalid.unconfined.type (typeattr)))
