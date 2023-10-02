@@ -1,4 +1,4 @@
-open CILsyntax
+(* open CILsyntax
 open CILgrammar
 open Utils
 
@@ -755,4 +755,4 @@ let rec print_flat_CIL (pos, stmnt) =
       ".classmap " ^ clsmap ^ " ( " ^ String.concat " " clsmappings ^ ")"
   | FLATCLASSMAPPING (clsmap, clsmapping, clsperm) ->
       ".classmapping " ^ print_path clsmap ^ " " ^ print_path clsmapping
-      ^ print_classpermission clsperm
+      ^ print_classpermission clsperm *)

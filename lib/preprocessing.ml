@@ -1,4 +1,4 @@
-open Utils
+(* open Utils
 open IFCILconfiguration
 open CILsyntax
 
@@ -107,4 +107,4 @@ let rec flatten_conf stmnts loc =
   let semiflatstmnts = semi_flatten_conf sstmnts loc in
   List.fold_left
     (fun flatls semiflatstmnt -> flatin semiflatstmnt semiflatstmnts @ flatls)
-    [] semiflatstmnts
+    [] semiflatstmnts *)

@@ -1,5 +1,5 @@
 %{
-open CILsyntax 
+open IFCILsyntax 
 
 exception ParsingIFL of string
 
@@ -33,7 +33,7 @@ let rec read_ifl ls =
 %token ALLOW SELF ATTRIBUTE ATTRIBUTESET ALL ANOT AND OR XOR LPAREN RPAREN STRING
 %token EOF ARROWBODY ARROWHEAD LSQUARE RSQUARE NOT COLON COMMA
 %start main             /* the entry point */
-%type <CILsyntax.statement list> main
+%type <IFCILsyntax.statement list> main
 /*%type <string list> names  XXX attenzione, visto che ignoriamo gli spazi (a.b.c d.e.f) potrebbe essere letto a.b.c.d.e.f */
 %%
 main:
@@ -65,16 +65,13 @@ stmnt:
   | ATTRIBUTE name                                                         { Some (CILATTRIBUTE $2) }
   | ATTRIBUTESET name attributeexp                                         { Some (CILATTRIBUTESET(read_path($2), $3)) }
   | BLOCK name stmnts                                                      { Some (CILBLOCK($2, $3)) }
-  | BLOCKINHERIT name iflrefs                                              { Some (CILBLOCKINHERIT(read_path($2), $3)) }
-  | BLOCKINHERIT name                                                      { Some (CILBLOCKINHERIT(read_path($2), [])) }
+  | BLOCKINHERIT name                                                      { Some (CILBLOCKINHERIT(read_path($2))) }
   | BLOCKABSTRACT name                                                     { Some (CILBLOCKABSTRACT) }
   | IN NAME stmnts                                                         { Some (CILIN(read_path($2), $3)) }
   | MACRO name LPAREN formparams RPAREN stmnts                             { Some (CILMACRO($2, $4, $6)) }
   | MACRO name LPAREN RPAREN stmnts                                        { Some (CILMACRO($2, [], $5)) }
-  | CALL name LPAREN names RPAREN                                          { Some (CILCALL(read_path($2), (List.map (fun str -> read_path str) $4), [])) }
-  | CALL name LPAREN names RPAREN iflrefs                                  { Some (CILCALL(read_path($2), (List.map (fun str -> read_path str) $4), $6)) }
-  | CALL name                                                              { Some (CILCALL(read_path($2), [], [])) }
-  | CALL name iflrefs                                                      { Some (CILCALL(read_path($2), [], $3)) }
+  | CALL name LPAREN names RPAREN                                          { Some (CILCALL(read_path($2), (List.map (fun str -> read_path str) $4))) }
+  | CALL name                                                              { Some (CILCALL(read_path($2), [])) }
   | ALLOW name name LPAREN name LPAREN names RPAREN RPAREN                 { Some (CILALLOW(read_path($2), read_path($3), Anonym(read_path($5), (Permissions $7)))) }
   | ALLOW name name LPAREN name attributeexp RPAREN                        { Some (CILALLOW(read_path($2), read_path($3), Anonym(read_path($5), (Expression $6)))) }
   | ALLOW name name name                                                   { Some (CILALLOW(read_path($2), read_path($3), Name(read_path($4)))) }
@@ -96,13 +93,6 @@ attributeexp:
   | LPAREN OR attributeexp attributeexp RPAREN   { A_OR($3, $4) }
   | LPAREN XOR attributeexp attributeexp RPAREN  { A_XOR($3, $4) }
   | NAME                                         { A_NAME (read_path($1)) }
-;
-iflrefs:
-    iflref iflrefs  { $1 :: $2 }
-  | iflref          { [$1] }
-;
-iflref:
-    IFL LPAREN NAME COLON NAME RPAREN iflreq IFL  { ($3, read_path($5), $7) }
 ;
 everys:
     IN                    { } 

@@ -1,4 +1,4 @@
-module SS :
+(* module SS :
   sig
     type elt = String.t
     type t = Set.Make(String).t
@@ -60,4 +60,4 @@ val times_list : 'a list -> 'b list -> ('a * 'b) list
 val remove_duplicate : 'a list -> 'a list
 val make_pairs :
   'a list -> 'b list -> (('a list * 'b list) * ('a list * 'b list)) list
-val list_start_with : 'a list -> 'a list -> bool
+val list_start_with : 'a list -> 'a list -> bool *)

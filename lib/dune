@@ -1,0 +1,9 @@
+(library
+ (public_name SELinuxIFCIL)
+ (name SELinuxIFCIL)
+ (libraries str))
+
+(ocamllex IFCILlexer)
+(ocamlyacc IFCILparser)
+
+

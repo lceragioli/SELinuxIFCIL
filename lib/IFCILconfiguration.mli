@@ -1,4 +1,4 @@
-open CILsyntax
+(* open CILsyntax
 
 exception OurError of string
 
@@ -182,4 +182,4 @@ val print_classpermission : CILsyntax.classpermission -> string
 
 val print_fparams : (CILsyntax.parametertype * string) list -> string
 
-val print_flat_CIL : string list * flat_statement -> string
+val print_flat_CIL : string list * flat_statement -> string *)

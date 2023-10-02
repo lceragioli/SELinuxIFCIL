@@ -1,6 +1,6 @@
 (* File lexer.mll *)
 {
-open CILgrammar        (* The type token is defined in parser.mli *)
+open IFCILparser        (* The type token is defined in parser.mli *)
 exception Eof
 }
 rule token = parse

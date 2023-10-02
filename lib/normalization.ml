@@ -1,4 +1,4 @@
-open CILsyntax
+(* open CILsyntax
 open IFCILconfiguration
 open Utils
 open IFL
@@ -641,4 +641,4 @@ let normalize fstmntls =
     (phase6 << phase5 << phase4 << phase3 << phase2 << phase1) fstmntls
   in
   print_string "normalization completed\n";
-  result
+  result *)

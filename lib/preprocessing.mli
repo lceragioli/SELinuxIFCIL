@@ -1,4 +1,4 @@
-open IFCILconfiguration
+(* open IFCILconfiguration
 open CILsyntax
 
 exception OurError of string
@@ -18,4 +18,4 @@ type semi_flat_statement =
   | SEMIFLATIN of path * statement list
 
 val flatten_conf : CILsyntax.statement list ->
-  string list -> (string list * IFCILconfiguration.flat_statement) list
+  string list -> (string list * IFCILconfiguration.flat_statement) list *)
