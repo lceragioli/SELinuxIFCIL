@@ -33,16 +33,16 @@ other := (! ( ( state = DB | ( state = http | ( state = anon | state = net))))) 
 (state = pozzo -> next(state = pozzo))
 
 
---  (F1) .IFL-must  ( #.net,  +[any-mod]> , #.http )  ( #.http,  +[any-mod]> , #.DB ) 
+--  (F1) .IFL-must  #.net +> #.http +> #.DB 
  
 LTLSPEC !(state = net &  X ( F (state = http &  X ( F state = DB))))
---  (F2) .IFL-must  ( #.DB,  +[any-mod]> , #.http )  ( #.http,  +[any-mod]> , #.net ) 
+--  (F2) .IFL-must  #.DB +> #.http +> #.net 
  
 LTLSPEC !(state = DB &  X ( F (state = http &  X ( F state = net))))
---  (S1) .IFL-every  ( #.DB,  +[any-mod]> , #.net )  must be  ( #.DB,  [read]> , #.anon )  ( #.anon,  +[any-mod]> , #.net ) 
+--  (S1) .IFL-every  #.DB +> #.net  must be  #.DB [read]> #.anon +> #.net 
  
 LTLSPEC (!(state = DB &  X ( F state = net)) | (state = DB & operation = read &  X (state = anon &  X ( F state = net))))
---  (S2) .IFL-mustnot  ( #.DB,  +[any-mod]> , #.other ) 
+--  (S2) .IFL-mustnot  #.DB +> #.other 
  
 LTLSPEC !(state = DB &  X ( F other))
 

@@ -1,17 +1,17 @@
 #!/bin/bash
 
 table="
-| Properties                | Verification Time         |
+| Properties                | Completion Time           |
 | ------------------------- | ------------------------- |
 ";
-for filename in Examples/IFCILNuSMVconfigurations/*; do
+for filename in Examples/*; do
     bname="$(basename -- $filename)"
     echo "----------------------------------------------"
     echo "  verifying $bname"
     echo "----------------------------------------------
 "
     exec 3>&1 4>&2
-    time=$( { time ./IFCILverif $filename 1>&3 2>&4; } 2>&1 )
+    time=$( { time dune exec IFCILverif $filename 1>&3 2>&4; } 2>&1 )
     exec 3>&- 4>&-
     time="${time//[$'\r\n ']}"
     user=${time%%s*}

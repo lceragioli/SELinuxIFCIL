@@ -390,11 +390,13 @@ let _ =
     let requirements = parse_requirements_from_NuSMV in_NuSMVfile in
     close_in_noerr in_NuSMVfile;
     if
+      print_endline "... verifying requirements";
       Sys.command ("./NuSMV  -v 0 " ^ mc_in_file ^ " > " ^ mc_out_file ^ " 2>/dev/null") <> 0 
     then
         failwith "problem running NuSMV"
     else
       let tmp_file = open_in mc_out_file in
+      print_endline "\n+++ RESULTS +++\n";
       parse_response tmp_file requirements  
     )
   with 

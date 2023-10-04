@@ -12,8 +12,8 @@ let parse_response_line line mustfalse =
           (String.sub line (String.length line - 8) 8 = "is false" && mustfalse)
           || String.sub line (String.length line - 7) 7 = "is true"
              && not mustfalse
-        then "-------- is satisfied!\n\n"
-        else "-------- is violated!\n\n"
+        then " -------- is satisfied!\n"
+        else " -------- is violated!\n"
       with Invalid_argument s ->
         raise (Invalid_argument (s ^ " when parsing responses"))
     else ""
@@ -32,11 +32,12 @@ let rec parse_response oc' requirements =
       let result = parse_response_line line mustfalse in
       if result <> "" then (
         print_string
-          ("++++ "
-          ^ fst (List.hd requirements)
-          ^ " "
-          ^ (snd (List.hd requirements))
-          ^ result);
+          ( 
+            fst (List.hd requirements)
+            ^ " "
+            ^ (snd (List.hd requirements))
+            ^ result
+          );
         parse_response oc' (List.tl requirements))
       else parse_response oc' requirements
     with

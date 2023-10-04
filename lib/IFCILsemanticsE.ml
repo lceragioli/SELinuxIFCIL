@@ -556,36 +556,13 @@ and sem_ifl cmd rho =
     sem_ifl' cmd rho ["#"] [["#"]] SM.empty
     
 let get_semantics rules = 
-  (* print_endline "######### RULES #########\n";
-  CILsyntax.print rules;
-  print_endline "###############################\n"; *)
-
   let cmds = from_config rules  in
-  (* print_endline "######### COMMANDS #########\n";
-  CILsyntaxE.print cmds;
-  print_endline "###############################\n"; *)
-
-  let get_permissions = permissions cmds in
-  
+  let get_permissions = permissions cmds in 
   let irho = initialrho rules in
-  (* print_endline "######### INITIAL RHO #########\n";
-  CILenvE.print irho;
-  print_endline "###############################\n"; *)
 
   let cmds' = t1 cmds irho in     
-  (* print_endline "######### RULES AFTER T1 #########\n";
-  CILsyntaxE.print cmds';
-  print_endline "###############################\n"; *)
-
   let rho' = t2 cmds' irho in 
-  (* print_endline "\n######### RHO AFTER T2 #########\n";
-  CILenvE.print rho';
-  print_endline "###############################\n"; *)
-
   let rho'' = t3 cmds' rho' in 
-  (* print_endline "######### RHO AFTER T3 #########\n";
-  CILenvE.print rho'';
-  print_endline "###############################\n"; *)
 
   let tnodes = sem_TN rho''
   and allows = sem_A get_permissions cmds' rho'' in
@@ -601,16 +578,6 @@ let get_semantics rules =
       SS.empty
       allows
   in 
-  (* print_endline "######### ALLOWS AFTER E_A #########\n";
-  (* List.iter
-    (fun (src,dst) -> 
-      print_string ("permission from " ^ (qn_tostring src) ^ " to " ^ (qn_tostring dst) ^ "\n"))
-    allows; *)
-  print_int (List.length nodes);
-  print_int (List.length attributes);
-  print_endline "###############################\n"; *)
-
-  print_endline "SEMANTIC COMPLETED ";
   {
     types = tnodes;
     attributes = anodes;

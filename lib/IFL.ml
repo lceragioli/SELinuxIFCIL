@@ -9,36 +9,50 @@ exception NotUniqueMeet of string *)
 
 exception UncorrectRefinement of string
 
+let print_node = function
+| A_Type t
+| A_Attr t -> " " ^ (String.concat "." t) ^ " "
+| Any -> ""
 
-let print_IFL_path (node, marrow, node') =
-  let print_node = function
-    | A_Type t
-    | A_Attr t -> String.concat "." t
-    | Any -> "*"
+let print_marrows = function
+| m, LONGARROW -> 
+    if m = ["any-mod"] then "+>"  else "+[" ^ String.concat "," m ^ "]>"
+| m, SHORTARROW -> 
+    if m = ["any-mod"] then ">"  else "[" ^ String.concat "," m ^ "]>"
+
+let print_IFL_path_hd (node, marrow, node') =
+  (print_node node) ^  
+  (print_marrows marrow) ^ 
+  (print_node node')
+
+let print_IFL_path_tl (_, marrow, node') =
+  (print_marrows marrow) ^ 
+  (print_node node')  
+
+let print_IFL_path path =
+  let hdpath = List.hd path
+  and tlpath = List.tl path
   in
-  let marrowstring =
-    match marrow with
-    | m, LONGARROW -> " +[" ^ String.concat "," m ^ "]> "
-    | m, SHORTARROW -> " [" ^ String.concat "," m ^ "]> "
-  in
-  " ( " ^ (print_node node) ^ ", " ^ marrowstring ^ ", "
-  ^ (print_node node') ^ " ) "
+  List.fold_left
+    (fun s p -> s ^ (print_IFL_path_tl p)) 
+    (print_IFL_path_hd hdpath)
+    tlpath 
 
 let print_IFL_requirement_E r =
   match r with
   | E_MUST iflpath ->
       ".IFL-must "
-      ^ List.fold_right (fun p s -> print_IFL_path p ^ s) iflpath ""
+      ^ print_IFL_path iflpath
       ^ "\n"
   | E_MUSTNOT iflpath ->
       ".IFL-mustnot "
-      ^ List.fold_right (fun p s -> print_IFL_path p ^ s) iflpath ""
+      ^ print_IFL_path iflpath
       ^ "\n"
   | E_EVERYMUST (iflpath, iflpath') ->
       ".IFL-every "
-      ^ List.fold_right (fun p s -> print_IFL_path p ^ s) iflpath ""
+      ^ print_IFL_path iflpath
       ^ " must be "
-      ^ List.fold_right (fun p s -> print_IFL_path p ^ s) iflpath' ""
+      ^ print_IFL_path iflpath'
       ^ "\n"
 
 let node_minor node node' = node = node' || node' = Any
