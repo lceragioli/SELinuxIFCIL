@@ -1,7 +1,7 @@
 #!/bin/bash
 
 table="
-| Properties                | Completion Time           |
+| Properties                | Verification Time         |
 | ------------------------- | ------------------------- |
 ";
 for filename in Examples/*.cil; do
