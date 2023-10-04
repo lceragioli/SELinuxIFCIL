@@ -1,0 +1,27 @@
+(class file (read write))
+
+(macro anonymize ((type x) (type y))
+    (type anon)
+    (allow anon x (file (read)))
+    ;IFL; (S1) x +> y : x > anon +> y ;IFL;
+)
+
+(typeattribute other)
+(typeattributeset other
+(not (or DB (or http (or anon net)))))
+(type DB)
+(type http)
+(type home)
+(type net)
+
+;IFL; (F1) net +> http +> DB ;IFL;
+;IFL; (F2) DB +> http +> net ;IFL;
+(call anonymize (DB net))
+;IFL; (S1) DB +> net : DB [read]> anon +> net ;IFL;
+
+(allow http anon (file (read)))
+(allow http DB (file (write)))
+(allow http other (file (read)))
+(allow http net (file (read write)))
+
+;IFL; (S2) ~DB +> other ;IFL;

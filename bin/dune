@@ -1,5 +1,5 @@
 (executable
- (public_name IFCILtoNuSMV)
- (name IFCILtoNuSMV)
+ (public_name IFCILverif)
+ (name IFCILverif)
  (libraries SELinuxIFCIL)
 )

@@ -6,9 +6,10 @@ open CILclass
 
 type semantics =
   {
-    nodes: qn list;
+    types: qn list;
+    attributes: qn list;
     allows: (torat_node * SS.t * torat_node) list;
-    ta: (qn * attributeexpE) list;
+    ta: attributeexpE SLM.t;
     ifl: iflreqE SM.t;
     bigo: SS.t
   }
@@ -264,8 +265,34 @@ and sem_A'' get_permissions cmd rho ns sigma rule allows =
 and sem_A get_permissions cmd rho =
   sem_A' get_permissions cmd rho ["#"] [["#"]] []
 
-let sem_N rho =
+let sem_TN rho =
   nss rho
+
+let sem_AN rho =
+  ass rho
+(* allows ta =
+  List.fold_left
+  (fun an (toan1, _, toan2) ->
+    match toan1 with
+      | Any 
+      | A_Type _ -> an
+      | A_Attr a ->
+        if SLM.find_opt a ta = None
+        then 
+          SLS.add a an 
+        else an
+  )
+  SLS.empty
+  allows *)
+
+let slmta_update qn ex map =
+  SLM.update
+    qn
+    (function
+      | Some v -> Some (E_OR (v, ex))
+      | None -> Some ex)
+    map
+
 
 let rec sem_Call_taR cmd ns rules rho sigma csi allows = 
   List.fold_left
@@ -362,7 +389,7 @@ and sem_ta'' cmd rho ns sigma rule attrset =
           "undefined typeattribute"
       and gexpr = 
           eval_attrexp_E expr rho sigma
-      in (gattr, gexpr) :: attrset
+      in slmta_update gattr gexpr attrset
   | CILBLOCKINHERIT qn ->
       (match eval_b_bar qn rho sigma with
       | Some (_, ns') ->
@@ -393,7 +420,7 @@ and sem_ta'' cmd rho ns sigma rule attrset =
   | _ -> attrset
   
 and sem_ta cmd rho =
-    sem_ta' cmd rho ["#"] [["#"]] []
+  sem_ta' cmd rho ["#"] [["#"]] SLM.empty
 
 let add_ifl name iflreq iflm =
   SM.update
@@ -560,11 +587,13 @@ let get_semantics rules =
   CILenvE.print rho'';
   print_endline "###############################\n"; *)
 
-  let nodes = sem_N rho''
-  and allows = sem_A get_permissions cmds' rho''  
-  and attributes = sem_ta cmds' rho'' 
+  let tnodes = sem_TN rho''
+  and allows = sem_A get_permissions cmds' rho'' in
+  let attributes =  
+      (sem_ta cmds' rho'')
   and iflreqs = sem_ifl cmds' rho'' in
-  let ops = 
+  let anodes = sem_AN rho'' 
+  and ops = 
     List.fold_left
       (fun xops (_, o, _) -> 
         SS.union xops o
@@ -583,7 +612,8 @@ let get_semantics rules =
 
   print_endline "SEMANTIC COMPLETED ";
   {
-    nodes = nodes;
+    types = tnodes;
+    attributes = anodes;
     allows = allows;
     ta = attributes;
     ifl = iflreqs;

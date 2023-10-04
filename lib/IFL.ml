@@ -9,14 +9,37 @@ exception NotUniqueMeet of string *)
 
 exception UncorrectRefinement of string
 
-let print_IFL (node, marrow, node') =
+
+let print_IFL_path (node, marrow, node') =
+  let print_node = function
+    | A_Type t
+    | A_Attr t -> String.concat "." t
+    | Any -> "*"
+  in
   let marrowstring =
     match marrow with
-    | m, LONGARROW -> " -[" ^ String.concat "," m ^ "]> "
+    | m, LONGARROW -> " +[" ^ String.concat "," m ^ "]> "
     | m, SHORTARROW -> " [" ^ String.concat "," m ^ "]> "
   in
-  " ( " ^ String.concat "." node ^ ", " ^ marrowstring ^ ", "
-  ^ String.concat "." node' ^ " ) "
+  " ( " ^ (print_node node) ^ ", " ^ marrowstring ^ ", "
+  ^ (print_node node') ^ " ) "
+
+let print_IFL_requirement_E r =
+  match r with
+  | E_MUST iflpath ->
+      ".IFL-must "
+      ^ List.fold_right (fun p s -> print_IFL_path p ^ s) iflpath ""
+      ^ "\n"
+  | E_MUSTNOT iflpath ->
+      ".IFL-mustnot "
+      ^ List.fold_right (fun p s -> print_IFL_path p ^ s) iflpath ""
+      ^ "\n"
+  | E_EVERYMUST (iflpath, iflpath') ->
+      ".IFL-every "
+      ^ List.fold_right (fun p s -> print_IFL_path p ^ s) iflpath ""
+      ^ " must be "
+      ^ List.fold_right (fun p s -> print_IFL_path p ^ s) iflpath' ""
+      ^ "\n"
 
 let node_minor node node' = node = node' || node' = Any
 

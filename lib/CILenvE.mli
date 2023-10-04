@@ -42,3 +42,4 @@ val fake_fr_rho : rho -> ns -> csi -> rho
 val fresh : string
 
 val nss : rho -> string list list
+val ass : rho -> string list list

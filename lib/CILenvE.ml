@@ -489,20 +489,40 @@ let fake_fr_rho rho ns csi =
   rho
 
 let nss rho =
-  SLM.fold(
-    fun _ (fr :Frame.t) xnss ->
-      (
-        SM.fold
+  let nodeset =
+    SLM.fold(
+      fun _ (fr :Frame.t) xnss ->
         (
-          fun _ t xnss' ->
-            t :: xnss'
+          SM.fold
+          (
+            fun _ t xnss' ->
+              SLS.add t xnss'
+          )
+          fr.trho
+          xnss
         )
-        fr.trho
-        xnss
-      )
-  )
-  rho
-  []
+    )
+    rho
+    SLS.empty
+  in SLS.elements nodeset
+
+let ass rho =
+  let nodeset =
+    SLM.fold(
+      fun _ (fr :Frame.t) xnss ->
+        (
+          SM.fold
+          (
+            fun _ a xnss' ->
+              SLS.add a xnss'
+          )
+          fr.arho
+          xnss
+        )
+    )
+    rho
+    SLS.empty
+  in SLS.elements nodeset 
 
 (* let rec eval_attrexp attrexp rho sigma =
   match (attrexp :attributeexp) with

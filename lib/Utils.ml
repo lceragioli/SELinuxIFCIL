@@ -14,6 +14,7 @@ end;;
 module StringList = OrderList (String)
 module StSL = OrderPair (String) (StringList)
 module SS = Set.Make (String)
+module SLS = Set.Make (StringList)
 module SM = Map.Make (String)
 module SLM = Map.Make (StringList)
 
