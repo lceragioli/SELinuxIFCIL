@@ -87,8 +87,9 @@ Here is a description of content of the repository
 ```
 Examples/                      <-- Running example from the paper and real-world policies
 
-bin/                           <-- directory for applications using our semantics which comes as a library
-   computeSem                  <-- our example application that just prints the allows of a configuration
+bin/                           <-- directory for the application IFCILverif
+   IFCILverif.ml               <-- our application source code
+   ReadNuSMV.ml                <-- module for interacting with the NuSMV model checker
    dune                        <-- dune configuration file
 
 lib/                           <-- our SELinux IFCIL library
