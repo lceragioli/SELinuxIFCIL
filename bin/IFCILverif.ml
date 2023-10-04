@@ -365,9 +365,8 @@ let print_NuSMV semantics oc =
   close_out oc;
   print_endline "... NuSMV generated"
 
-let temp = "NuSMVoutput"
-let mc_in_file = "NuSMVinput"
-let mc_out_file = "NuSMVoutput"
+let mc_in_file = "NuSMVinput.tmp"
+let mc_out_file = "NuSMVoutput.tmp"
 
 let _ =
   if Array.length Sys.argv != 2 then

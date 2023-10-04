@@ -4,7 +4,7 @@ table="
 | Properties                | Completion Time           |
 | ------------------------- | ------------------------- |
 ";
-for filename in Examples/*; do
+for filename in Examples/*.cil; do
     bname="$(basename -- $filename)"
     echo "----------------------------------------------"
     echo "  verifying $bname"

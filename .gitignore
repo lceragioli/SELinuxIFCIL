@@ -1,5 +1,6 @@
 *.cmi
 *.cmo
+*.tmp
 temp
 CILgrammar.ml   
 CILgrammar.mli
