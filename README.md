@@ -4,23 +4,20 @@
 
 Ocaml, Ocamllex, Ocamlyacc >= 4.12.0
 
+Dune >= 3.8.1
+
 ### Overview
 
 SELinux IFCIL is a SELinux configuration language that extends CIL with information flow requirements.
 IFCIL configurations are legal CIL configurations and can be compiled using the standard SELinux CIL compiler.
-Moreover, IFCIL comes with a pair of tools for verifying that the information flow requirements are met by the configuration.
-
-- IFCILtoNuSMV : translates a IFCIL configuration into a IFCIL-NuSMV configuration file
-- IFCILverif : uses the model checker NuSMV to verify the requirements of a IFCIL-NuSMV configuration file
+Moreover, IFCIL comes with IFCILverif, a tool for verifying that the information flow requirements are met by the configuration.
 
 ### Compilation
 
 To compile run
 ```
-make
+dune build
 ```
-It will produce the executables `IFCILtoNuSMV` and `IFCILverif`
-
 Depending on you system, you may need to run the following before compiling to use the correct version of ocaml
 
 ```
@@ -28,26 +25,15 @@ opam switch 4.12.0
 eval $(opam env)
 ```
 
-### How to Generate the IFCIL-NuSMV configuration file
-
-To generate the configuration file for NuSMV with IFCIL labels run
-```
-./IFCILtoNuSMV IFCIL-input-file IFCIL-NuSMV-output-file  
-```
-Where
- - `IFCILtoNuSMV` : is the name of the executable
- - `IFCIL-input-file` : is the IFCIL input file, i.e., a SELinux CIL configuration with IFL annotations
- - `IFCIL-NuSMV-output-file` : is the destination for the IFCIL-NuSMV configuration file to be verified using the tool IFCILverif
-
 ### How to Verify a IFCIL-NuSMV configuration file
 
-To verify the IFCIL-NuSMV configuration file run
+To verify the IFCIL configuration file run
 ```
-./IFCILverif IFCIL-NuSMV-config-file  
+./IFCILverif IFCIL-input-file  
 ```
 Where
  - `IFCILverif` : is the name of the executable
- - `IFCIL-NuSMV-config-file` : is the IFCIL-NuSMV configuration file to be verified, obtained using IFCILtoNuSMV
+ - `IFCIL-input-file` : is the IFCIL input file, i.e., a SELinux CIL configuration with IFL annotations
 
 ### Examples
 
@@ -55,17 +41,16 @@ The `Examples` directory contains the running example from the paper and the rea
 
 To verify the running example from the paper run
 ```
-./IFCILtoNuSMV Examples/IFCILconfigurations/paper-example.cil paper-example-IFCIL-NuSMV
-./IFCILverif paper-example-IFCIL-NuSMV
+./IFCILtoNuSMV Examples/paper-example.cil
 ```
 
 ### How to Replicate the Experiments about Scalability of IFCILverif
 
-The IFCIL-NuSMV configuration files for the experiments can be found in `Examples/IFCILNuSMVconfigurations`.
-There is a single file for every CIL configuration and set of IFL requirements (e.g., `cilbase-pipelineNuSMVconf` is for cilbase CIL configuration and assured pipeline property). 
+The IFCIL configuration files for the experiments can be found in `Examples`.
+There is a single file for every CIL configuration and set of IFL requirements (e.g., `cilbase-pipeline` is for cilbase CIL configuration and assured pipeline property). 
 To replicate the results about the scalability of IFCILverif, run
 ```
-./IFCILverif Examples/IFCILNuSMVconfigurations/cilbase-pipelineNuSMVconf
+./IFCILverif Examples/cilbase-pipeline.cil
 ```
 
 The script `run_experiments.sh` iterates on all the configurations and the considered properties printing the output of IFCILverif and the time of execution measured through the standard Unix command `time`.
@@ -74,7 +59,7 @@ Table 1 of the paper lists the configuration, properties and the execution time 
 ./run_experiments.sh
 ```
 
-The expected results are in `IFCILtoNuSMV` and the execution time should be approximately as follows
+The expected results are in `expected_results.txt` and the execution time should be approximately as follows
 
 | Properties                | Verification Time         |
 | ------------------------- | ------------------------- |
@@ -100,31 +85,32 @@ The expected results are in `IFCILtoNuSMV` and the execution time should be appr
 Here is a description of content of the repository
 
 ```
- Examples/                 <-- Running example from the paper and real-world policies
+Examples/                      <-- Running example from the paper and real-world policies
 
- README.md                 <-- This file
+bin/                           <-- directory for the application IFCILverif
+   IFCILverif.ml               <-- our application source code
+   ReadNuSMV.ml                <-- module for interacting with the NuSMV model checker
+   dune                        <-- dune configuration file
 
- CILlexer.mll              <-- Ocamllex configuration file
- CILgrammar.mly            <-- Ocamlyacc configuration file
+lib/                           <-- our SELinux IFCIL library
+   IFCILlexer.mll              <-- specification file for ocamllex
+   IFCILparser.mly             <-- specification file for ocamlyacc
+   IFCILsyntax.ml - .mli       <-- module for abstract syntax of CIL
+   IFCILsyntaxE.ml - .mli      <-- module for an efficient representation of CIL configurations
+   IFCILsemanticsE.ml - .mli   <-- module for IFCIL semantics 
+   CILclass.ml - .mli          <-- module with class and operations related functions
+   CILenv.ml - .mli            <-- module for environment rho and frame fr
+   CILenvE.ml - .mli           <-- module for an efficient representation of environment rho and frame fr
+   IFL.ml - .mli               <-- module for IFL information flow language
+   Utils.ml                    <-- module with utilities data structures and functions 
+   dune                        <-- dune configuration file
 
- CILsyntax.ml              <-- Source for CIL language syntax
- IFL.mli                   <-- Interface for IFL language syntax and refinement 
- IFL.ml                    <-- Source for IFL language syntax and refinement 
- IFCILconfiguration.mli    <-- Interface for IFLCIL configurations 
- IFCILconfiguration.ml     <-- Source for IFLCIL configurations 
- normalization.mli         <-- Interface for the normalization pipeline of IFCIL  
- normalization.ml          <-- Source for the normalization pipeline of IFCIL
- preprocessing.mli         <-- Interface for preprocessing on IFCIL configurations   
- preprocessing.ml          <-- Source for preprocessing on IFCIL configurations
- Utils.mli                 <-- Interface for utilities data structures and functions 
- Utils.ml                  <-- Source for utilities data structures and functions  
+NuSMV                          <-- NuSMV model checker executable 
+dune                           <-- dune configuration file
+dune-project                   <-- dune configuration file
 
- IFCILtoNuSMV.ml           <-- Source for IFCILtoNuSMV tool
- IFCILverif.ml             <-- Source for IFCILverif tool
+run_experiments.sh             <-- Script for the scalability experiments
+expected_results.txt           <-- Expected results of run_experiments.sh
+README.md                      <-- This file
 
- NuSMV                     <-- NuSMV model checker executable 
-
- Makefile                  
- run_experiments.sh        <-- Script for the scalability experiments
- expected_results.txt      <-- Expected results of run_experiments.sh
 ```
