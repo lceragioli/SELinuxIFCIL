@@ -1,8 +1,8 @@
 #!/bin/bash
 
 table="
-| Properties                | Verification Time         |
-| ------------------------- | ------------------------- |
+| Properties                | Total Time          | NuSMV Running Time  |
+| ------------------------- | ------------------- | ------------------- |
 ";
 for filename in Examples/*.cil; do
     bname="$(basename -- $filename)"
@@ -19,12 +19,30 @@ for filename in Examples/*.cil; do
     user=${user:5} 
     namelen=${#bname}
     timelen=${#user}
+
+    exec 3>&1 4>&2
+    atime=$( { time ./NuSMV NuSMVinput.tmp 1>&3 2>&4; } 2>&1 )
+    exec 3>&- 4>&-
+    atime="${atime//[$'\r\n ']}"
+    auser=${atime%%s*}
+    auser=${auser#real }
+    auser=${auser:5} 
+    atimelen=${#auser}
+
+    echo $atime
+
     let "confpadlen = 25 - $namelen"
-    let "timepadlen = 24 - $timelen"
+    let "timepadlen = 18 - $timelen"
+    let "atimepadlen = 18 - $atimelen"
+
+
+
+    let "atimepadlen = 18 - $ttimelen"
     ch=' '
     confspaces=`printf '%*s' "$confpadlen" | tr ' ' "$ch"`
     timespaces=`printf '%*s' "$timepadlen" | tr ' ' "$ch"`
-    table="$table| $bname$confspaces | "$user"s$timespaces |
+    atimespaces=`printf '%*s' "$atimepadlen" | tr ' ' "$ch"`
+    table="$table| $bname$confspaces | "$user"s$timespaces | "$auser"s$atimespaces |
 "
 done
 echo "$table"
