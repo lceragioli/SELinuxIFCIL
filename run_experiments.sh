@@ -2,14 +2,12 @@
 
 table="
 | Properties                | Total Time          | NuSMV Running Time  |
-| ------------------------- | ------------------- | ------------------- |
-";
+| ------------------------- | ------------------- | ------------------- |";
 for filename in Examples/*.cil; do
     bname="$(basename -- $filename)"
     echo "----------------------------------------------"
     echo "  verifying $bname"
-    echo "----------------------------------------------
-"
+    echo "----------------------------------------------"
     exec 3>&1 4>&2
     time=$( { time dune exec IFCILverif $filename 1>&3 2>&4; } 2>&1 )
     exec 3>&- 4>&-
@@ -21,7 +19,7 @@ for filename in Examples/*.cil; do
     timelen=${#user}
 
     exec 3>&1 4>&2
-    atime=$( { time ./NuSMV NuSMVinput.tmp 1>&3 2>&4; } 2>&1 )
+    atime=$( { time ./NuSMV NuSMVinput.tmp 1>/dev/null 2>/dev/null; } 2>&1 )
     exec 3>&- 4>&-
     atime="${atime//[$'\r\n ']}"
     auser=${atime%%s*}
@@ -37,7 +35,8 @@ for filename in Examples/*.cil; do
     confspaces=`printf '%*s' "$confpadlen" | tr ' ' "$ch"`
     timespaces=`printf '%*s' "$timepadlen" | tr ' ' "$ch"`
     atimespaces=`printf '%*s' "$atimepadlen" | tr ' ' "$ch"`
-    table="$table| $bname$confspaces | "$user"s$timespaces | "$auser"s$atimespaces |
-"
+    table="$table
+| $bname$confspaces | "$user"s$timespaces | "$auser"s$atimespaces |"
+    echo ""
 done
 echo "$table"
