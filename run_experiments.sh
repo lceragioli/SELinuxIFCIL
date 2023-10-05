@@ -29,15 +29,10 @@ for filename in Examples/*.cil; do
     auser=${auser:5} 
     atimelen=${#auser}
 
-    echo $atime
-
     let "confpadlen = 25 - $namelen"
     let "timepadlen = 18 - $timelen"
     let "atimepadlen = 18 - $atimelen"
 
-
-
-    let "atimepadlen = 18 - $ttimelen"
     ch=' '
     confspaces=`printf '%*s' "$confpadlen" | tr ' ' "$ch"`
     timespaces=`printf '%*s' "$timepadlen" | tr ' ' "$ch"`
