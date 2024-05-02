@@ -1,3 +1,19 @@
+(typeattribute TCB)
+(typeattribute Harm)
+(typeattribute Harmless)
+(typeattributeset Harmless (or TCB (not Harm)))
+
+(typeattributeset TCB
+        (or kernel  proc_kernel_sched))
+
+(typeattributeset Harm
+      (isolated_app))
+
+
+;IFL; (TCBintegrity) +> TCB : Harmless +> TCB ;IFL;
+;IFL; (TCBintegrity2) ~ Harm +> TCB ;IFL;
+;IFL; (TCBintegrity3) ~ Harm > TCB ;IFL;
+
 (handleunknown deny)
 (class security (compute_av compute_create compute_member check_context load_policy compute_relabel compute_user setenforce setbool setsecparam setcheckreqprot read_policy validate_trans))
 (class process (fork transition sigchld sigkill sigstop signull signal ptrace getsched setsched getsession getpgid setpgid getcap setcap share getattr setexec setfscreate noatsecure siginh setrlimit rlimitinh dyntransition setcurrent execmem execstack execheap setkeycreate setsockcreate getrlimit))

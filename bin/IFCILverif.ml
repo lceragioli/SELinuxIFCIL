@@ -103,7 +103,9 @@ let is_read_only os =
 
 module SLS = Set.Make (StringList)
 
-let name node = String.concat "#" (List.tl node)
+let name node = 
+  "aaaa" ^
+  (String.concat "#" (List.tl node))
 
 let rec types_of attributeqn types ta attributetotypeset =
   let rec types_of_exp xattributetotypeset = function
