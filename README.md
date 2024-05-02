@@ -61,23 +61,23 @@ Table 1 of the paper lists the configuration, properties and the execution time 
 
 The expected results are in `expected_results.txt` and the execution time should be approximately as follows
 
-| Properties                | Verification Time         |
-| ------------------------- | ------------------------- |
-| cilbase-augmentNuSMVconf  | 0m 0,103s                 |
-| cilbaseNuSMVconf          | 0m 0,287s                 |
-| cilbase-pipelineNuSMVconf | 0m 0,113s                 |
-| cilbase-TCBNuSMVconf      | 0m 0,053s                 |
-| cilbase-wrappingNuSMVconf | 0m 0,128s                 |
-| dssp5NuSMVconf            | 0m 0,427s                 |
-| dssp5-pipelineNuSMVconf   | 0m 0,180s                 |
-| dssp5-TCBNuSMVconf        | 0m 0,132s                 |
-| dssp5-wrappingNuSMVconf   | 0m 0,279s                 |
-| openWRT-augmentNuSMVconf  | 0m 7,420s                 |
-| openWRTNuSMVconf          | 0m 27,469s                |
-| openWRT-pipelineNuSMVconf | 0m 8,079s                 |
-| openWRT-TCBNuSMVconf      | 0m 3,346s                 |
-| openWRT-wrappingNuSMVconf | 0m 9,850s                 |
-| paper-exampleNuSMVconf    | 0m 0,021s                 |
+| Properties                | Total Time          | NuSMV Running Time  |
+| ------------------------- | ------------------- | ------------------- |
+| cilbase-augment.cil       | 0m3,349s            | 0m0,191s            |
+| cilbase.cil               | 0m3,962s            | 0m0,515s            |
+| cilbase-pipeline.cil      | 0m3,373s            | 0m0,194s            |
+| cilbase-TCB.cil           | 0m3,256s            | 0m0,099s            |
+| cilbase-wrapping.cil      | 0m3,363s            | 0m0,227s            |
+| dssp5.cil                 | 0m7,735s            | 0m1,969s            |
+| dssp5-pipeline.cil        | 0m6,321s            | 0m0,806s            |
+| dssp5-TCB.cil             | 0m6,321s            | 0m0,546s            |
+| dssp5-wrapping.cil        | 0m7,037s            | 0m1,299s            |
+| openWRT-augment.cil       | 0m50,687s           | 0m9,961s            |
+| openWRT.cil               | 1m13,219s           | 0m32,465s           |
+| openWRT-pipeline.cil      | 0m50,719s           | 0m10,227s           |
+| openWRT-TCB.cil           | 0m46,107s           | 0m5,011s            |
+| openWRT-wrapping.cil      | 0m56,318s           | 0m15,147s           |
+| paper-example.cil         | 0m0,048s            | 0m0,013s            |
 
 
 ### Project structure
