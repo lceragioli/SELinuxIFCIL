@@ -1,13 +1,13 @@
 #!/bin/bash
 
 table="
-| Properties                | Total Time          | NuSMV Running Time  |
-| ------------------------- | ------------------- | ------------------- |";
+| Properties                                                                       | Total Time            | NuSMV Running Time    |
+| -------------------------------------------------------------------------------- | --------------------- | --------------------- |";
 for filename in Examples/*.cil; do
     bname="$(basename -- $filename)"
-    echo "----------------------------------------------"
+    echo " ------------------------------------------------------------------------ "
     echo "  verifying $bname"
-    echo "----------------------------------------------"
+    echo " ------------------------------------------------------------------------ "
     exec 3>&1 4>&2
     time=$( { time dune exec IFCILverif $filename 1>&3 2>&4; } 2>&1 )
     exec 3>&- 4>&-
@@ -27,9 +27,9 @@ for filename in Examples/*.cil; do
     auser=${auser:5} 
     atimelen=${#auser}
 
-    let "confpadlen = 25 - $namelen"
-    let "timepadlen = 18 - $timelen"
-    let "atimepadlen = 18 - $atimelen"
+    let "confpadlen = 80 - $namelen"
+    let "timepadlen = 20 - $timelen"
+    let "atimepadlen = 20 - $atimelen"
 
     ch=' '
     confspaces=`printf '%*s' "$confpadlen" | tr ' ' "$ch"`
