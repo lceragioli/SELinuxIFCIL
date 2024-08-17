@@ -1,5 +1,9 @@
 # SELinuxIFCIL
 
+SELinuxIFCIL is a SELinux configuration language that extends CIL with information flow requirements. It comes with a tool for parsing, computing the semantics of a configuration, and verifying the correctness of it with respect to its own specifications.
+
+Its design is described in the ACM TOPS paper titled "Specifying and Verifying Information Flow Control in SELinux Configurations", by Lorenzo Ceragioli, Letterio Galletta, Pierpaolo Degano and David Basin. A full version with proofs can be found [here](paper.pdf).
+
 ### Requirements
 
 Ocaml, Ocamllex, Ocamlyacc >= 4.12.0
